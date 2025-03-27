@@ -5,29 +5,34 @@
         <c-card-group>
           <c-card class="p-4">
             <c-card-body>
-              <form cForm>
+              <form cForm (ngSubmit)="submit()" [formGroup]="loginForm">
                 <h1>Login</h1>
                 <p class="text-body-secondary">Sign In to your account</p>
                 <c-input-group class="mb-3">
                   <span cInputGroupText>
                     <svg cIcon name="cilUser"></svg>
                   </span>
-                  <input autoComplete="username" cFormControl placeholder="Username" />
+                  <input cFormControl placeholder="Username" formControlName="username"/>
                 </c-input-group>
+                @if (((loginForm.get('username')?.touched || loginForm.get('username')?.dirty))) {
+                  @if (loginForm.get('username')?.hasError('required')) {
+                    required
+                  }
+                }
                 <c-input-group class="mb-4">
                   <span cInputGroupText>
                     <svg cIcon name="cilLockLocked"></svg>
                   </span>
-                  <input
-                    autoComplete="current-password"
-                    cFormControl
-                    placeholder="Password"
-                    type="password"
-                  />
+                  <input cFormControl autoComplete="current-password" placeholder="Password" type="password"
+                         formControlName="password"/>
                 </c-input-group>
+
+                {{ loginForm.value|json }}
+
+
                 <c-row>
                   <c-col xs="6">
-                    <button cButton class="px-4" color="primary">
+                    <button cButton class="px-4" color="primary" type="submit" [disabled]="!loginForm.valid">
                       Login
                     </button>
                   </c-col>

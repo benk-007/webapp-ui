@@ -1,0 +1,47 @@
+section.container-fluid{
+
+  .cover{
+    background-color: #F6F7FB !important;
+  }
+
+  .login{
+    min-height: 100vh;
+    background-color: white !important;
+
+      div.login-title{
+        h1{
+          font-family: "xstay", "Plus Jakrta Sans", sans-serif;
+          font-size: 3.5rem;
+          display: block;
+        }
+        h6{
+          font-family: "Plus Jakrta Sans", sans-serif;
+          font-weight: 200 !important;
+
+          span.xstay-char{
+            font-family: "xstay", "Plus Jakrta Sans", sans-serif;
+          }
+        }
+      }
+
+    form{
+      a{
+        color: var(--cui-danger) !important;
+        opacity: 50%;
+        &:hover{
+          opacity: 80%;
+          transition: ease-in;
+          transition-duration: 0.2s;
+        }
+      }
+    }
+
+
+
+
+  }
+
+}
+
+
+

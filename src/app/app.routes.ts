@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DefaultLayoutComponent } from './layout';
+import { DefaultLayoutComponent } from './core/layout';
 
 export const routes: Routes = [
   {
@@ -72,7 +72,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./views/pages/login/login.component').then(m => m.LoginComponent),
+    loadComponent: () => import('./features/authentication/pages/login/login.component').then(m => m.LoginComponent),
     data: {
       title: 'Login Page'
     }

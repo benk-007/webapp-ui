@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CardModule, CarouselModule, GridModule } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { IconSetService } from '@coreui/icons-angular';
-import { iconSubset } from '../../../icons/icon-subset';
+import { iconSubset } from '../../../core/icons/icon-subset';
 import { CarouselsComponent } from './carousels.component';
 
 describe('CarouselsComponent', () => {

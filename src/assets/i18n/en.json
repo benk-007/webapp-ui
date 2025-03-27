@@ -1,0 +1,31 @@
+{
+  "commons": {
+    "errors": {
+      "required": "This field is required"
+    }
+  },
+  "authentication": {
+    "login": {
+      "sub-title": {
+        "text-1": "wherever you roam,",
+        "text-2": "marks your home"
+      },
+      "form": {
+        "email-input": {
+          "label": "Email address"
+        },
+        "password-input": {
+          "label": "Password"
+        },
+        "submit-btn": "Sign in",
+        "forgot-password-link": "Forgot your password?"
+      },
+      "errors": {
+        "UAA_AUTH_UNAU_ERR_1": "Invalid credentials. Please try again.",
+        "UAA_AUTH_FORB_ERR_4": "Your account is not yet validated. Please follow email instructions.",
+        "UAA_AUTH_FORB_ERR_6": "You account is disabled. Please contact the support team.",
+        "undefined": "Something went wrong at our end, and we are working to fix the problem! "
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+<alert (onClosed)="clearAlert()" *ngIf="alert" [dismissible]="true" type='{{alert?.type}}'><span
+  [innerHTML]="alert?.text"></span></alert>

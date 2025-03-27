@@ -1,0 +1,18 @@
+@use "variables" as vars;
+
+.form-control:focus, .form-check-input:focus {
+  box-shadow: none;
+}
+
+.form-control {
+  border-color: var(--cui-border-color);
+  color: var(--cui-body-color);
+  font-weight: 350;
+}
+
+.invalid-feedback {
+  display: block;
+  color: vars.$danger !important;
+  font-size: 0.8rem;
+
+}

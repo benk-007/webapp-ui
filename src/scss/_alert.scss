@@ -1,0 +1,54 @@
+@use "variables" as vars;
+
+.alert {
+  padding: 0.625rem 0.85rem;
+  font-size: 0.8125rem;
+
+  &.alert-primary {
+    background-color: #f0f5ff;
+    border-color: #589bff1a;
+    color: vars.$primary;
+  }
+
+  &.alert-secondary{
+    background-color: #af6ded1a;
+    border-color: #af6ded1a;
+    color: vars.$secondary;
+  }
+
+  &.alert-success{
+    background-color: #edfbf2;
+    border-color: #edfbf2;
+    color: vars.$success;
+  }
+
+  &.alert-warning{
+    background-color: #fff3cd;
+    border-color: #ffe69c;
+    color: vars.$warning;
+  }
+
+  &.alert-danger{
+    background-color: #f8d7da;
+    border-color: rgba(var(vars.$danger), 0.1);
+    color: vars.$danger;
+  }
+
+  &.alert-dismissible{
+    button.btn-close.close{
+      padding: 0.95rem;
+      color: #fea45a !important;
+      font-size: 10px ;
+      &:focus{
+        box-shadow: none;
+      }
+    }
+    span{
+      margin-inline-end: 2rem;
+      display: block;
+    }
+  }
+
+
+
+}

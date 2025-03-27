@@ -1,5 +1,8 @@
 @use "@coreui/coreui/scss/mixins/transition" as *;
 @use "@coreui/coreui/scss/mixins/color-mode" as *;
+@use "sass:color";
+@use "sass:map";
+@use "@coreui/coreui/scss/variables" as *;
 
 body {
   background-color: var(--cui-tertiary-bg);
@@ -62,3 +65,7 @@ body {
     --cui-footer-bg: var(--cui-body-bg);
   }
 }
+
+
+
+
