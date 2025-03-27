@@ -1,5 +1,5 @@
-import { Routes } from '@angular/router';
-import { DefaultLayoutComponent } from './core/layout';
+import {Routes} from '@angular/router';
+import {DefaultLayoutComponent} from './core/layout';
 
 export const routes: Routes = [
   {
@@ -78,11 +78,18 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./features/authentication/pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+    data: {
+      title: 'Forgot password Page'
+    }
+  },
+  {
     path: 'register',
     loadComponent: () => import('./views/pages/register/register.component').then(m => m.RegisterComponent),
     data: {
       title: 'Register Page'
     }
   },
-  { path: '**', redirectTo: 'dashboard' }
+  {path: '**', redirectTo: 'dashboard'}
 ];

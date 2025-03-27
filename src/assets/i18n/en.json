@@ -1,7 +1,8 @@
 {
   "commons": {
     "errors": {
-      "required": "This field is required"
+      "required": "This field is required",
+      "email": "Enter a valid email address"
     }
   },
   "authentication": {
@@ -18,14 +19,29 @@
           "label": "Password"
         },
         "submit-btn": "Sign in",
-        "forgot-password-link": "Forgot your password?"
+        "errors": {
+          "UAA_AUTH_UNAU_ERR_1": "Invalid credentials. Please try again.",
+          "UAA_AUTH_FORB_ERR_4": "Your account is not yet validated. Please follow email instructions.",
+          "UAA_AUTH_FORB_ERR_6": "You account is disabled. Please contact the support team.",
+          "undefined": "Something went wrong at our end, and we are working to fix the problem! "
+        }
       },
-      "errors": {
-        "UAA_AUTH_UNAU_ERR_1": "Invalid credentials. Please try again.",
-        "UAA_AUTH_FORB_ERR_4": "Your account is not yet validated. Please follow email instructions.",
-        "UAA_AUTH_FORB_ERR_6": "You account is disabled. Please contact the support team.",
-        "undefined": "Something went wrong at our end, and we are working to fix the problem! "
-      }
+      "forgot-password-link": "Forgot your password?"
+    },
+    "forgot-password": {
+      "title": "Forgot your password?",
+      "sub-title": "Enter your email below and we will send you a reset link",
+      "form": {
+        "email-input": {
+          "label": "Email address"
+        },
+        "submit-btn": "Send",
+        "errors": {
+          "undefined": "Something went wrong at our end, and we are working to fix the problem! "
+        },
+        "success": "If an account with this email exists, you will receive a password reset link shortly. Please check your inbox (and spam folder)."
+      },
+      "login-link": "Go back to login page"
     }
   }
 }

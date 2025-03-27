@@ -15,6 +15,7 @@ import {AuthApiService} from "../../services/auth-api.service";
 import {AlertComponent} from "../../../../shared/components/alert/alert.component";
 import {AlertService} from "../../../../core/services/alert.service";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
+import {emailValidator} from "../../../../shared/validators/email.validator";
 
 @Component({
   selector: 'app-login',
@@ -48,7 +49,7 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private authApiService: AuthApiService, private alertService: AlertService,
               private translateService: TranslateService, private router: Router) {
     this.loginForm = this.fb.group({
-      username: [null, Validators.required],
+      username: [null, [Validators.required, emailValidator()]],
       password: [null, Validators.required]
     })
   }
@@ -64,7 +65,7 @@ export class LoginComponent {
       error: err => {
         console.error('an error occurred when login api:', err.error);
         this.errorCode = err.error.code;
-        let message = this.translateService.instant('authentication.login.errors.' + this.errorCode);
+        let message = this.translateService.instant('authentication.login.form.errors.' + this.errorCode);
         this.alertService.addAlert(message, 'warning', false);
       }
     }))

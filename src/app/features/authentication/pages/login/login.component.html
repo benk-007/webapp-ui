@@ -28,6 +28,9 @@
                 @if (loginForm.get('username')?.hasError('required')) {
                   <c-form-feedback [valid]="false">{{'commons.errors.required'|translate}}</c-form-feedback>
                 }
+                @if (loginForm.get('username')?.hasError('invalidEmail')) {
+                  <c-form-feedback [valid]="false">{{ 'commons.errors.email'|translate }}</c-form-feedback>
+                }
               }
             </div>
 
@@ -44,7 +47,7 @@
             </div>
 
             <!--Forgot password link-->
-            <a class="small d-flex justify-content-end" routerLink="/forgot-password">{{'authentication.login.form.forgot-password-link'|translate}}</a>
+            <a class="small d-flex justify-content-end" routerLink="/forgot-password">{{'authentication.login.forgot-password-link'|translate}}</a>
             <!--Submit button-->
             <div class="d-grid gap-2 ms-5 me-5 mt-4">
               <button cButton color="primary" type="submit" [disabled]="!loginForm.valid">{{'authentication.login.form.submit-btn'|translate}}</button>
