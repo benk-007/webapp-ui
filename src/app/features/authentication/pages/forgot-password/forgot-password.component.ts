@@ -54,7 +54,6 @@ export class ForgotPasswordComponent implements OnDestroy {
   }
 
   submit() {
-    console.log('clicked')
     let payload = this.forgotPasswordForm.value;
     this.subscriptions.push(this.authApiService.forgotPassword(payload).subscribe({
       next: () => {

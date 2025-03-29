@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {UserCredentialsPostModel} from "../models/user-credentials-post.model";
 import {TokenGetModel} from "../models/token-get.model";
 import {ForgotPasswordPostModel} from "../models/forgot-password-post.model";
+import {ResetPasswordPostModel} from "../models/reset-password-post.model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class AuthApiService {
 
   forgotPassword(payload: ForgotPasswordPostModel) {
     return this.httpClient.post<void>('http://localhost:8080/authMgtApi/forgot-password', payload);
+  }
+
+  resetPassword(payload: ResetPasswordPostModel) {
+    return this.httpClient.post<void>('http://localhost:8080/authMgtApi/reset-password', payload);
   }
 }
