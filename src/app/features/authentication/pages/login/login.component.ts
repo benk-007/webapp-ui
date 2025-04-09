@@ -16,6 +16,7 @@ import {AlertComponent} from "../../../../shared/components/alert/alert.componen
 import {AlertService} from "../../../../core/services/alert.service";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {emailValidator} from "../../../../shared/validators/email.validator";
+import {AuthService} from "../../../../core/services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -60,6 +61,7 @@ export class LoginComponent {
     this.subscriptions.push(this.authApiService.login(payload).subscribe({
       next: result => {
         console.log('login api response is:', result);
+        localStorage.setItem(AuthService.TOKEN, result.access_token);
         this.router.navigate(['/dashboard']).then(() => console.log('redirecting to dashboard page'));
       },
       error: err => {

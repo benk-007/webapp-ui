@@ -3,6 +3,17 @@
     "errors": {
       "required": "This field is required",
       "email": "Enter a valid email address"
+    },
+    "form": {
+      "search-input": {
+        "placeholder": "Search ..."
+      },
+      "save-btn": "Save",
+      "update-btn": "Update",
+      "cancel-btn": "Cancel"
+    },
+    "snippets": {
+
     }
   },
   "authentication": {
@@ -70,6 +81,71 @@
       "login-link": "Go back to login page",
       "errors": {
         "no-token": "The reset password link is invalid or missing the required token."
+      }
+    }
+  },
+  "settings": {
+    "user-settings": {
+      "list-users": {
+        "title": "Account users",
+        "cta": {
+          "add-btn": "+ Add user"
+        },
+        "table": {
+          "header": {
+            "fullname": "Full name",
+            "role": "Role",
+            "email": "Email",
+            "mobile": "Mobile",
+            "last-activity": "Last activity",
+            "actions": "Actions"
+          }
+        }
+      },
+      "create-user": {
+        "title": "Add user",
+        "form": {
+          "fullname-input": {
+            "label": "Full name"
+          },
+          "email-input": {
+            "label": "Email"
+          },
+          "mobile-input": {
+            "label": "Mobile"
+          },
+          "role-input": {
+            "label": "Role"
+          },
+          "notifications": {
+            "success": {
+              "title": "User created",
+              "message": "User :name has been successfully created"
+            },
+            "error": {
+              "title": "User creation failed",
+              "message": "An error occurred while creating the user. Please try again or contact the support team."
+            }
+          }
+        }
+      },
+      "edit-user": {
+        "title": "Edit user",
+        "form": {
+          "enabled-input": {
+            "label": "Enabled"
+          },
+          "notifications": {
+            "success": {
+              "title": "User updated",
+              "message": "User :name has been successfully updated"
+            },
+            "error": {
+              "title": "User update failed",
+              "message": "An error occurred while updating the user. Please try again or contact the support team."
+            }
+          }
+        }
       }
     }
   }

@@ -1,5 +1,16 @@
 @use "variables" as vars;
 
+label.form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+
+  &.required:after {
+    content: " *";
+    color: vars.$danger;
+  }
+}
+
 .form-control:focus, .form-check-input:focus {
   box-shadow: none;
 }
@@ -15,4 +26,10 @@
   color: vars.$danger !important;
   font-size: 0.8rem;
 
+}
+
+button.btn {
+  &.btn-ghost-light {
+    color: vars.$body-color;
+  }
 }

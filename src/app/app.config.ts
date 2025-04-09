@@ -1,5 +1,5 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {ApplicationConfig, importProvidersFrom} from '@angular/core';
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -9,12 +9,14 @@ import {
   withViewTransitions
 } from '@angular/router';
 
-import { DropdownModule, SidebarModule } from '@coreui/angular';
-import { IconSetService } from '@coreui/icons-angular';
-import { routes } from './app.routes';
-import {HttpClient, provideHttpClient} from "@angular/common/http";
+import {DropdownModule, SidebarModule} from '@coreui/angular';
+import {IconSetService} from '@coreui/icons-angular';
+import {routes} from './app.routes';
+import {HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {jwtInterceptor} from "./core/interceptors/jwt.interceptor";
+import {provideToastr} from "ngx-toastr";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -34,10 +36,17 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withHashLocation()
     ),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptorsFromDi(), withInterceptors([jwtInterceptor])
+    ),
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
     provideAnimationsAsync(),
+    provideToastr({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      timeOut: 50000
+    }),
     importProvidersFrom(
       TranslateModule.forRoot({
         "loader": {

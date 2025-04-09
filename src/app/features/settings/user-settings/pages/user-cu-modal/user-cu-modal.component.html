@@ -1,0 +1,115 @@
+<!--Modal title-->
+<div class="modal-header justify-content-center align-items-center">
+  <h6 class="modal-title">
+    {{ userToEdit ? ('settings.user-settings.edit-user.title'|translate) : ('settings.user-settings.create-user.title'|translate) }}
+  </h6>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+  <form (submit)="submit()" [formGroup]="userForm" cForm>
+    <!--Full name input-->
+    <c-row class="mb-3">
+      <c-col [md]="12">
+        <label cLabel class="required me-2" for="fullName">
+          {{ 'settings.user-settings.create-user.form.fullname-input.label'|translate }}
+        </label>
+        <input cFormControl formControlName="fullName" id="fullName" name="fullName" type="text"/>
+        @if (((userForm.get('fullName')?.touched || userForm.get('fullName')?.dirty))) {
+          @if (userForm.get('fullName')?.hasError('required')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+          }
+        }
+      </c-col>
+    </c-row>
+
+    <!--Email & Mobile inputs-->
+    <c-row class="mb-3">
+      <!--Email input-->
+      <c-col [md]="6">
+        <label cLabel class="required me-2" for="email">
+          {{ 'settings.user-settings.create-user.form.email-input.label'|translate }}
+        </label>
+        <input cFormControl formControlName="email" id="email" name="email" type="text"
+               (input)="uniqueEmailError=false"/>
+        @if (((userForm.get('email')?.touched || userForm.get('email')?.dirty))) {
+          @if (userForm.get('email')?.hasError('required')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+          }
+          @if (userForm.get('email')?.hasError('invalidEmail')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.email'|translate }}</c-form-feedback>
+          }
+          @if (uniqueEmailError) {
+            <c-form-feedback [valid]="false">This email is already assigned to an existing user</c-form-feedback>
+          }
+        }
+      </c-col>
+
+      <!--Mobile input-->
+      <c-col [md]="6">
+        <label cLabel for="mobile">
+          {{ 'settings.user-settings.create-user.form.mobile-input.label'|translate }}
+        </label>
+        <ngx-intl-tel-input
+          [enableAutoCountrySelect]="false"
+          [enablePlaceholder]="true"
+          [maxLength]="15"
+          [phoneValidation]="true"
+          [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+          [searchCountryFlag]="true"
+          [selectFirstCountry]="false"
+          [selectedCountryISO]="CountryISO.Morocco"
+          cssClass="form-control"
+          formControlName="mobile"
+          id="mobile"
+          inputId="mobile"
+        ></ngx-intl-tel-input>
+      </c-col>
+    </c-row>
+
+    <c-row class="mb-3">
+      <c-col [md]="12">
+        <label cLabel class="required me-2" for="roles">
+          {{ 'settings.user-settings.create-user.form.role-input.label'|translate }}
+        </label>
+        <ng-select id="roles" appearance="outline" [searchable]="false" [clearable]="false" [items]="roles"
+                   formControlName="roles">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item }}</span>
+          </ng-template>
+        </ng-select>
+        @if (((userForm.get('roles')?.touched || userForm.get('roles')?.dirty))) {
+          @if (userForm.get('roles')?.hasError('required')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+          }
+        }
+      </c-col>
+    </c-row>
+
+    <c-row class="mt-4">
+      <c-col [md]="6">
+        <c-form-check [switch]="true">
+          <input cFormCheckInput type="checkbox" formControlName="enabled" id="enabled"
+                 [checked]="userForm.value.enabled"/>
+          <label cFormCheckLabel for="enabled">
+            {{ 'settings.user-settings.edit-user.form.enabled-input.label'|translate }}
+          </label>
+        </c-form-check>
+      </c-col>
+    </c-row>
+
+    <!--Modal footer-->
+    <c-row class="mt-4">
+      <c-col class="d-flex justify-content-end">
+        <button cButton class="ms-1" color="light" size="sm" variant="ghost" (click)="closeModal()">
+          {{ 'commons.form.cancel-btn'|translate }}
+        </button>
+        <button cButton class="ms-1" color="primary" size="sm" type="submit">
+          {{ userToEdit ? ('commons.form.update-btn'|translate) : ('commons.form.save-btn'|translate) }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>

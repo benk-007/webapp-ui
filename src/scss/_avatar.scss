@@ -1,0 +1,8 @@
+@use "variables" as vars;
+
+.avatar {
+  &.bg-primary {
+    background-color: vars.$primary01 !important;
+    color: vars.$primary !important;
+  }
+}

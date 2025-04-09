@@ -1,0 +1,27 @@
+.page-title {
+  h1 {
+    font-size: 1.125rem;
+    font-weight: 500 !important;
+  }
+}
+
+.search-input {
+  border: 1px solid #e2e6f1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0.25rem;
+
+  &:focus-within{
+    border-color: #accdff !important;
+  }
+
+  span.input-group-text {
+    background-color: white;
+    border: none;
+  }
+  input{
+    border: none;
+    outline: none;
+  }
+}

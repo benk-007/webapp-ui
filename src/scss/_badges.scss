@@ -1,0 +1,22 @@
+@use "variables" as vars;
+
+span.badge {
+  padding: 0.25rem 0.45rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+  font-size: 0.7rem !important;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  display: inline-block;
+
+  &.bg-primary-transparent {
+    background-color: vars.$primary01;
+    color: vars.$primary;
+  }
+
+  &.bg-danger-transparent {
+    background-color: vars.$danger01;
+    color: vars.$danger;
+  }
+}

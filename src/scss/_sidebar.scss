@@ -1,0 +1,26 @@
+@use "variables" as vars;
+
+.sidebar {
+
+  border-color: #f3f3f3 !important;
+
+  .sidebar-nav {
+    .nav-item, .nav-group {
+      font-size: 0.85rem !important;
+      font-weight: 500 !important;
+    }
+
+    .nav-title {
+      margin-top: 0 !important;
+      padding: 0.75rem 1.75rem;
+      color: #61748f;
+      font-size: 0.675rem;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+      position: relative;
+      opacity: 0.5;
+    }
+  }
+}

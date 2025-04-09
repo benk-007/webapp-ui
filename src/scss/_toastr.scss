@@ -1,0 +1,75 @@
+@use "variables" as var;
+
+.toast-container{
+  &:hover{
+    box-shadow: none;
+  }
+  .ngx-toastr{
+    padding: 0 0;
+    &:hover{
+      box-shadow: none;
+    }
+
+    .toast-title{
+      padding: 0.375rem 0.75rem !important;
+    }
+
+    .toast-message{
+      padding: 0.75rem !important;
+    }
+
+
+    &.toast-error{
+      background-image: none;
+      background-color: var.$danger01;
+
+      .toast-title{
+        background-color: var.$danger !important;
+      }
+
+      .toast-message{
+        background-color: var.$danger01 !important;
+        color: var.$danger !important;
+      }
+    }
+
+    &.toast-success{
+      background-image: none;
+      background-color: var.$success01;
+
+      .toast-title{
+        background-color: var.$success !important;
+      }
+
+      .toast-message{
+        background-color: var.$success01 !important;
+        color: var.$success !important;
+      }
+    }
+
+    &.toast-info{
+      background-image: none;
+      background-color: var.$info01;
+
+      .toast-title{
+        background-color: var.$info !important;
+      }
+
+      .toast-message{
+        background-color: var.$info01 !important;
+        color: var.$info !important;
+      }
+    }
+
+
+
+  }
+
+
+}
+
+
+
+/*.toast-container .ngx-toastr:hover {
+  box-shadow: none;
+}*/

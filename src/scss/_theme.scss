@@ -3,9 +3,11 @@
 @use "sass:color";
 @use "sass:map";
 @use "@coreui/coreui/scss/variables" as *;
+@use "variables" as vars;
 
 body {
-  background-color: var(--cui-tertiary-bg);
+  //background-color: var(--cui-tertiary-bg);
+  background-color: white !important;
 }
 
 .wrapper {
@@ -54,6 +56,7 @@ body {
 
 .footer {
   min-height: calc(3rem + 1px); // stylelint-disable-line function-disallowed-list
+  background-color: white !important;
 }
 
 @include color-mode(dark) {

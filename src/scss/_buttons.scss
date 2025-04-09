@@ -1,7 +1,30 @@
-.btn{
+@use "variables" as vars;
+
+.btn {
   font-family: "Plus Jakrta Sans", sans-serif;
   font-weight: 300;
-  &.btn-primary{
+
+  &.btn-primary, &.btn-secondary {
     color: white !important;
   }
+
+  &.btn-light {
+    &:hover {
+      border-color: transparent !important;
+    }
+  }
+
+  &.btn-primary {
+    &.btn-light {
+      background-color: vars.$primary01;
+      color: vars.$primary !important;
+
+      &:hover {
+        background-color: vars.$primary;
+        color: white !important;
+      }
+    }
+  }
+
+
 }

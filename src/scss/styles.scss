@@ -14,16 +14,26 @@
   $dark: #0a0a0a,
   $border-color: #e2e6f1,
   $body-color: #010101,
-
+  $sidebar-nav-link-color: #61748f,
+  $sidebar-nav-link-icon-color: #589bff,
+  $sidebar-nav-link-active-color: #589bff,
+  $sidebar-nav-link-active-icon-color: #589bff,
+  $sidebar-nav-link-active-bg: #f0f5ff,
+  $sidebar-nav-link-hover-color: #589bff,
+  $sidebar-nav-link-hover-icon-color: #589bff,
+  $sidebar-nav-link-hover-bg: #f0f5ff,
+  $sidebar-nav-link-padding-y: .65rem ,
+  $sidebar-nav-link-padding-x: 1rem,
+  $sidebar-width: 15rem,
+  $table-hover-bg: #f9fafb
 );
 
 // Import Chart.js custom tooltips styles
 @use "@coreui/chartjs/scss/coreui-chartjs";
-
+@use "@ng-select/ng-select/themes/default.theme.css";
+@use 'ngx-toastr/toastr';
 // Custom styles for this theme
 @use "theme";
 
 // If you want to add custom CSS you can put it here.
 @use "custom";
-
-
