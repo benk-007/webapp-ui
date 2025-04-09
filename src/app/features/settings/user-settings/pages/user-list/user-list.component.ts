@@ -22,6 +22,7 @@ import {UserService} from "../../services/user.service";
 import {DatePipe, NgIf, TitleCasePipe} from "@angular/common";
 import {UserCuModalComponent} from "../user-cu-modal/user-cu-modal.component";
 import {BsModalService} from "ngx-bootstrap/modal";
+import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
 
 @Component({
   selector: 'app-user-list',
@@ -41,7 +42,8 @@ import {BsModalService} from "ngx-bootstrap/modal";
     BadgeComponent,
     DatePipe,
     TitleCasePipe,
-    NgIf
+    NgIf,
+    AuditNamePipe
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',

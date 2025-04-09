@@ -2,7 +2,10 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 import {Subscription} from "rxjs";
 import {
   ButtonDirective,
-  ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  ColComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
   FormControlDirective,
   FormDirective,
   FormFeedbackComponent,
@@ -20,6 +23,7 @@ import {UserPostModel} from "../../models/user-post.model";
 import {UserService} from "../../services/user.service";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {ToastrService} from "ngx-toastr";
+import {UserPatchModel} from "../../models/user-patch.model";
 import {JsonPipe} from "@angular/common";
 
 @Component({
@@ -71,6 +75,7 @@ export class UserCuModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.userToEdit) {
       this.userForm.patchValue(this.userToEdit);
+      this.userForm.patchValue({roles: this.userToEdit.roles[0]});
     }
   }
 
@@ -80,7 +85,7 @@ export class UserCuModalComponent implements OnInit, OnDestroy {
       let payload: UserPostModel = {
         fullName: this.userForm.value.fullName,
         email: this.userForm.value.email,
-        mobile: this.userForm.value.mobile,
+        mobile: this.userForm.value.mobile?.e164Number,
         roles: [this.userForm.value.roles]
       }
       this.subscriptions.push(this.userService.postUser(payload).subscribe({
@@ -88,8 +93,12 @@ export class UserCuModalComponent implements OnInit, OnDestroy {
           console.log('User creation api response is:', res);
           this.actionConfirmed.emit();
           this.closeModal();
-          let message = this.translateService.instant('settings.create-user.form.notifications.success.message').replace(':name', res.fullName);
-          this.toastrService.success(message, this.translateService.instant('settings.create-user.form.notifications.success.title'));
+          let message = this.translateService.instant('settings.user-settings.create-user.form.notifications.success.message');
+          message = message.replace(':name', res.fullName);
+          let title = this.translateService.instant('settings.user-settings.create-user.form.notifications.success.title');
+          this.toastrService.success(message, title);
+
+          this.toastrService.success(message, title);
         },
         error: (err) => {
           console.log('An error occurred when creating the user:', err);
@@ -104,18 +113,55 @@ export class UserCuModalComponent implements OnInit, OnDestroy {
             );
             this.uniqueEmailError = uniqueEmailError != undefined;
           } else {
-            this.toastrService.error(this.translateService.instant('settings.create-user.form.notifications.error.message'),
-              this.translateService.instant('settings.create-user.form.notifications.error.title'));
+            this.toastrService.error(this.translateService.instant('settings.user-settings.create-user.form.notifications.error.message'),
+              this.translateService.instant('settings.user-settings.create-user.form.notifications.error.title'));
           }
         }
       }))
     } else {
       console.log('User edition mode for user ...');
+      let payload: UserPatchModel = {
+        fullName: this.userForm.value.fullName,
+        email: this.userForm.value.email,
+        mobile: this.userForm.value.mobile?.e164Number,
+        roles: [this.userForm.value.roles],
+        enabled: this.userForm.value.enabled
+      }
+
+      this.subscriptions.push(this.userService.patchUserById(payload, this.userToEdit.id).subscribe({
+        next: (res) => {
+          console.log('User update api response is:', res);
+          this.actionConfirmed.emit();
+          this.closeModal();
+          let message = this.translateService.instant('settings.user-settings.edit-user.form.notifications.success.message');
+          message = message.replace(':name', res.fullName);
+          let title = this.translateService.instant('settings.user-settings.edit-user.form.notifications.success.title');
+          this.toastrService.success(message, title);
+        },
+        error: (err) => {
+          console.log('An error occurred when updating the user:', err);
+
+          if (
+            err?.error?.errors?.email &&
+            Array.isArray(err.error.errors.email)
+          ) {
+            console.log(err.error.errors.email);
+            const uniqueEmailError = err.error.errors.email.find(
+              (err: { code: string }) => err.code === "UniqueEmail"
+            );
+            this.uniqueEmailError = uniqueEmailError != undefined;
+          } else {
+            this.toastrService.error(this.translateService.instant('settings.user-settings.edit-user.form.notifications.error.message'),
+              this.translateService.instant('settings.edit-user.form.notifications.error.title'));
+          }
+        }
+      }))
     }
   }
 
   closeModal() {
     this.modalRef.hide();
+    this.userForm.reset();
   }
 
   ngOnDestroy(): void {

@@ -87,17 +87,19 @@
       </c-col>
     </c-row>
 
-    <c-row class="mt-4">
-      <c-col [md]="6">
-        <c-form-check [switch]="true">
-          <input cFormCheckInput type="checkbox" formControlName="enabled" id="enabled"
-                 [checked]="userForm.value.enabled"/>
-          <label cFormCheckLabel for="enabled">
-            {{ 'settings.user-settings.edit-user.form.enabled-input.label'|translate }}
-          </label>
-        </c-form-check>
-      </c-col>
-    </c-row>
+    @if (userToEdit) {
+      <c-row class="mt-4" >
+        <c-col [md]="6">
+          <c-form-check [switch]="true">
+            <input cFormCheckInput type="checkbox" formControlName="enabled" id="enabled"
+                   [checked]="userForm.value.enabled"/>
+            <label cFormCheckLabel for="enabled">
+              {{ 'settings.user-settings.edit-user.form.enabled-input.label'|translate }}
+            </label>
+          </c-form-check>
+        </c-col>
+      </c-row>
+    }
 
     <!--Modal footer-->
     <c-row class="mt-4">

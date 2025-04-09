@@ -4,6 +4,7 @@ import {PageModel} from "../../../../shared/models/pageable/page.model";
 import {UserListItemGetModel} from "../models/user-list-item-get.model";
 import {HttpClient} from "@angular/common/http";
 import {UserPostModel} from "../models/user-post.model";
+import {UserPatchModel} from "../models/user-patch.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,9 @@ export class UserService {
 
   postUser(payload: UserPostModel) {
     return this.httpClient.post<UserListItemGetModel>('http://localhost:8080/authMgtApi/users', payload);
+  }
+
+  patchUserById(payload: UserPatchModel, userId: string){
+    return this.httpClient.patch<UserListItemGetModel>('http://localhost:8080/authMgtApi/users/'+userId, payload);
   }
 }

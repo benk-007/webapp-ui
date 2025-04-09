@@ -4,6 +4,7 @@ import {UserCredentialsPostModel} from "../models/user-credentials-post.model";
 import {TokenGetModel} from "../models/token-get.model";
 import {ForgotPasswordPostModel} from "../models/forgot-password-post.model";
 import {ResetPasswordPostModel} from "../models/reset-password-post.model";
+import {AccountValidationPostModel} from "../models/account-validation-post.model";
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class AuthApiService {
 
   resetPassword(payload: ResetPasswordPostModel) {
     return this.httpClient.post<void>('http://localhost:8080/authMgtApi/reset-password', payload);
+  }
+
+  validateAccount(payload: AccountValidationPostModel){
+    return this.httpClient.post<void>('http://localhost:8080/authMgtApi/validate-account', payload);
   }
 }

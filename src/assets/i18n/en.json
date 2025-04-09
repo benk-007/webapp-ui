@@ -13,7 +13,9 @@
       "cancel-btn": "Cancel"
     },
     "snippets": {
-
+      "audit": {
+        "created-by": "Created by"
+      }
     }
   },
   "authentication": {
@@ -82,6 +84,35 @@
       "errors": {
         "no-token": "The reset password link is invalid or missing the required token."
       }
+    },
+    "account-validation": {
+      "title": "Validate your account",
+      "sub-title": "Set a password for your account by entering and confirming it below.",
+      "form": {
+        "password-input": {
+          "placeholder": "Password",
+          "errors": {
+            "strong": "Password should be at least 8 characters long lower and upper case, with a number and a special character"
+          }
+        },
+        "confirm-password-input": {
+          "placeholder": "Confirm your password",
+          "errors": {
+            "mismatch": "Passwords do not match"
+          }
+        },
+        "submit-btn": "Submit",
+        "errors": {
+          "undefined": "Something went wrong at our end, and we are working to fix the problem! ",
+          "UAA_RNF_ERR_3": "We couldn’t verify your account validation request. The key might be incorrect.",
+          "UAA_AUTH_FORB_ERR_5": "The account validation key has expired. A new account validation email has been sent to your registered email address."
+        },
+        "success": "Your account has been validated! You can now sign in with your credentials."
+      },
+      "login-link": "Go back to login page",
+      "errors": {
+        "no-token": "The account validation link is invalid or missing the required token."
+      }
     }
   },
   "settings": {
@@ -97,7 +128,7 @@
             "role": "Role",
             "email": "Email",
             "mobile": "Mobile",
-            "last-activity": "Last activity",
+            "last-activity": "Created on",
             "actions": "Actions"
           }
         }

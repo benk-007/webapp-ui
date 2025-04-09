@@ -96,6 +96,13 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'account-validation',
+    loadComponent: () => import('./features/authentication/pages/account-validation/account-validation.component').then(m => m.AccountValidationComponent),
+    data: {
+      title: 'Account validation Page'
+    }
+  },
+  {
     path: 'register',
     loadComponent: () => import('./views/pages/register/register.component').then(m => m.RegisterComponent),
     data: {

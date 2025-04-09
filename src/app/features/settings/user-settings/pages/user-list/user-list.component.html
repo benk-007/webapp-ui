@@ -57,7 +57,7 @@
                   }
                 </div>
                 <div class="small text-body-secondary text-nowrap">
-                  <span>Created by {{ user.audit.createdBy | titlecase }}</span>
+                  <span>{{'commons.snippets.audit.created-by'|translate}} {{ user.audit.createdBy | auditName }}</span>
                 </div>
               </div>
             </div>
