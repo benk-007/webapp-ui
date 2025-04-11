@@ -12,7 +12,7 @@ import {
   FormLabelDirective,
   RowComponent
 } from "@coreui/angular";
-import {UserListItemGetModel} from "../../models/user-list-item-get.model";
+import {UserItemGetModel} from "../../models/user-item-get.model";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {emailValidator} from "../../../../../shared/validators/email.validator";
@@ -50,7 +50,7 @@ import {JsonPipe} from "@angular/common";
   styleUrl: './user-cu-modal.component.scss'
 })
 export class UserCuModalComponent implements OnInit, OnDestroy {
-  userToEdit!: UserListItemGetModel | undefined;
+  userToEdit!: UserItemGetModel | undefined;
   userForm: FormGroup;
   uniqueEmailError: boolean = false;
   roles = [RoleEnum.ADMINISTRATOR, RoleEnum.ACCOUNTING, RoleEnum.HOUSE_STAFF, RoleEnum.PROPERTY_MANAGER, RoleEnum.PROPERTY_OWNER]

@@ -1,7 +1,7 @@
 import {AuditGetModel} from "../../../../shared/models/audit-get.model";
 import {RoleEnum} from "./role.enum";
 
-export interface UserListItemGetModel{
+export interface UserItemGetModel {
 
   id: string;
   fullName: string;

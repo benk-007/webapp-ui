@@ -30,7 +30,7 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Rentals',
-    url: '/theme/colors',
+    url: '/units',
     iconComponent: {name: 'cil-home'}
   },
   {

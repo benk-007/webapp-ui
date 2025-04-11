@@ -12,17 +12,18 @@ import {
 import {IconDirective} from "@coreui/icons-angular";
 import {cilClock, cilPen, cilSearch} from "@coreui/icons";
 import {ListContentComponent} from "../../../../../shared/components/list-content/list-content.component";
-import {UserListItemGetModel} from "../../models/user-list-item-get.model";
+import {UserItemGetModel} from "../../models/user-item-get.model";
 import {TableControlComponent} from "../../../../../shared/components/table-control/table-control.component";
 import {TranslatePipe} from "@ngx-translate/core";
 import {SelectableTableDirective} from "../../../../../shared/directives/selectable-table.directive";
 import {BadgeComponent} from "../../../../../shared/components/badge/badge.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
-import {DatePipe, NgIf, TitleCasePipe} from "@angular/common";
+import {DatePipe, TitleCasePipe} from "@angular/common";
 import {UserCuModalComponent} from "../user-cu-modal/user-cu-modal.component";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
+import {TooltipDirective} from "ngx-bootstrap/tooltip";
 
 @Component({
   selector: 'app-user-list',
@@ -42,8 +43,8 @@ import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
     BadgeComponent,
     DatePipe,
     TitleCasePipe,
-    NgIf,
-    AuditNamePipe
+    AuditNamePipe,
+    TooltipDirective
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -52,7 +53,7 @@ import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
 export class UserListComponent extends ListContentComponent {
 
   icons = {cilSearch, cilClock, cilPen}
-  override listContent: UserListItemGetModel[] = [];
+  override listContent: UserItemGetModel[] = [];
   override listParamValidator = {
     page: /^[1-9]\d*$/,
     size: ['10', '20', '50', '100'],
@@ -93,35 +94,7 @@ export class UserListComponent extends ListContentComponent {
     );
   }
 
-  getNameInitials(name: string): string {
-    if (name) {
-      // Split the name into words, removing any extra spaces
-      const words = name.trim().split(" ").filter(word => word.trim() !== "");
-
-      // Handle names with different word counts
-      if (words.length === 1) {
-        // Single word name: Use the first two letters
-        return words[0].slice(0, 2).toUpperCase();
-      } else if (words.length === 2) {
-        // Two words: Use the initials of both words
-        return (
-          words[0].charAt(0).toUpperCase() +
-          words[1].charAt(0).toUpperCase()
-        );
-      } else {
-        // Three or more words: Use the initials of the first two and the last word
-        return (
-          words[0].charAt(0).toUpperCase() +
-          words[1].charAt(0).toUpperCase() +
-          words[words.length - 1].charAt(0).toUpperCase()
-        );
-      }
-    } else {
-      return 'N/A';
-    }
-  }
-
-  openUserCuModal(user?: UserListItemGetModel) {
+  openUserCuModal(user?: UserItemGetModel) {
     let initialState;
     if (user) {
       initialState = {

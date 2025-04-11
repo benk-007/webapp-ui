@@ -5,6 +5,7 @@ import {FormGroup} from "@angular/forms";
 import {filter, tap} from "rxjs/operators";
 import moment from "moment";
 import {PageChangedEvent} from "ngx-bootstrap/pagination";
+import {UtilsService} from "../../services/utils.service";
 
 @Component({
   selector: 'app-list-content',
@@ -326,11 +327,11 @@ export class ListContentComponent implements OnInit, OnDestroy {
 
     if (value && value.length >= 1) {
       this.isSearchActive = true;
-      this.updateQueryParam({ page: 1, search: value });
+      this.updateQueryParam({page: 1, search: value});
     } else if (this.isSearchActive) {
       // No need to check `(!value || value.length === 0)` again since we're in the `else` block.
       this.isSearchActive = false;
-      this.updateQueryParam({ page: 1, search: '' });
+      this.updateQueryParam({page: 1, search: ''});
     }
   }
 
@@ -448,6 +449,10 @@ export class ListContentComponent implements OnInit, OnDestroy {
     this.httpSubscriptions.forEach(value => {
       value.unsubscribe();
     })
+  }
+
+  getNameInitials(value: string) {
+    return UtilsService.getNameInitials(value);
   }
 
   /**

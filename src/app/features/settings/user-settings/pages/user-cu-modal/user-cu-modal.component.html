@@ -107,7 +107,7 @@
         <button cButton class="ms-1" color="light" size="sm" variant="ghost" (click)="closeModal()">
           {{ 'commons.form.cancel-btn'|translate }}
         </button>
-        <button cButton class="ms-1" color="primary" size="sm" type="submit">
+        <button cButton class="ms-1" color="primary" size="sm" type="submit" [disabled]="!userForm.valid">
           {{ userToEdit ? ('commons.form.update-btn'|translate) : ('commons.form.save-btn'|translate) }}
         </button>
       </c-col>

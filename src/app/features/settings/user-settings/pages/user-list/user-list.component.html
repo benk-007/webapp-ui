@@ -47,12 +47,15 @@
                 <div><span class="me-1">
                   {{ user.fullName }}</span>
                   @if (!user.enabled) {
-                    <i class="bi bi-patch-plus-fill text-danger"></i>
+                    <i class="bi bi-patch-plus-fill text-danger" [adaptivePosition]="true"
+                       [tooltip]="'settings.user-settings.list-users.table.body.disabled-user'|translate"></i>
                   } @else {
                     @if (!user.activated) {
-                      <i class="bi bi-patch-exclamation-fill text-warning"></i>
+                      <i class="bi bi-patch-exclamation-fill text-warning" [adaptivePosition]="true"
+                         [tooltip]="'settings.user-settings.list-users.table.body.not-activated-user'|translate"></i>
                     } @else {
-                      <i class="bi bi-patch-check-fill text-success"></i>
+                      <i class="bi bi-patch-check-fill text-success" [adaptivePosition]="true"
+                         [tooltip]="'settings.user-settings.list-users.table.body.activated-user'|translate"></i>
                     }
                   }
                 </div>
