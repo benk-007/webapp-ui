@@ -11,5 +11,5 @@ VERSION=$(node -pe "require('$SCRIPT_DIR/../package.json').version")
 docker build  --build-arg PROFILE=production -t registry.gitlab.com/xstay1/pms-ui:$VERSION -t registry.gitlab.com/xstay1/pms-ui:latest .
 
 # Push Docker images
-docker push registry.gitlab.com/pms-ui:$VERSION
-docker push registry.gitlab.com/pms-ui:latest
+docker push registry.gitlab.com/xstay1/pms-ui:$VERSION
+docker push registry.gitlab.com/xstay1/pms-ui:latest
