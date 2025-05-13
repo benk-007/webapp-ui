@@ -271,7 +271,6 @@ Docker image build & push:
   script:
     - ls -lh
     - chmod +x .gitlab/push-docker-image.sh
-    - docker login -u "$REGISTRY_USER" --password-stdin "$REGISTRY_URL"
     - apk update && apk add --no-cache nodejs
     - ./.gitlab/push-docker-image.sh $REGISTRY_URL
 
