@@ -1,1 +1,14 @@
-<p>edit-unit works!</p>
+<app-page-title [title]="'units.edit-unit.default-title'|translate">
+</app-page-title>
+
+<c-tabs [activeItemKey]="0" >
+  <c-tabs-list variant="underline-border">
+    <button cTab [itemKey]="0">{{'units.edit-unit.tabs.general-information.title'|translate}}</button>
+    <button cTab [itemKey]="1">{{'units.edit-unit.tabs.rental-details.title'|translate}}</button>
+    <button cTab [itemKey]="2">Contact</button>
+    <button cTab [itemKey]="3" disabled>Disabled</button>
+  </c-tabs-list>
+  <c-tabs-content>
+    <router-outlet></router-outlet>
+  </c-tabs-content>
+</c-tabs>

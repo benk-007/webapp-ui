@@ -16,7 +16,9 @@
     "snippets": {
       "audit": {
         "created-by": "Created by"
-      }
+      },
+      "no-result": "No results match your search. Please try adjusting your keywords or filters.",
+      "loading": "Loading"
     },
     "countries": {
       "AD": "Andorra",
@@ -319,7 +321,8 @@
     "unit-list": {
       "title": "Unit list",
       "cta": {
-        "add-btn": "+ Add unit"
+        "add-btn": "+ Add unit",
+        "add-multi-btn": "Add Multi-unit"
       },
       "table": {
         "header": {
@@ -337,7 +340,8 @@
           "beds": "Bed(s)",
           "bathrooms": "Bathroom(s)"
         }
-      }
+      },
+      "empty-data": "Jump start your <span class=\"text-primary xstay\">xStay</span> account by adding your first rental. Click the 'Add unit' button above to begin."
     },
     "create-unit": {
       "title": "Add unit",
@@ -386,6 +390,41 @@
             "label": "Email",
             "placeholder": ""
           }
+        },
+        "notifications": {
+          "success": {
+            "title": "Unit created",
+            "message": "Unit :unit has been successfully created"
+          },
+          "error": {
+            "title": "Unit creation failed",
+            "message": "An error occurred while creating the unit. Please try again or contact the support team."
+          }
+        }
+      }
+    },
+    "edit-unit": {
+      "default-title": "Edit unit",
+      "title": "Unit: :unit",
+      "tabs": {
+        "general-information": {
+          "title": "General information",
+          "form": {
+            "latitude-input": {
+              "label": "Latitude",
+              "placeholder": ""
+            },
+            "longitude-input": {
+              "label": "Longitude",
+              "placeholder": ""
+            }
+          }
+        },
+        "rental-details": {
+          "title": "Rental details"
+        },
+        "checkin-policy": {
+          "title": ""
         }
       }
     }

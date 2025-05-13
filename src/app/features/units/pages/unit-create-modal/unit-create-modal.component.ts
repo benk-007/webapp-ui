@@ -14,7 +14,6 @@ import {BsModalRef} from "ngx-bootstrap/modal";
 import {ToastrService} from "ngx-toastr";
 import {Subscription} from "rxjs";
 import {CountryISO, NgxIntlTelInputModule, SearchCountryField} from "ngx-intl-tel-input";
-import {JsonPipe} from "@angular/common";
 import {emailValidator} from "../../../../shared/validators/email.validator";
 import {CountrySelectComponent} from "../../../../shared/components/country-select/country-select.component";
 import {noNumbersValidator} from "../../../../shared/validators/no-number.validator";
@@ -35,7 +34,6 @@ import {UnitApiService} from "../../services/unit-api.service";
     FormDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    JsonPipe,
     CountrySelectComponent
   ],
   templateUrl: './unit-create-modal.component.html',
@@ -89,9 +87,16 @@ export class UnitCreateModalComponent implements OnDestroy {
         console.log('Your post unit API response is:', data);
         this.actionConfirmed.emit("");
         this.closeModal();
+        let message = this.translateService.instant('units.create-unit.form.notifications.success.message');
+        this.toastrService.success(message.replace(':unit', data.name),
+          this.translateService.instant('units.create-unit.form.notifications.success.title')
+        )
       },
       error: (err) => {
         console.log('An error occurred when calling post unit API: ', err);
+        this.toastrService.error(this.translateService.instant('units.create-unit.form.notifications.error.message'),
+          this.translateService.instant('units.create-unit.form.notifications.success.title')
+        )
       }
     }))
 

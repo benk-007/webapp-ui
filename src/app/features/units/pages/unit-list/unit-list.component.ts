@@ -2,16 +2,22 @@ import {Component} from '@angular/core';
 import {
   AvatarComponent,
   ButtonDirective,
-  ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  ButtonGroupComponent,
+  ColComponent,
+  DropdownComponent,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
   FormControlDirective,
   InputGroupComponent,
   InputGroupTextDirective,
   RowComponent,
+  SpinnerComponent,
   TableDirective
 } from "@coreui/angular";
 import {TranslatePipe} from "@ngx-translate/core";
 import {IconDirective} from "@coreui/icons-angular";
-import {cilBath, cilBed, cilPen, cilSearch} from "@coreui/icons";
+import {cilBath, cilBed, cilMediaPlay, cilPen, cilSearch} from "@coreui/icons";
 import {SelectableTableDirective} from "../../../../shared/directives/selectable-table.directive";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {UnitCreateModalComponent} from "../unit-create-modal/unit-create-modal.component";
@@ -21,6 +27,9 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {UnitApiService} from "../../services/unit-api.service";
 import {AuditNamePipe} from "../../../../shared/pipes/audit-name.pipe";
 import {TooltipDirective} from "ngx-bootstrap/tooltip";
+import {TableControlComponent} from "../../../../shared/components/table-control/table-control.component";
+import {EmptyDataComponent} from "../../../../shared/components/empty-data/empty-data.component";
+import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
 
 @Component({
   selector: 'app-unit-list',
@@ -38,10 +47,16 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
     AuditNamePipe,
     AvatarComponent,
     RouterLink,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TooltipDirective
+    TooltipDirective,
+    ButtonGroupComponent,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    TableControlComponent,
+    EmptyDataComponent,
+    SpinnerComponent,
+    PageTitleComponent
   ],
   templateUrl: './unit-list.component.html',
   styleUrl: './unit-list.component.scss',
@@ -49,7 +64,7 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
 })
 export class UnitListComponent extends ListContentComponent {
 
-  icons = {cilSearch, cilBed, cilBath, cilPen}
+  icons = {cilSearch, cilBed, cilBath, cilPen, cilMediaPlay}
 
   override listContent: UnitItemGetModel[] = [];
   override listParamValidator = {
@@ -87,6 +102,9 @@ export class UnitListComponent extends ListContentComponent {
           },
           error: (err: any) => {
             console.warn('An error occurred when retrieving unit list from API:', err)
+            if (!this.firstCallDone) {
+              this.firstCallDone = true;
+            }
           }
         })
     );

@@ -7,10 +7,11 @@ import {
   InputGroupComponent,
   InputGroupTextDirective,
   RowComponent,
+  SpinnerComponent,
   TableDirective
 } from "@coreui/angular";
 import {IconDirective} from "@coreui/icons-angular";
-import {cilClock, cilPen, cilSearch} from "@coreui/icons";
+import {cilClock, cilPen, cilSearch, cilSortAscending, cilSortDescending, cilSwapVertical} from "@coreui/icons";
 import {ListContentComponent} from "../../../../../shared/components/list-content/list-content.component";
 import {UserItemGetModel} from "../../models/user-item-get.model";
 import {TableControlComponent} from "../../../../../shared/components/table-control/table-control.component";
@@ -24,6 +25,7 @@ import {UserCuModalComponent} from "../user-cu-modal/user-cu-modal.component";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
 import {TooltipDirective} from "ngx-bootstrap/tooltip";
+import {EmptyDataComponent} from "../../../../../shared/components/empty-data/empty-data.component";
 
 @Component({
   selector: 'app-user-list',
@@ -44,7 +46,9 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
     DatePipe,
     TitleCasePipe,
     AuditNamePipe,
-    TooltipDirective
+    TooltipDirective,
+    EmptyDataComponent,
+    SpinnerComponent
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -52,12 +56,15 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
 })
 export class UserListComponent extends ListContentComponent {
 
-  icons = {cilSearch, cilClock, cilPen}
+
+  icons = {
+    cilSearch, cilClock, cilPen, cilSwapVertical, cilSortAscending, cilSortDescending
+  }
   override listContent: UserItemGetModel[] = [];
   override listParamValidator = {
     page: /^[1-9]\d*$/,
     size: ['10', '20', '50', '100'],
-    sort: /^(name|contactName|type|website|status|creationDate|modifiedAt),(asc|desc)$/,
+    sort: /^(fullname|role|email|mobile|createdAt),(asc|desc)$/,
     search: /.{3,}/,
   };
 
@@ -82,13 +89,16 @@ export class UserListComponent extends ListContentComponent {
     console.log('Retrieving users list ...')
     this.subscriptions.push(
       this.userService
-        .getUsersByPage()
+        .getUsersByPage(this.page, this.size, this.sort, this.sortDirection, this.search)
         .subscribe({
           next: (data: any) => {
             super.handleSuccessData(data);
           },
           error: (err: any) => {
-            console.warn('An error occurred when retrieving users list from API:', err)
+            console.warn('An error occurred when retrieving users list from API:', err);
+            if (!this.firstCallDone) {
+              this.firstCallDone = true;
+            }
           }
         })
     );
