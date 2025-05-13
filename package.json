@@ -46,7 +46,7 @@
     "ngx-bootstrap": "^19.0.2",
     "ngx-scrollbar": "^13.0.3",
     "ngx-intl-tel-input": "^17.0.0",
-    "intl-tel-input": "^25.3.1",
+    "intl-tel-input": "^17.0.3",
     "@ng-select/ng-select": "^14.2.6",
     "@angular/google-maps": "^19.2.9",
     "ngx-toastr": "^19.0.0",
