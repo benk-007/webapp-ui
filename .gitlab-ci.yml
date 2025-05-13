@@ -39,4 +39,5 @@ Docker image build & push:
     - ls -lh
     - chmod +x .gitlab/push-docker-image.sh
     - apk update && apk add --no-cache nodejs
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - ./.gitlab/push-docker-image.sh
