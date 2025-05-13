@@ -5,6 +5,7 @@ import {UserItemGetModel} from "../models/user-item-get.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {UserPostModel} from "../models/user-post.model";
 import {UserPatchModel} from "../models/user-patch.model";
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,14 @@ export class UserService {
     params = params.set('size', size.toString());
     params = params.set('page', page.toString());
 
-    return this.httpClient.get<PageModel<UserItemGetModel>>('http://localhost:8080/authMgtApi/users', {params})
+    return this.httpClient.get<PageModel<UserItemGetModel>>(environment.apiBaseUrl.concat(environment.userList), {params})
   }
 
   postUser(payload: UserPostModel) {
-    return this.httpClient.post<UserItemGetModel>('http://localhost:8080/authMgtApi/users', payload);
+    return this.httpClient.post<UserItemGetModel>(environment.apiBaseUrl.concat(environment.userList), payload);
   }
 
   patchUserById(payload: UserPatchModel, userId: string) {
-    return this.httpClient.patch<UserItemGetModel>('http://localhost:8080/authMgtApi/users/' + userId, payload);
+    return this.httpClient.patch<UserItemGetModel>(environment.apiBaseUrl.concat(environment.userById).replace(':userId', userId), payload);
   }
 }

@@ -1,0 +1,31 @@
+export const UAA_SERVICE = 'authMgtApi/';
+export const UNIT_SERVICE = 'unitMgtApi/';
+
+
+export const commonProperties = {
+  //authentication
+  login: UAA_SERVICE + 'login',
+
+  //forgot-password
+  forgotPassword: UAA_SERVICE + 'forgot-password',
+
+  //refresh-token
+  refreshToken: UAA_SERVICE + 'refresh-token',
+
+  //reset-password
+  resetPassword: UAA_SERVICE + 'reset-password',
+
+  //change-password
+  changePassword: UAA_SERVICE + 'change-password',
+
+  //validate-account
+  validateAccount: UAA_SERVICE + 'validate-account',
+
+  //user-management
+  userList: UAA_SERVICE + 'users',
+  userById: UAA_SERVICE + 'users/:userId',
+
+  //unit
+  unitList: UNIT_SERVICE + 'units',
+  unitById: UNIT_SERVICE + 'units/:unitId',
+}

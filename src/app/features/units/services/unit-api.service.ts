@@ -4,6 +4,7 @@ import {UnitPostModel} from "../models/unit-post.model";
 import {UnitItemGetModel} from "../models/unit-item-get.model";
 import {PageModel} from "../../../shared/models/pageable/page.model";
 import {UnitGetModel} from "../models/unit-get.model";
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,15 @@ export class UnitApiService {
   }
 
   postUnit(payload: UnitPostModel) {
-    return this.httpClient.post<UnitItemGetModel>('http://localhost:8080/unitMgtApi/units', payload);
+    return this.httpClient.post<UnitItemGetModel>(environment.apiBaseUrl.concat(environment.unitList), payload);
   }
 
   getUnitsByPage() {
-    return this.httpClient.get<PageModel<UnitItemGetModel>>('http://localhost:8080/unitMgtApi/units');
+    return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList));
   }
 
   getUnitById(unitId: string) {
-    return this.httpClient.get<UnitGetModel>('http://localhost:8080/unitMgtApi/units/:unitId'.replace(':unitId', unitId));
+    return this.httpClient.get<UnitGetModel>(environment.apiBaseUrl.concat(environment.unitById).replace(':unitId', unitId));
   }
 
 }
