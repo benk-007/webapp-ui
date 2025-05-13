@@ -6,31 +6,12 @@ import {filter, tap} from "rxjs/operators";
 import moment from "moment";
 import {PageChangedEvent} from "ngx-bootstrap/pagination";
 import {UtilsService} from "../../services/utils.service";
-import {
-  ColComponent,
-  FormControlDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  RowComponent
-} from "@coreui/angular";
-import {IconDirective} from "@coreui/icons-angular";
-import {TableControlComponent} from "../table-control/table-control.component";
-import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-list-content',
   templateUrl: './list-content.component.html',
   styleUrl: './list-content.component.scss',
-  imports: [
-    ColComponent,
-    FormControlDirective,
-    IconDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    TableControlComponent,
-    TranslatePipe
-  ]
+  imports: []
 })
 export class ListContentComponent implements OnInit, OnDestroy {
 
