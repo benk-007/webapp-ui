@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {PageModel} from "../../../../shared/models/pageable/page.model";
 import {UserItemGetModel} from "../models/user-item-get.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {UserPostModel} from "../models/user-post.model";
 import {UserPatchModel} from "../models/user-patch.model";
 
@@ -14,15 +14,22 @@ export class UserService {
   constructor(private readonly httpClient: HttpClient) {
   }
 
-  getUsersByPage(): Observable<PageModel<UserItemGetModel>> {
-    return this.httpClient.get<PageModel<UserItemGetModel>>('http://localhost:8080/authMgtApi/users')
+  getUsersByPage(page: number, size: number, sort: string, sortDirection: string, search: string): Observable<PageModel<UserItemGetModel>> {
+    let params = new HttpParams();
+    if (search) {
+      params = params.set('search', search);
+    }
+    params = params.set('size', size.toString());
+    params = params.set('page', page.toString());
+
+    return this.httpClient.get<PageModel<UserItemGetModel>>('http://localhost:8080/authMgtApi/users', {params})
   }
 
   postUser(payload: UserPostModel) {
     return this.httpClient.post<UserItemGetModel>('http://localhost:8080/authMgtApi/users', payload);
   }
 
-  patchUserById(payload: UserPatchModel, userId: string){
-    return this.httpClient.patch<UserItemGetModel>('http://localhost:8080/authMgtApi/users/'+userId, payload);
+  patchUserById(payload: UserPatchModel, userId: string) {
+    return this.httpClient.patch<UserItemGetModel>('http://localhost:8080/authMgtApi/users/' + userId, payload);
   }
 }

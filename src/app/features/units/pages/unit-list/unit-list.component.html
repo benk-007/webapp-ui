@@ -1,13 +1,16 @@
-<c-row class="page-title mb-3">
-  <c-col [md]="6" class="d-flex align-items-center">
-    <h1 class="page-title mb-0">{{ 'units.unit-list.title'|translate }}</h1>
-  </c-col>
-  <c-col [md]="6" class="d-flex justify-content-end">
-    <button cButton size="sm" color="secondary"
-            (click)="openCreateUnitModal()">{{ 'units.unit-list.cta.add-btn'|translate }}
+<app-page-title [title]="'units.unit-list.title'|translate">
+  <c-button-group>
+    <button cButton color="secondary" size="sm" (click)="openCreateUnitModal()">
+      {{ 'units.unit-list.cta.add-btn'|translate }}
     </button>
-  </c-col>
-</c-row>
+    <c-dropdown variant="btn-group">
+      <button cButton color="secondary" cDropdownToggle size="sm"></button>
+      <ul cDropdownMenu>
+        <li><a cDropdownItem routerLink>Multi unit</a></li>
+      </ul>
+    </c-dropdown>
+  </c-button-group>
+</app-page-title>
 
 <c-row class="mb-3">
   <c-col [md]="2">
@@ -15,101 +18,125 @@
         <span cInputGroupText>
           <svg [cIcon]="icons.cilSearch"></svg>
         </span>
-      <input
-        cFormControl
-        id="searchBar" [placeholder]="'commons.form.search-input.placeholder'|translate"/>
+      <input id="searchBar" cFormControl (input)="triggerBasicSearch($event)"
+             [placeholder]="'commons.form.search-input.placeholder'|translate"/>
     </c-input-group>
   </c-col>
 </c-row>
 
-<div class="table-responsive ">
-  <table cTable hover appSelectableTable [responsive]="true">
-    <thead>
-    <tr>
-      <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.country'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.ready'|translate }}</th>
-      <th>{{ 'units.unit-list.table.header.actions'|translate }}</th>
-    </tr>
-    </thead>
+<app-table-control></app-table-control>
 
-    <tbody>
-      @for (unit of listContent; track unit.id) {
+@if (!firstCallDone) {
+  <c-row class="d-flex justify-content-center mt-5">
+    <c-spinner color="secondary"/>
+  </c-row>
+  <c-row class="d-flex justify-content-center mt-1">
+    <c-col [md]="4" class="d-flex justify-content-center text-center">
+      {{ 'commons.snippets.loading'|translate }}
+    </c-col>
+  </c-row>
+} @else {
+
+  @if (!isListEmpty) {
+    <div class="table-responsive ">
+      <table cTable hover appSelectableTable [responsive]="true">
+        <thead>
         <tr>
-          <td>
-            <div class="d-flex align-items-center gap-2">
-              <c-avatar [size]="'md'" shape="rounded" textColor="white"
-                        color="primary">{{ getNameInitials(unit.name) }}
-              </c-avatar>
-              <div class="d-flex flex-column" [adaptivePosition]="true"
-                   [tooltip]="unit.subtitle">
-                <div>
-                  <span class="me-1" >{{ unit.name }}</span>
-                </div>
-                <div class="small text-body-secondary text-nowrap">
-                  <span>{{ 'commons.snippets.audit.created-by'|translate }} {{ unit.audit.createdBy | auditName }}</span>
-                </div>
-              </div>
-            </div>
-          </td>
+          <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.country'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.ready'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.actions'|translate }}</th>
+        </tr>
+        </thead>
 
-          <td>
+        <tbody>
+          @for (unit of listContent; track unit.id) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <c-avatar [size]="'md'" shape="rounded" textColor="white"
+                            color="primary">{{ getNameInitials(unit.name) }}
+                  </c-avatar>
+                  <div class="d-flex flex-column" [adaptivePosition]="true"
+                       [tooltip]="unit.subtitle">
+                    <div>
+                      <span class="me-1">{{ unit.name }}</span>
+                    </div>
+                    <div class="small text-body-secondary text-nowrap">
+                      <span>{{ 'commons.snippets.audit.created-by'|translate }} {{ unit.audit.createdBy | auditName }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
             <span [adaptivePosition]="true"
                   [tooltip]="'units.unit-list.table.body.beds'|translate">
               <span class="me-1 fs-6">{{ unit.beds }}</span>
               <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
             </span>
-            <span [adaptivePosition]="true"
-                  [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
+                <span [adaptivePosition]="true"
+                      [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
               <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
               <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
             </span>
 
-          </td>
+              </td>
 
-          <td>
-            <div class="d-flex flex-column">
-              <div>
-                <span class="me-1">{{ unit.contact.mobile }}</span>
-              </div>
-              @if (unit.contact.email) {
-                <div class="small text-body-secondary text-nowrap">
-                  {{ unit.contact.email }}
+              <td>
+                <div class="d-flex flex-column">
+                  <div>
+                    <span class="me-1">{{ unit.contact.mobile }}</span>
+                  </div>
+                  @if (unit.contact.email) {
+                    <div class="small text-body-secondary text-nowrap">
+                      {{ unit.contact.email }}
+                    </div>
+                  }
                 </div>
-              }
-            </div>
-          </td>
+              </td>
 
-          <td>
-            {{ unit.address.city }}
-          </td>
+              <td>
+                {{ unit.address.city }}
+              </td>
 
-          <td>
-            {{ 'commons.countries.' + unit.address.country|translate }}
-          </td>
+              <td>
+                {{ 'commons.countries.' + unit.address.country|translate }}
+              </td>
 
-          <td>
-            @if (unit.readiness) {
-              <span class="text-success">
+              <td>
+                @if (unit.readiness) {
+                  <span class="text-success">
               <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
               </span>
-            } @else {
-              <span class="text-danger">
+                } @else {
+                  <span class="text-danger">
               <i class="bi bi-x-square-fill"></i> {{ 'units.unit-list.table.body.not-ready'|translate }}
               </span>
-            }
-          </td>
+                }
+              </td>
 
-          <td>
-            <a cButton size="sm" color="primary" class="btn-light" [routerLink]="['/units/', unit.id, 'edit']">
-              <svg [cIcon]="icons.cilPen" size="sm"></svg>
-            </a>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+              <td>
+                <a cButton size="sm" color="primary" class="btn-light" [routerLink]="['/units/', unit.id]">
+                  <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    @if (!isSearchActive) {
+      <app-empty-data imageSrc="assets/images/animations/units.gif" [message]="'units.unit-list.empty-data'|translate">
+      </app-empty-data>
+    } @else {
+      <app-empty-data imageSrc="assets/images/animations/no-result.gif">
+      </app-empty-data>
+    }
+  }
+
+}

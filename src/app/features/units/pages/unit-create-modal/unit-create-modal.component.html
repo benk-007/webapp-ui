@@ -110,7 +110,7 @@
 
         <c-row>
           <c-col [md]="6" class="mb-3 w-100">
-            <label cLabel for="mobile">
+            <label cLabel for="mobile" class="required">
               {{ 'units.create-unit.form.contact.mobile-input.label'|translate }}
             </label>
             <ngx-intl-tel-input
@@ -154,10 +154,6 @@
       </c-col>
 
     </c-row>
-
-
-    {{ unitForm.value|json }}
-
 
     <!--Modal footer-->
     <c-row class="mt-4">

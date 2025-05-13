@@ -18,6 +18,14 @@ export const routes: Routes = [
         data: {
           title: 'List'
         }
+      },
+      {
+        path: ':unitId/view',
+        loadComponent: () => import('./pages/view-unit/view-unit.component').then((m) => m.ViewUnitComponent)
+      },
+      {
+        path: ':unitId',
+        loadChildren: () => import('./pages/edit-unit/routes').then((m) => m.routes)
       }
     ]
   }
