@@ -409,14 +409,25 @@
       "tabs": {
         "general-information": {
           "title": "General information",
+          "sections": {
+            "other": {
+              "title": "Other",
+              "form": {
+                "calendar-color-input": {
+                  "label": "Calendar color"
+                }
+              }
+            }
+          },
           "form": {
+            "lat-lng-input": {
+              "label": "Lat/Lng"
+            },
             "latitude-input": {
-              "label": "Latitude",
-              "placeholder": ""
+              "placeholder": "Latitude"
             },
             "longitude-input": {
-              "label": "Longitude",
-              "placeholder": ""
+              "placeholder": "Longitude"
             }
           }
         },

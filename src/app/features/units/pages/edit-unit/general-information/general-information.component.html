@@ -3,9 +3,9 @@
   <c-col md="8">
 
     <form (submit)="submit()" [formGroup]="infoForm" cForm>
-
       <!--Name & Subtitle input-->
       <c-row>
+        <!--Name input-->
         <c-col [md]="4" sm="12" class="mb-3">
           <label cLabel class="required me-2" for="name">
             {{ 'units.create-unit.form.name-input.label'|translate }}
@@ -18,6 +18,7 @@
             }
           }
         </c-col>
+        <!--Subtitle input-->
         <c-col [md]="8" sm="12" class="mb-3">
           <label cLabel for="subtitle">
             {{ 'units.create-unit.form.subtitle-input.label'|translate }}
@@ -26,15 +27,12 @@
                  [placeholder]="'units.create-unit.form.subtitle-input.placeholder'|translate" type="text"/>
         </c-col>
       </c-row>
-
-      <!--Address section title-->
-      <h6 class="card-title mb-3 mt-2">{{ 'units.create-unit.form.address.title'|translate }}</h6>
-
+      <!--Address section-->
       <c-row>
-
+        <!--Title-->
+        <h6 class="card-title mb-3 mt-2">{{ 'units.create-unit.form.address.title'|translate }}</h6>
         <!--street1, street2, postcode, city, country, latitude, longitude inputs-->
         <c-col md="6">
-
           <!--Street1 input-->
           <c-row>
             <c-col md="12" class="mb-3">
@@ -50,7 +48,6 @@
               }
             </c-col>
           </c-row>
-
           <!--Street2 & postCode inputs-->
           <c-row>
             <c-col md="8" class="mb-3">
@@ -71,9 +68,9 @@
 
             </c-col>
           </c-row>
-
           <!--City and Country inputs-->
           <c-row>
+            <!--City input-->
             <c-col md="6" class="mb-3">
               <label cLabel class="required me-2" for="city">
                 {{ 'units.create-unit.form.address.city-input.label'|translate }}
@@ -89,7 +86,7 @@
                 }
               }
             </c-col>
-
+            <!--Country input-->
             <c-col md="6" class="mb-3">
               <label cLabel class="required me-2" for="country">
                 {{ 'units.create-unit.form.address.country-input.label'|translate }}
@@ -102,44 +99,87 @@
               }
             </c-col>
           </c-row>
-
           <!--Latitude & Longitude inputs-->
           <c-row>
-            <c-col md="6" class="mb-3">
-              <label cLabel for="latitude">
-                {{ 'units.edit-unit.tabs.general-information.form.latitude-input.label'|translate }}
+            <c-col md="12" class="mb-3">
+              <label cLabel for="latlng">
+                {{ 'units.edit-unit.tabs.general-information.form.lat-lng-input.label'|translate }}
               </label>
-              <input cFormControl formControlName="latitude" id="latitude" name="latitude"
-                     [placeholder]="'units.edit-unit.tabs.general-information.form.latitude-input.placeholder'|translate"
-                     type="text"/>
-
-            </c-col>
-
-            <c-col md="6" class="mb-3">
-              <label cLabel class=" me-2" for="longitude">
-                {{ 'units.edit-unit.tabs.general-information.form.longitude-input.label'|translate }}
-              </label>
-              <input cFormControl formControlName="longitude" id="longitude" name="longitude"
-                     [placeholder]="'units.edit-unit.tabs.general-information.form.longitude-input.placeholder'|translate"
-                     type="text"/>
-
+              <c-input-group id="latlng">
+                <input cFormControl formControlName="latitude" id="latitude" name="latitude"
+                       [placeholder]="'units.edit-unit.tabs.general-information.form.latitude-input.placeholder'|translate"/>
+                <span cInputGroupText><svg [cIcon]="icons.cilLocationPin"></svg></span>
+                <input cFormControl formControlName="longitude" id="longitude" name="longitude"
+                       [placeholder]="'units.edit-unit.tabs.general-information.form.longitude-input.placeholder'|translate"/>
+              </c-input-group>
             </c-col>
           </c-row>
-
         </c-col>
-
-        <!--Google maps section-->
+        <!--Leaflet map section-->
         <c-col md="6">
           <div class="map-container">
-            <google-map [options]="mapOptions" (mapClick)="setMarker($event)">
-              <map-marker *ngFor="let marker of markers" [position]="marker"></map-marker>
-            </google-map>
+            <div style="height: 100%;width: 100%;"
+                 leaflet
+                 [leafletOptions]="options" [leafletLayers]="layers" (leafletClick)="setMarker($event)">
+            </div>
           </div>
         </c-col>
-
       </c-row>
+      <!--Contact & Other sections-->
+      <c-row>
+        <!--Contact section-->
+        <c-col [md]="6">
+          <!--Title-->
+          <h6 class="card-title mb-3 mt-2">{{ 'units.create-unit.form.contact.title'|translate }}</h6>
+          <c-row>
+            <!--Mobile input-->
+            <c-col md="6">
+              <label cLabel for="mobile" class="required">
+                {{ 'units.create-unit.form.contact.mobile-input.label'|translate }}
+              </label>
+              <ngx-intl-tel-input
+                [enableAutoCountrySelect]="false"
+                [enablePlaceholder]="true"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                [searchCountryFlag]="true"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="CountryISO.Morocco"
+                cssClass="form-control"
+                formControlName="mobile"
+                id="mobile"
+                inputId="mobile"
+              ></ngx-intl-tel-input>
 
-
+              @if (((infoForm.get('mobile')?.touched))) {
+                @if (infoForm.get('mobile')?.hasError('required')) {
+                  <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+                }
+              }
+            </c-col>
+            <!--Email input-->
+            <c-col md="6" class="mb-3">
+              <label cLabel for="email">
+                {{ 'units.create-unit.form.contact.email-input.label'|translate }}
+              </label>
+              <input cFormControl formControlName="email" id="email" name="mobile"
+                     [placeholder]="'units.create-unit.form.contact.email-input.placeholder'|translate" type="text"/>
+              @if (((infoForm.get('email')?.touched || infoForm.get('email')?.dirty))) {
+                @if (infoForm.get('email')?.hasError('invalidEmail')) {
+                  <c-form-feedback [valid]="false">{{ 'commons.errors.email'|translate }}</c-form-feedback>
+                }
+              }
+            </c-col>
+          </c-row>
+        </c-col>
+        <!--Other section-->
+        <c-col [md]="6">
+          <!--Title-->
+          <h6
+            class="card-title mb-3 mt-2">{{ 'units.edit-unit.tabs.general-information.sections.other.title'|translate }}</h6>
+        </c-col>
+      </c-row>
     </form>
 
   </c-col>
