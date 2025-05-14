@@ -1,11 +1,11 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {NgTemplateOutlet} from '@angular/common';
+import {Component, computed, inject, input} from '@angular/core';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 
 import {
   AvatarComponent,
   BadgeComponent,
-  BreadcrumbRouterComponent,
+  ButtonDirective,
   ColorModeService,
   ContainerComponent,
   DropdownComponent,
@@ -22,12 +22,14 @@ import {
   SidebarToggleDirective
 } from '@coreui/angular';
 
-import { IconDirective } from '@coreui/icons-angular';
+import {IconDirective} from '@coreui/icons-angular';
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
-    selector: 'app-default-header',
-    templateUrl: './default-header.component.html',
-  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, DropdownComponent, DropdownToggleDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective]
+  selector: 'app-default-header',
+  templateUrl: './default-header.component.html',
+  styleUrls: ['./default-header.component.scss'],
+  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, DropdownComponent, DropdownToggleDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective, ButtonDirective]
 })
 export class DefaultHeaderComponent extends HeaderComponent {
 
@@ -35,9 +37,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
   readonly colorMode = this.#colorModeService.colorMode;
 
   readonly colorModes = [
-    { name: 'light', text: 'Light', icon: 'cilSun' },
-    { name: 'dark', text: 'Dark', icon: 'cilMoon' },
-    { name: 'auto', text: 'Auto', icon: 'cilContrast' }
+    {name: 'light', text: 'Light', icon: 'cilSun'},
+    {name: 'dark', text: 'Dark', icon: 'cilMoon'},
+    {name: 'auto', text: 'Auto', icon: 'cilContrast'}
   ];
 
   readonly icons = computed(() => {
@@ -45,7 +47,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
-  constructor() {
+  constructor(private authService: AuthService) {
     super();
   }
 
@@ -105,25 +107,28 @@ export class DefaultHeaderComponent extends HeaderComponent {
   ];
 
   public newNotifications = [
-    { id: 0, title: 'New user registered', icon: 'cilUserFollow', color: 'success' },
-    { id: 1, title: 'User deleted', icon: 'cilUserUnfollow', color: 'danger' },
-    { id: 2, title: 'Sales report is ready', icon: 'cilChartPie', color: 'info' },
-    { id: 3, title: 'New client', icon: 'cilBasket', color: 'primary' },
-    { id: 4, title: 'Server overloaded', icon: 'cilSpeedometer', color: 'warning' }
+    {id: 0, title: 'New user registered', icon: 'cilUserFollow', color: 'success'},
+    {id: 1, title: 'User deleted', icon: 'cilUserUnfollow', color: 'danger'},
+    {id: 2, title: 'Sales report is ready', icon: 'cilChartPie', color: 'info'},
+    {id: 3, title: 'New client', icon: 'cilBasket', color: 'primary'},
+    {id: 4, title: 'Server overloaded', icon: 'cilSpeedometer', color: 'warning'}
   ];
 
   public newStatus = [
-    { id: 0, title: 'CPU Usage', value: 25, color: 'info', details: '348 Processes. 1/4 Cores.' },
-    { id: 1, title: 'Memory Usage', value: 70, color: 'warning', details: '11444GB/16384MB' },
-    { id: 2, title: 'SSD 1 Usage', value: 90, color: 'danger', details: '243GB/256GB' }
+    {id: 0, title: 'CPU Usage', value: 25, color: 'info', details: '348 Processes. 1/4 Cores.'},
+    {id: 1, title: 'Memory Usage', value: 70, color: 'warning', details: '11444GB/16384MB'},
+    {id: 2, title: 'SSD 1 Usage', value: 90, color: 'danger', details: '243GB/256GB'}
   ];
 
   public newTasks = [
-    { id: 0, title: 'Upgrade NPM', value: 0, color: 'info' },
-    { id: 1, title: 'ReactJS Version', value: 25, color: 'danger' },
-    { id: 2, title: 'VueJS Version', value: 50, color: 'warning' },
-    { id: 3, title: 'Add new layouts', value: 75, color: 'info' },
-    { id: 4, title: 'Angular Version', value: 100, color: 'success' }
+    {id: 0, title: 'Upgrade NPM', value: 0, color: 'info'},
+    {id: 1, title: 'ReactJS Version', value: 25, color: 'danger'},
+    {id: 2, title: 'VueJS Version', value: 50, color: 'warning'},
+    {id: 3, title: 'Add new layouts', value: 75, color: 'info'},
+    {id: 4, title: 'Angular Version', value: 100, color: 'success'}
   ];
 
+  logout() {
+    this.authService.logout();
+  }
 }

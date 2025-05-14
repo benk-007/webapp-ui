@@ -31,6 +31,7 @@
 // Import Chart.js custom tooltips styles
 @use "@coreui/chartjs/scss/coreui-chartjs";
 @use "@ng-select/ng-select/themes/default.theme.css";
+@use 'intl-tel-input/build/css/intlTelInput.css';
 @use 'ngx-toastr/toastr';
 
 // Custom styles for this theme

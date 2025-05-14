@@ -3,7 +3,8 @@ import {
   ButtonDirective,
   ColComponent,
   FormControlDirective,
-  FormDirective, FormFeedbackComponent,
+  FormDirective,
+  FormFeedbackComponent,
   FormFloatingDirective,
   FormLabelDirective,
   RowComponent
