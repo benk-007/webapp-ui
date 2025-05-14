@@ -7,17 +7,22 @@ import {
   FormDirective,
   FormFeedbackComponent,
   FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
   RowComponent
 } from "@coreui/angular";
-import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
+import {CountryISO, NgxIntlTelInputModule, SearchCountryField} from "ngx-intl-tel-input";
 import {TranslatePipe} from "@ngx-translate/core";
 import {CountrySelectComponent} from "../../../../../shared/components/country-select/country-select.component";
-import {GoogleMap, GoogleMapsModule, MapMarker} from "@angular/google-maps";
-import {NgForOf} from "@angular/common";
+import {GoogleMapsModule} from "@angular/google-maps";
 import {UnitApiService} from "../../../services/unit-api.service";
 import {combineLatest, Subscription} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {UnitGetModel} from "../../../models/unit-get.model";
+import {Icon, icon, latLng, marker, tileLayer} from "leaflet";
+import {LeafletModule} from "@bluehalo/ngx-leaflet";
+import {IconDirective} from "@coreui/icons-angular";
+import {cilLocationPin} from "@coreui/icons";
 
 @Component({
   selector: 'app-general-information',
@@ -33,10 +38,11 @@ import {UnitGetModel} from "../../../models/unit-get.model";
     ReactiveFormsModule,
     TranslatePipe,
     CountrySelectComponent,
-    GoogleMap,
-    MapMarker,
-    NgForOf,
-    GoogleMapsModule
+    GoogleMapsModule,
+    LeafletModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    IconDirective
   ],
   templateUrl: './general-information.component.html',
   styleUrl: './general-information.component.scss'
@@ -45,19 +51,28 @@ export class GeneralInformationComponent implements OnDestroy {
 
   infoForm: FormGroup;
   unitId!: string;
-  markers: google.maps.LatLngLiteral[] = [];
+  // markers: google.maps.LatLngLiteral[] = [];
   unit!: UnitGetModel;
+  icons = {cilLocationPin}
 
-  mapOptions: google.maps.MapOptions = {
-    center: {lat: 33.5731, lng: -7.5898},
-    mapId: 'customMap',
-    scrollwheel: true,
-    disableDoubleClickZoom: true,
-    mapTypeId: 'hybrid',
-    zoom: 12,
-    maxZoom: 18,
-    minZoom: 4,
+  options = {
+    layers: [
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18})
+    ],
+    zoom: 4,
+    center: latLng(33.57184, -7.61279)
   };
+
+  layers = [
+    marker([33.57184, -7.61279], {
+      icon: icon({
+        ...Icon.Default.prototype.options,
+        iconUrl: 'assets/marker-icon.png',
+        iconRetinaUrl: 'assets/marker-icon-2x.png',
+        shadowUrl: 'assets/marker-shadow.png'
+      })
+    })
+  ];
 
   private subscriptions: Subscription[] = [];
 
@@ -97,14 +112,6 @@ export class GeneralInformationComponent implements OnDestroy {
 
   }
 
-  setMarker(event: google.maps.MapMouseEvent) {
-    if (event.latLng) {
-      const lat = event.latLng.lat();
-      const lng = event.latLng.lng();
-      console.log('Selected coordinates:', {lat, lng});
-      this.markers = [{lat, lng}];
-    }
-  }
 
   private retrieveUnit() {
     this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
@@ -123,11 +130,11 @@ export class GeneralInformationComponent implements OnDestroy {
           mobile: this.unit.contact.mobile,
           email: this.unit.contact.email
         });
-        if (this.unit.address.location) {
-          let lat = this.unit.address.location.lat;
-          let lng = this.unit.address.location.lng;
-          this.markers = [{lat, lng}];
-        }
+        /*        if (this.unit.address.location) {
+                  let lat = this.unit.address.location.lat;
+                  let lng = this.unit.address.location.lng;
+                  this.markers = [{lat, lng}];
+                }*/
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
@@ -136,8 +143,28 @@ export class GeneralInformationComponent implements OnDestroy {
     }))
   }
 
+  setMarker(event: any) {
+    console.log('your event is:', event);
+    this.layers = [
+      marker([event.latlng.lat, event.latlng.lng], {
+        icon: icon({
+          ...Icon.Default.prototype.options,
+          iconUrl: 'assets/marker-icon.png',
+          iconRetinaUrl: 'assets/marker-icon-2x.png',
+          shadowUrl: 'assets/marker-shadow.png'
+        })
+      })
+    ];
+    this.infoForm.patchValue({
+      latitude: event.latlng.lat,
+      longitude: event.latlng.lng
+    })
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.map(subscription => subscription.unsubscribe());
   }
 
+  protected readonly SearchCountryField = SearchCountryField;
+  protected readonly CountryISO = CountryISO;
 }
