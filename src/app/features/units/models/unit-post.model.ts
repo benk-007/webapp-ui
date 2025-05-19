@@ -5,7 +5,7 @@ export interface UnitPostModel{
   subtitle?:string;
   address: AddressModel;
   contact: {
-    mobile: string;
+    mobile?: string;
     email?: string;
   };
 }

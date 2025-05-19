@@ -4,6 +4,7 @@ label.form-label {
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.2rem;
+  color: vars.$gray;
 
   &.required:after {
     content: " *";

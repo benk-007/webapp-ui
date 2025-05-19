@@ -6,6 +6,9 @@
       "no-numbers": "Numbers are not allowed"
     },
     "form": {
+      "buttons": {
+        "update": "Update"
+      },
       "search-input": {
         "placeholder": "Search ..."
       },
@@ -428,6 +431,16 @@
             },
             "longitude-input": {
               "placeholder": "Longitude"
+            }
+          },
+          "notifications": {
+            "success": {
+              "title": "Rental updated",
+              "message": "Rental \":rentalName\" information were successfully updated."
+            },
+            "error": {
+              "title": "Rental update error",
+              "message": "An error occurred when updating rental \":rentalName\" general information."
             }
           }
         },

@@ -1,5 +1,26 @@
+@use "variables" as vars;
+
 body{
   font-size: .875rem !important;
   font-weight: 500 !important;
   font-family: "Plus Jakrta Sans", sans-serif;
+
+  h6.section-title{
+    font-weight: 500 !important;
+    color: vars.$secondary;
+    &.underline{
+      margin-bottom: 1.5rem;
+
+      &:after {
+        content: ' ';
+        display: block;
+        background: vars.$secondary;
+        opacity: 30%;
+        border-radius: 50px;
+        height: .3rem;
+        margin-top: .1rem;
+        width: 2rem;
+      }
+    }
+  }
 }

@@ -30,9 +30,9 @@
       <!--Address section-->
       <c-row>
         <!--Title-->
-        <h6 class="card-title mb-3 mt-2">{{ 'units.create-unit.form.address.title'|translate }}</h6>
+        <h6 class="section-title underline mb-3 mt-2">{{ 'units.create-unit.form.address.title'|translate }}</h6>
         <!--street1, street2, postcode, city, country, latitude, longitude inputs-->
-        <c-col md="6">
+        <c-col md="6" formGroupName="address">
           <!--Street1 input-->
           <c-row>
             <c-col md="12" class="mb-3">
@@ -54,7 +54,7 @@
               <label cLabel for="street2">
                 {{ 'units.create-unit.form.address.street2-input.label'|translate }}
               </label>
-              <input cFormControl formControlName="street1" id="street2" name="street2"
+              <input cFormControl formControlName="street2" id="street2" name="street2"
                      [placeholder]="'units.create-unit.form.address.street2-input.placeholder'|translate" type="text"/>
 
             </c-col>
@@ -101,15 +101,15 @@
           </c-row>
           <!--Latitude & Longitude inputs-->
           <c-row>
-            <c-col md="12" class="mb-3">
+            <c-col md="12" class="mb-3" formGroupName="location">
               <label cLabel for="latlng">
                 {{ 'units.edit-unit.tabs.general-information.form.lat-lng-input.label'|translate }}
               </label>
               <c-input-group id="latlng">
-                <input cFormControl formControlName="latitude" id="latitude" name="latitude"
+                <input cFormControl formControlName="lat" id="latitude" name="latitude"
                        [placeholder]="'units.edit-unit.tabs.general-information.form.latitude-input.placeholder'|translate"/>
                 <span cInputGroupText><svg [cIcon]="icons.cilLocationPin"></svg></span>
-                <input cFormControl formControlName="longitude" id="longitude" name="longitude"
+                <input cFormControl formControlName="lng" id="longitude" name="longitude"
                        [placeholder]="'units.edit-unit.tabs.general-information.form.longitude-input.placeholder'|translate"/>
               </c-input-group>
             </c-col>
@@ -130,8 +130,8 @@
         <!--Contact section-->
         <c-col [md]="6">
           <!--Title-->
-          <h6 class="card-title mb-3 mt-2">{{ 'units.create-unit.form.contact.title'|translate }}</h6>
-          <c-row>
+          <h6 class="section-title underline mb-3 mt-2">{{ 'units.create-unit.form.contact.title'|translate }}</h6>
+          <c-row formGroupName="contact">
             <!--Mobile input-->
             <c-col md="6">
               <label cLabel for="mobile" class="required">
@@ -177,9 +177,31 @@
         <c-col [md]="6">
           <!--Title-->
           <h6
-            class="card-title mb-3 mt-2">{{ 'units.edit-unit.tabs.general-information.sections.other.title'|translate }}</h6>
+            class="section-title underline mb-3 mt-2">{{ 'units.edit-unit.tabs.general-information.sections.other.title'|translate }}</h6>
+          <c-row>
+
+            <c-col [md]="12">
+              <label cLabel for="email">
+                {{ 'units.edit-unit.tabs.general-information.sections.other.form.calendar-color-input.label'|translate }}
+              </label>
+              <div class="colors-wrapper">
+                @for (color of calendarColors; track color) {
+                  <div class="color" [style.background-color]="color" (click)="selectColor(color)"
+                       [ngClass]="{'selected': infoForm.value?.calendarColor==color}"></div>
+                }
+              </div>
+            </c-col>
+          </c-row>
         </c-col>
       </c-row>
+
+      <!--Submit button-->
+      <c-row class="m-3">
+        <c-col [md]="12" class="d-flex justify-content-end">
+          <button cButton type="submit" size="sm">{{ 'commons.form.buttons.update'|translate }}</button>
+        </c-col>
+      </c-row>
+
     </form>
 
   </c-col>

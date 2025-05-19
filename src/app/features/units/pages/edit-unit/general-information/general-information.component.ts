@@ -2,6 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {noNumbersValidator} from "../../../../../shared/validators/no-number.validator";
 import {
+  ButtonDirective,
   ColComponent,
   FormControlDirective,
   FormDirective,
@@ -12,17 +13,19 @@ import {
   RowComponent
 } from "@coreui/angular";
 import {CountryISO, NgxIntlTelInputModule, SearchCountryField} from "ngx-intl-tel-input";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {CountrySelectComponent} from "../../../../../shared/components/country-select/country-select.component";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {UnitApiService} from "../../../services/unit-api.service";
 import {combineLatest, Subscription} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {UnitGetModel} from "../../../models/unit-get.model";
 import {Icon, icon, latLng, marker, tileLayer} from "leaflet";
 import {LeafletModule} from "@bluehalo/ngx-leaflet";
 import {IconDirective} from "@coreui/icons-angular";
 import {cilLocationPin} from "@coreui/icons";
+import {JsonPipe, NgClass} from "@angular/common";
+import {UnitInfosGetModel} from "../../../models/unit-infos-get.model";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-general-information',
@@ -42,7 +45,10 @@ import {cilLocationPin} from "@coreui/icons";
     LeafletModule,
     InputGroupComponent,
     InputGroupTextDirective,
-    IconDirective
+    IconDirective,
+    NgClass,
+    ButtonDirective,
+    JsonPipe
   ],
   templateUrl: './general-information.component.html',
   styleUrl: './general-information.component.scss'
@@ -52,8 +58,12 @@ export class GeneralInformationComponent implements OnDestroy {
   infoForm: FormGroup;
   unitId!: string;
   // markers: google.maps.LatLngLiteral[] = [];
-  unit!: UnitGetModel;
+  unit!: UnitInfosGetModel;
   icons = {cilLocationPin}
+  readonly calendarColors: string[] = ['#7ad148', '#5484ED', '#A4BDFC', '#46D6DB', '#7AE7BF', '#51B749', '#FBD75B',
+    '#FFB878', '#FF887C', '#DC2127', '#DBADFF', '#DDDDDD']
+  protected readonly SearchCountryField = SearchCountryField;
+  protected readonly CountryISO = CountryISO;
 
   options = {
     layers: [
@@ -63,32 +73,32 @@ export class GeneralInformationComponent implements OnDestroy {
     center: latLng(33.57184, -7.61279)
   };
 
-  layers = [
-    marker([33.57184, -7.61279], {
-      icon: icon({
-        ...Icon.Default.prototype.options,
-        iconUrl: 'assets/marker-icon.png',
-        iconRetinaUrl: 'assets/marker-icon-2x.png',
-        shadowUrl: 'assets/marker-shadow.png'
-      })
-    })
-  ];
+  layers!: any;
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private readonly fb: FormBuilder, private readonly unitApiService: UnitApiService, private readonly activatedRoute: ActivatedRoute) {
+  constructor(private readonly fb: FormBuilder, private readonly unitApiService: UnitApiService,
+              private readonly activatedRoute: ActivatedRoute, private readonly toastrService: ToastrService,
+              private readonly translateService: TranslateService) {
     this.infoForm = this.fb.group({
       name: [null, [Validators.required]],
       subtitle: [null],
-      street1: [null, [Validators.required]],
-      street2: [null],
-      postcode: [null],
-      city: [null, [Validators.required, noNumbersValidator()]],
-      country: [null, [Validators.required]],
-      mobile: [null, [Validators.required]],
-      email: [null, [Validators.required]],
-      latitude: [null],
-      longitude: [null]
+      address: this.fb.group({
+        street1: [null, [Validators.required]],
+        street2: [null],
+        postcode: [null],
+        city: [null, [Validators.required, noNumbersValidator()]],
+        country: [null, [Validators.required]],
+        location: this.fb.group({
+          lat: [null],
+          lng: [null],
+        })
+      }),
+      contact: this.fb.group({
+        mobile: [null, [Validators.required]],
+        email: [null, [Validators.required]]
+      }),
+      calendarColor: [null]
     });
 
     this.subscriptions.push(
@@ -98,7 +108,6 @@ export class GeneralInformationComponent implements OnDestroy {
         const unitId = paramMaps
           .map(paramMap => paramMap.get('unitId'))
           .find(id => id !== null);
-
         if (unitId) {
           this.unitId = unitId;
           this.retrieveUnit();
@@ -109,32 +118,63 @@ export class GeneralInformationComponent implements OnDestroy {
   }
 
   submit() {
-
+    let payload = {
+      ...this.infoForm.value,
+      contact: {
+        mobile: this.infoForm.value.contact.mobile.e164Number
+      }
+    };
+    this.subscriptions.push(this.unitApiService.updateUnitInfosById(this.unitId, payload).subscribe({
+      next: (data) => {
+        console.log('Unit infos updated successfully. Api response is:', data);
+        this.unit = data;
+        this.infoForm.patchValue(this.unit);
+        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
+          this.layers = [
+            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
+              icon: icon({
+                ...Icon.Default.prototype.options,
+                iconUrl: 'assets/marker-icon.png',
+                iconRetinaUrl: 'assets/marker-icon-2x.png',
+                shadowUrl: 'assets/marker-shadow.png'
+              })
+            })
+          ];
+        }
+        this.toastrService.info(
+          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.message')
+            .replace(':rentalName', this.unit.name),
+          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.title'));
+      },
+      error: (err) => {
+        console.error('An error occurred during unit infos update. Api response is:', err);
+        this.toastrService.warning(
+          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.error.message')
+            .replace(':rentalName', this.unit.name),
+          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.error.title'));
+      }
+    }))
   }
 
 
   private retrieveUnit() {
-    this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
+    this.subscriptions.push(this.unitApiService.getUnitInfosById(this.unitId).subscribe({
       next: (data) => {
-        console.log('Unit call general information response is:', data);
+        console.log('Unit infos call general information response is:', data);
         this.unit = data;
         this.infoForm.patchValue(this.unit);
-        this.infoForm.patchValue({
-          street1: this.unit.address.street1,
-          street2: this.unit.address.street2,
-          postcode: this.unit.address.postCode,
-          city: this.unit.address.city,
-          country: this.unit.address.country,
-          latitude: this.unit.address.location?.lat,
-          longitude: this.unit.address.location?.lng,
-          mobile: this.unit.contact.mobile,
-          email: this.unit.contact.email
-        });
-        /*        if (this.unit.address.location) {
-                  let lat = this.unit.address.location.lat;
-                  let lng = this.unit.address.location.lng;
-                  this.markers = [{lat, lng}];
-                }*/
+        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
+          this.layers = [
+            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
+              icon: icon({
+                ...Icon.Default.prototype.options,
+                iconUrl: 'assets/marker-icon.png',
+                iconRetinaUrl: 'assets/marker-icon-2x.png',
+                shadowUrl: 'assets/marker-shadow.png'
+              })
+            })
+          ];
+        }
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
@@ -156,8 +196,18 @@ export class GeneralInformationComponent implements OnDestroy {
       })
     ];
     this.infoForm.patchValue({
-      latitude: event.latlng.lat,
-      longitude: event.latlng.lng
+      address: {
+        location: {
+          lat: event.latlng.lat,
+          lng: event.latlng.lng
+        }
+      }
+    })
+  }
+
+  selectColor(colorHexCode: string) {
+    this.infoForm.patchValue({
+      calendarColor: colorHexCode,
     })
   }
 
@@ -165,6 +215,5 @@ export class GeneralInformationComponent implements OnDestroy {
     this.subscriptions.map(subscription => subscription.unsubscribe());
   }
 
-  protected readonly SearchCountryField = SearchCountryField;
-  protected readonly CountryISO = CountryISO;
+
 }

@@ -1,5 +1,28 @@
+@use "../../../../../../scss/variables" as vars;
 .map-container {
   height: 300px !important;
   position: relative;
   overflow: hidden;
+}
+
+div.colors-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+
+  div.color {
+    margin-top: 7px;
+    cursor: pointer;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    min-height: 24px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+
+    &.selected{
+      border-color: vars.$dark;
+    }
+  }
 }
