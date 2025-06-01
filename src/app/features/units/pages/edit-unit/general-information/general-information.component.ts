@@ -23,9 +23,10 @@ import {Icon, icon, latLng, marker, tileLayer} from "leaflet";
 import {LeafletModule} from "@bluehalo/ngx-leaflet";
 import {IconDirective} from "@coreui/icons-angular";
 import {cilLocationPin} from "@coreui/icons";
-import {JsonPipe, NgClass} from "@angular/common";
+import {NgClass} from "@angular/common";
 import {UnitInfosGetModel} from "../../../models/unit-infos-get.model";
 import {ToastrService} from "ngx-toastr";
+import {GalleryComponent} from "./gallery/gallery.component";
 
 @Component({
   selector: 'app-general-information',
@@ -48,13 +49,12 @@ import {ToastrService} from "ngx-toastr";
     IconDirective,
     NgClass,
     ButtonDirective,
-    JsonPipe
+    GalleryComponent
   ],
   templateUrl: './general-information.component.html',
   styleUrl: './general-information.component.scss'
 })
 export class GeneralInformationComponent implements OnDestroy {
-
   infoForm: FormGroup;
   unitId!: string;
   // markers: google.maps.LatLngLiteral[] = [];
@@ -203,6 +203,10 @@ export class GeneralInformationComponent implements OnDestroy {
         }
       }
     })
+  }
+
+  private retrieveUnitImages() {
+
   }
 
   selectColor(colorHexCode: string) {

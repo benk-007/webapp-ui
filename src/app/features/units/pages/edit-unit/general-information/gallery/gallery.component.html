@@ -1,0 +1,50 @@
+<c-row>
+  @if (coverImage == null) {
+    <c-col [md]="12">
+      <label class="upload-placeholder-first w-100 mb-3">
+        <input type="file" (change)="onFileSelected($event)" hidden/>
+        <div class="image-wrapper d-flex flex-column align-items-center justify-content-center text-center">
+          <img class="img-fluid" src="assets/images/animations/image-placeholder.gif" alt="">
+          <span class="text-info-emphasis">
+          {{ 'units.edit-unit.tabs.general-information.gallery.upload-section' | translate }}
+        </span>
+        </div>
+      </label>
+    </c-col>
+  } @else {
+    <c-col [md]="12">
+      <div class="image-wrapper cover mb-3 position-relative">
+        <img [src]="coverImage?.imageUrl" alt="Cover" class="img-fluid rounded shadow w-100"/>
+        <div class="image-overlay d-none">
+          <button class="btn btn-danger btn-sm me-2" title="Delete" type="button"
+                  (click)="confirmImageDeletion(coverImage)"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    </c-col>
+  }
+
+  <!--Thumbnails Grid-->
+  @for (image of images; track image.id) {
+    <c-col [md]="4">
+      <div class="image-wrapper grid-img mb-3 position-relative">
+        <img [src]="image.imageUrl" alt="rental pic" class="img-fluid rounded shadow w-100"/>
+        <div class="image-overlay d-none">
+          <button class="btn btn-primary btn-sm me-2" title="Set as Cover" type="button" (click)="setAsCover(image)"><i
+            class="bi bi-star"></i></button>
+          <button class="btn btn-danger btn-sm" title="Delete" type="button" (click)="confirmImageDeletion(image)"><i
+            class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    </c-col>
+  }
+
+  @if (coverImage) {
+    <c-col [md]="12">
+      <button class="btn btn-outline-secondary w-100" (click)="fileInput.click()">
+        <i class="bi bi-upload me-2"></i>{{ 'units.edit-unit.tabs.general-information.gallery.upload-btn'|translate }}
+      </button>
+      <input #fileInput type="file" (change)="onFileSelected($event)" hidden/>
+    </c-col>
+  }
+
+</c-row>
