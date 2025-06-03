@@ -1,14 +1,38 @@
 <app-page-title [title]="'units.edit-unit.default-title'|translate">
 </app-page-title>
 
-<c-tabs [activeItemKey]="0" >
+<ul class="nav nav-underline">
+  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.general-information.hint'|translate" placement="auto">
+    <a class="nav-link active" routerLink="infos"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.general-information.title'|translate }}</a>
+  </li>
+  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.rental-details.hint'|translate" placement="auto">
+    <a class="nav-link" routerLink="details"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.rental-details.title'|translate }}</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+  </li>
+</ul>
+
+<router-outlet></router-outlet>
+
+<!--<c-tabs>
   <c-tabs-list variant="underline-border">
-    <button cTab [itemKey]="0">{{'units.edit-unit.tabs.general-information.title'|translate}}</button>
-    <button cTab [itemKey]="1">{{'units.edit-unit.tabs.rental-details.title'|translate}}</button>
+    <a class="btn" routerLink="infos" cTab>{{ 'units.edit-unit.tabs.general-information.title'|translate }}</a>
+    <button cTab [itemKey]="0" [tooltip]="'units.edit-unit.tabs.general-information.hint'|translate"
+            placement="auto">{{ 'units.edit-unit.tabs.general-information.title'|translate }}
+    </button>
+    <button cTab [itemKey]="1" [tooltip]="'units.edit-unit.tabs.rental-details.hint'|translate"
+            placement="auto">{{ 'units.edit-unit.tabs.rental-details.title'|translate }}
+    </button>
     <button cTab [itemKey]="2">Contact</button>
     <button cTab [itemKey]="3" disabled>Disabled</button>
   </c-tabs-list>
   <c-tabs-content>
-    <router-outlet></router-outlet>
+
   </c-tabs-content>
-</c-tabs>
+</c-tabs>-->

@@ -19,6 +19,13 @@ export const routes: Routes = [
         data: {
           title: 'General information'
         }
+      },
+      {
+        path: 'details',
+        loadComponent: () => import('./rental-details/rental-details.component').then(m => m.RentalDetailsComponent),
+        data: {
+          title: 'Rental details'
+        }
       }
     ]
   }

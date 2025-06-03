@@ -414,6 +414,7 @@
       "tabs": {
         "general-information": {
           "title": "General information",
+          "hint": "Set name, address, images and other basic information of the rental",
           "sections": {
             "other": {
               "title": "Other",
@@ -487,7 +488,8 @@
           }
         },
         "rental-details": {
-          "title": "Rental details"
+          "title": "Rental details",
+          "hint": "Specify rooms, bedding, occupancy, amenities and other rental values"
         },
         "checkin-policy": {
           "title": ""

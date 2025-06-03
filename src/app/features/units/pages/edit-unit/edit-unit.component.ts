@@ -2,10 +2,11 @@ import {Component, OnDestroy} from '@angular/core';
 import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {UnitApiService} from "../../services/unit-api.service";
-import {ActivatedRoute, RouterOutlet} from "@angular/router";
+import {ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {TabDirective, TabPanelComponent, TabsComponent, TabsContentComponent, TabsListComponent} from "@coreui/angular";
+import {TooltipDirective} from "ngx-bootstrap/tooltip";
 
 @Component({
   selector: 'app-edit-unit',
@@ -17,7 +18,10 @@ import {TabDirective, TabPanelComponent, TabsComponent, TabsContentComponent, Ta
     TabDirective,
     TabsContentComponent,
     TabPanelComponent,
-    RouterOutlet
+    RouterOutlet,
+    TooltipDirective,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './edit-unit.component.html',
   styleUrl: './edit-unit.component.scss'
