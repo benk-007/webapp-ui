@@ -1,1 +1,151 @@
-<p>rental-details works!</p>
+<form (submit)="submit()" [formGroup]="rentalDetailsForm">
+  <c-row class="mt-3">
+
+    {{ rentalDetailsForm.value | json }}
+    <c-col [md]="8">
+
+      <!--Type & Floor size inputs-->
+      <c-row class="mb-3">
+        <!--Type input-->
+        <c-col [md]="6">
+          <label cLabel
+                 for="type">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.type-input.label'|translate }}</label>
+          <select cSelect id="type" formControlName="type">
+            <option *ngFor="let unitType of unitTypes" [value]="unitType">{{ unitType }}</option>
+          </select>
+        </c-col>
+
+        <!--Floor size input-->
+        <c-col [md]="6">
+          <label cLabel
+                 for="floor-size">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.floor-size-input.label'|translate }}</label>
+          <c-input-group>
+            <input id="floor-size" cFormControl formControlName="floorSize" type="text"/>
+            <c-dropdown>
+              <button cButton cDropdownToggle color="secondary" variant="outline">
+                {{ rentalDetailsForm.value?.floorSizeUnit }}
+              </button>
+              <div cDropdownMenu>
+                <button cDropdownItem *ngFor="let floorSizeUnit of floorSizeUnits"
+                        (click)="setFloorSizeUnit(floorSizeUnit)">{{ floorSizeUnit }}
+                </button>
+              </div>
+            </c-dropdown>
+          </c-input-group>
+        </c-col>
+      </c-row>
+
+      <!--Occupancy section-->
+      <c-row class="mb-3">
+        <!--Title-->
+        <h6 class="section-title underline mb-3 mt-2">
+          {{ 'units.edit-unit.tabs.rental-details.sections.occupancy.title'|translate }}
+        </h6>
+
+
+
+
+        <!--Min occupancy input-->
+        <c-col [md]="12" class="mb-3" formGroupName="minOccupancy">
+          <c-row class="flex-nowrap align-items-end" [gutter]="2">
+            <c-col>
+              <label cLabel class="invisible" for="min-occupancy">Min occupancy</label>
+              <input [plaintext]="true" cFormControl id="min-occupancy" readonly type="text" value="Min occupancy"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-adults">Adults</label>
+              <input cFormControl id="min-adults" type="text" formControlName="adults"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-children">Children</label>
+              <input cFormControl id="min-children" type="text" formControlName="children"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-infants">Infants</label>
+              <input cFormControl id="min-infants" type="text" formControlName="infants"/>
+            </c-col>
+          </c-row>
+        </c-col>
+
+        <!--Max occupancy input-->
+        <c-col [md]="12" formGroupName="maxOccupancy">
+          <c-row class="flex-nowrap align-items-end" [gutter]="2">
+            <c-col>
+              <label cLabel class="invisible" for="staticEmail2">Max occupancy</label>
+              <input [plaintext]="true" cFormControl id="staticEmail2" readonly type="text" value="Max occupancy"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-adults">Adults</label>
+              <input cFormControl id="max-adults" type="text" formControlName="adults"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-children">Children</label>
+              <input cFormControl id="max-children" placeholder="Children" type="text" formControlName="children"/>
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-in">Infants</label>
+              <input cFormControl id="max-infants" placeholder="Infants" type="text" formControlName="infants"/>
+            </c-col>
+          </c-row>
+        </c-col>
+
+      </c-row>
+
+      <!--Additional information section-->
+      <c-row class="mb-3">
+        <!--Title-->
+        <h6 class="section-title underline mb-3 mt-2">
+          {{ 'units.edit-unit.tabs.rental-details.sections.additional-information.title'|translate }}
+        </h6>
+
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="childrenAllowed">Children allowed</label>
+          <c-form-check>
+            <input cFormCheckInput id="childrenAllowed" type="checkbox"/>
+            <label cFormCheckLabel for="childrenAllowed">Children allowed</label>
+          </c-form-check>
+        </c-col>
+
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="eventsAllowed">Events allowed</label>
+          <c-form-check>
+            <input cFormCheckInput id="eventsAllowed" type="checkbox"/>
+            <label cFormCheckLabel for="eventsAllowed">Events allowed</label>
+          </c-form-check>
+        </c-col>
+
+        <c-col [md]="4">
+          <label cLabel for="petsAllowed">Traveller age</label>
+          <input cFormControl id="petsAllowed" type="text"/>
+        </c-col>
+
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="smokingAllowed">Smoking allowed</label>
+          <c-form-check>
+            <input cFormCheckInput id="smokingAllowed" type="checkbox"/>
+            <label cFormCheckLabel for="smokingAllowed">Smoking allowed</label>
+          </c-form-check>
+        </c-col>
+
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="petsAllowed">Pets allowed</label>
+          <c-form-check>
+            <input cFormCheckInput id="petsAllowed" type="checkbox"/>
+            <label cFormCheckLabel for="petsAllowed">Pets allowed</label>
+          </c-form-check>
+        </c-col>
+
+
+      </c-row>
+
+    </c-col>
+
+    <!--Description input-->
+    <c-col [md]="4">
+      something
+      <textarea cFormControl></textarea>
+    </c-col>
+
+
+  </c-row>
+</form>

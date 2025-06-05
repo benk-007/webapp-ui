@@ -14,6 +14,9 @@
       "search-input": {
         "placeholder": "Search ..."
       },
+      "floor-size-input": {
+        "label": "Floor size"
+      },
       "save-btn": "Save",
       "update-btn": "Update",
       "cancel-btn": "Cancel"
@@ -489,7 +492,33 @@
         },
         "rental-details": {
           "title": "Rental details",
-          "hint": "Specify rooms, bedding, occupancy, amenities and other rental values"
+          "hint": "Specify rooms, bedding, occupancy, amenities and other rental values",
+          "sections": {
+            "general": {
+              "form": {
+                "type-input": {
+                  "label": "Type"
+                },
+                "floor-size-input": {
+                  "label": "Floor size"
+                }
+              }
+            },
+            "occupancy": {
+              "title": "Occupancy",
+              "form": {
+                "min-occupancy": {
+                  "label": "Min occupancy"
+                },
+                "max-occupancy": {
+                  "label": "Max occupancy"
+                }
+              }
+            },
+            "additional-information": {
+              "title": "Additional information"
+            }
+          }
         },
         "checkin-policy": {
           "title": ""
