@@ -6,6 +6,9 @@
       "no-numbers": "Numbers are not allowed"
     },
     "form": {
+      "description-input": {
+        "label": "Description"
+      },
       "buttons": {
         "update": "Update",
         "confirm": "Confirm",
@@ -497,7 +500,20 @@
             "general": {
               "form": {
                 "type-input": {
-                  "label": "Type"
+                  "label": "Type",
+                  "values": {
+                    "ROOM": "Room",
+                    "APARTMENT": "Apartment",
+                    "HOUSE": "House",
+                    "VILLA": "Villa",
+                    "CABIN": "Cabin",
+                    "CARAVAN": "Caravan",
+                    "FARMHOUSE": "Farmhouse",
+                    "MOBILE_HOME": "Mobile Home",
+                    "RIAD": "Riad",
+                    "STUDIO": "Studio"
+
+                  }
                 },
                 "floor-size-input": {
                   "label": "Floor size"
@@ -516,7 +532,60 @@
               }
             },
             "additional-information": {
-              "title": "Additional information"
+              "title": "Additional information",
+              "form": {
+                "children-allowed-input": {
+                  "label": "Children allowed"
+                },
+                "events-allowed-input": {
+                  "label": "Events allowed"
+                },
+                "traveller-age-input": {
+                  "label": "Traveller age"
+                },
+                "smoking-allowed-input": {
+                  "label": "Smoking allowed"
+                },
+                "pets-allowed-input": {
+                  "label": "Pets allowed"
+                }
+              }
+            },
+            "rooms-bedding": {
+              "title": "Rooms & bedding",
+              "room": {
+                "title": "Room",
+                "form": {
+                  "type-input": {
+                    "label": "Type",
+                    "values": {
+                      "BEDROOM": "Bedroom",
+                      "GUEST_BEDROOM": "Guest Bedroom",
+                      "KID_BEDROOM": "Kids Bedroom",
+                      "MASTER_BEDROOM": "Master Bedroom",
+                      "LIVING_ROOM": "Living Room",
+                      "KITCHEN": "Kitchen",
+                      "FULL_BATHROOM": "Full Bathroom",
+                      "HALF_BATHROOM": "Half Bathroom"
+                    }
+                  },
+                  "size-input": {
+                    "label": "Size"
+                  },
+                  "bathroom-input": {
+                    "label": "Bathroom"
+                  },
+                  "bed-input": {
+                    "label": "Bedding"
+                  },
+                  "add-btn": {
+                    "label": "Add bed"
+                  }
+                }
+              }
+            },
+            "amenities": {
+              "title": "Amenities"
             }
           }
         },

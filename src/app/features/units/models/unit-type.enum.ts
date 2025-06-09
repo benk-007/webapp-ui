@@ -3,5 +3,10 @@ export enum UnitTypeEnum {
   APARTMENT = 'APARTMENT',
   HOUSE = 'HOUSE',
   VILLA = 'VILLA',
-  BOAT = 'BOAT'
+  CABIN = 'CABIN',
+  CARAVAN = 'CARAVAN',
+  FARMHOUSE = 'FARMHOUSE',
+  MOBILE_HOME = 'MOBILE_HOME',
+  RIAD = 'RIAD',
+  STUDIO = 'STUDIO'
 }
