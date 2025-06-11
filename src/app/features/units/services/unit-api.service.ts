@@ -7,7 +7,8 @@ import {UnitGetModel} from "../models/unit-get.model";
 import {environment} from "../../../../environments/environment";
 import {UnitInfosGetModel} from "../models/unit-infos-get.model";
 import {UnitInfosPatchModel} from "../models/unit-infos-patch.model";
-import {UnitDetailsGetModel} from "../models/details/unit-details.get.model";
+import {UnitDetailsGetModel} from "../models/details/unit-details-get.model";
+import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model";
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class UnitApiService {
 
   getUnitDetailsById(unitId: string) {
     return this.httpClient.get<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId))
+  }
+
+  updateUnitDetailsById(unitId: string, payload: UnitDetailsPatchModel) {
+    return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
   }
 }

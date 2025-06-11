@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -13,6 +13,7 @@ import {
   FormCheckInputDirective,
   FormCheckLabelDirective,
   FormControlDirective,
+  FormFeedbackComponent,
   FormLabelDirective,
   FormSelectDirective,
   GutterDirective,
@@ -21,17 +22,19 @@ import {
 } from "@coreui/angular";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {UnitTypeEnum} from "../../../models/unit-type.enum";
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FloorSizeUnitEnum} from "../../../models/floor-size-unit.enum";
 import {IconDirective} from "@coreui/icons-angular";
-import {cilTrash} from "@coreui/icons";
+import {cilTrash, cilX} from "@coreui/icons";
 import {RoomTypeEnum} from "../../../models/details/room-type.enum";
-import {UnitDetailsGetModel} from "../../../models/details/unit-details.get.model";
 import {UnitApiService} from "../../../services/unit-api.service";
 import {ActivatedRoute} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {combineLatest, Subscription} from "rxjs";
+import {BedTypeEnum} from "../../../models/details/bed-type.enum";
+import {UnitDetailsGetModel} from "../../../models/details/unit-details-get.model";
+import {UnitMapperService} from "../../../services/unit-mapper.service";
 
 @Component({
   selector: 'app-rental-details',
@@ -52,7 +55,6 @@ import {combineLatest, Subscription} from "rxjs";
     FormsModule,
     GutterDirective,
     ReactiveFormsModule,
-    JsonPipe,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -60,17 +62,20 @@ import {combineLatest, Subscription} from "rxjs";
     CardComponent,
     CardBodyComponent,
     CardTitleDirective,
-    NgIf
+    NgIf,
+    FormFeedbackComponent,
+    NgClass
   ],
   templateUrl: './rental-details.component.html',
   standalone: true,
   styleUrl: './rental-details.component.scss'
 })
-export class RentalDetailsComponent {
+export class RentalDetailsComponent implements OnDestroy {
 
-  icons = {cilTrash}
+  icons = {cilTrash, cilX}
   unitTypes = Object.values(UnitTypeEnum);
   roomTypes = Object.values(RoomTypeEnum);
+  bedTypes = Object.values(BedTypeEnum);
   floorSizeUnits = Object.values(FloorSizeUnitEnum);
   unitId!: string;
   unit!: UnitDetailsGetModel;
@@ -78,22 +83,22 @@ export class RentalDetailsComponent {
   rentalDetailsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private readonly fb: FormBuilder, private readonly unitApiService: UnitApiService,
+  constructor(private readonly fb: FormBuilder, private readonly unitMapperService: UnitMapperService, private readonly unitApiService: UnitApiService,
               private readonly activatedRoute: ActivatedRoute, private readonly toastrService: ToastrService,
               private readonly translateService: TranslateService) {
     this.rentalDetailsForm = this.fb.group({
-      type: [null],
-      floorSize: [null],
-      floorSizeUnit: [FloorSizeUnitEnum.SQM],
+      type: [null, [Validators.required]],
+      floorSize: [null, [Validators.required]],
+      floorSizeUnit: [FloorSizeUnitEnum.SQM, [Validators.required]],
       minOccupancy: this.fb.group({
-        adults: [1],
-        children: [0],
-        infants: [0]
+        adults: [1, [Validators.required]],
+        children: [0, [Validators.required]],
+        infants: [0, [Validators.required]]
       }),
       maxOccupancy: this.fb.group({
-        adults: [2],
-        children: [0],
-        infants: [0]
+        adults: [2, [Validators.required]],
+        children: [0, [Validators.required]],
+        infants: [0, [Validators.required]]
       }),
       childrenAllowed: [null],
       eventsAllowed: [null],
@@ -103,13 +108,13 @@ export class RentalDetailsComponent {
       description: [null],
       rooms: this.fb.array([
         this.fb.group({
-          type: [null],
-          bathroom: [null],
-          size: [null],
+          type: [null, [Validators.required]],
+          bathroom: [0, [Validators.required]],
+          floorSize: [null],
           beds: this.fb.array([
             this.fb.group({
-              type: [null],
-              quantity: [null]
+              type: [null, [Validators.required]],
+              quantity: [null, [Validators.required]]
             })
           ]),
         })
@@ -130,6 +135,7 @@ export class RentalDetailsComponent {
     );
   }
 
+
   get rooms(): FormArray {
     return this.rentalDetailsForm.get('rooms') as FormArray;
   }
@@ -140,13 +146,13 @@ export class RentalDetailsComponent {
 
   addRoom() {
     this.rooms.push(this.fb.group({
-      type: [null],
-      bathroom: [null],
-      size: [null],
+      type: [null, [Validators.required]],
+      bathroom: [0, [Validators.required]],
+      floorSize: [null],
       beds: this.fb.array([
         this.fb.group({
-          type: [null],
-          quantity: [null]
+          type: [null, [Validators.required]],
+          quantity: [null, [Validators.required]]
         })
       ])
     }));
@@ -158,8 +164,8 @@ export class RentalDetailsComponent {
 
   addBed(roomIndex: number) {
     this.roomBeds(roomIndex).push(this.fb.group({
-      type: [null],
-      quantity: [null]
+      type: [null, [Validators.required]],
+      quantity: [null, [Validators.required]]
     }));
   }
 
@@ -174,20 +180,100 @@ export class RentalDetailsComponent {
   }
 
   submit() {
-
+    let payload = this.unitMapperService.formToDetailsPatchModel(this.rentalDetailsForm.value);
+    this.subscriptions.push(this.unitApiService.updateUnitDetailsById(this.unitId, payload).subscribe({
+      next: (data) => {
+        console.log('Your update api response is:', data);
+        this.handleUnitDetailsSuccessResponse(data);
+        this.toastrService.info(
+          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.message')
+            .replace(':rentalName', this.unit.name),
+          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.title'));
+      },
+      error: (err) => {
+        console.error('An error occurred when updating unit details with id:', this.unitId, 'More info:', err);
+        this.toastrService.warning(
+          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.message')
+            .replace(':rentalName', this.unit.name),
+          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.title'));
+      }
+    }))
   }
 
   private retrieveUnitDetails() {
     this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.unitId).subscribe({
       next: (data) => {
         console.log('Unit details call response is:', data);
-        this.unit = data;
-        this.rentalDetailsForm.patchValue(this.unit);
+        this.handleUnitDetailsSuccessResponse(data);
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its details. More info:', err);
-        //TODO: launch toast notification and redirect to unit list page
       }
     }))
   }
+
+  private handleUnitDetailsSuccessResponse(data: UnitDetailsGetModel) {
+    this.unit = data;
+    this.rentalDetailsForm.patchValue(this.unit);
+
+    // Patch flat values
+    const {
+      type,
+      floorSize,
+      floorSizeUnit,
+      minOccupancy,
+      maxOccupancy,
+      childrenAllowed,
+      eventsAllowed,
+      smokingAllowed,
+      petsAllowed,
+      travellerAge,
+      description,
+      rooms
+    } = data;
+
+    this.rentalDetailsForm.patchValue({
+      type,
+      floorSize,
+      floorSizeUnit,
+      minOccupancy,
+      maxOccupancy,
+      childrenAllowed,
+      eventsAllowed,
+      smokingAllowed,
+      petsAllowed,
+      travellerAge,
+      description
+    });
+
+    if (this.unit.rooms.length > 0) {
+      this.setRooms(rooms);
+    }
+  }
+
+  private setRooms(rooms: any[]) {
+    const roomsFormArray = new FormArray<FormGroup>([]);
+    rooms.forEach(room => {
+      const bedsArray = new FormArray<FormGroup>([]);
+      (room.beds || []).forEach((bed: { type: any; quantity: any; }) => {
+        bedsArray.push(this.fb.group({
+          type: [bed.type, [Validators.required]],
+          quantity: [bed.quantity, [Validators.required]]
+        }));
+      });
+      const roomGroup = this.fb.group({
+        type: [room.type, [Validators.required]],
+        bathroom: [room.bathroom, [Validators.required]],
+        floorSize: [room.floorSize],
+        beds: bedsArray
+      });
+      roomsFormArray.push(roomGroup);
+    });
+    this.rentalDetailsForm.setControl('rooms', roomsFormArray);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.map(subscription => subscription.unsubscribe());
+  }
+
 }

@@ -5,6 +5,6 @@ export interface RoomGetModel {
   id: string;
   type: RoomTypeEnum;
   bathroom: number;
-  size: number;
-  beds: BedGetModel[];
+  floorSize: number;
+  beds?: BedGetModel[];
 }

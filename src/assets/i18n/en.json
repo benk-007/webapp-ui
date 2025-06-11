@@ -512,7 +512,6 @@
                     "MOBILE_HOME": "Mobile Home",
                     "RIAD": "Riad",
                     "STUDIO": "Studio"
-
                   }
                 },
                 "floor-size-input": {
@@ -528,6 +527,18 @@
                 },
                 "max-occupancy": {
                   "label": "Max occupancy"
+                },
+                "adults-input": {
+                  "label": "Adults",
+                  "placeholder": "Adults"
+                },
+                "children-input": {
+                  "label": "Children",
+                  "placeholder": "Children"
+                },
+                "infants-input": {
+                  "label": "Infants",
+                  "placeholder": "Infants"
                 }
               }
             },
@@ -541,7 +552,8 @@
                   "label": "Events allowed"
                 },
                 "traveller-age-input": {
-                  "label": "Traveller age"
+                  "label": "Traveller age",
+                  "hint": "Specify the minimum age for a guest staying at the property"
                 },
                 "smoking-allowed-input": {
                   "label": "Smoking allowed"
@@ -553,6 +565,7 @@
             },
             "rooms-bedding": {
               "title": "Rooms & bedding",
+              "add-room": "Add room",
               "room": {
                 "title": "Room",
                 "form": {
@@ -570,13 +583,22 @@
                     }
                   },
                   "size-input": {
-                    "label": "Size"
+                    "label": "Floor size"
                   },
                   "bathroom-input": {
                     "label": "Bathroom"
                   },
                   "bed-input": {
-                    "label": "Bedding"
+                    "label": "Bedding",
+                    "values": {
+                      "SINGLE": "Single",
+                      "QUEEN": "Queen",
+                      "KING": "King",
+                      "BUNK": "Bunk",
+                      "SOFA": "Sofa",
+                      "TRUNDLE": "Trundle",
+                      "CRIB": "Crib"
+                    }
                   },
                   "add-btn": {
                     "label": "Add bed"
@@ -587,10 +609,26 @@
             "amenities": {
               "title": "Amenities"
             }
+          },
+          "notifications": {
+            "success": {
+              "title": "Rental details updated",
+              "message": "Rental \":rentalName\" details were successfully updated."
+            },
+            "error": {
+              "title": "Rental details update error",
+              "message": "An error occurred when updating rental \":rentalName\" details."
+            }
           }
         },
         "checkin-policy": {
-          "title": ""
+          "title": "Rental instructions",
+          "hint": "salam 3alikoum",
+          "sections": {
+            "checkin-times": {
+              "title": "Check-in/Check-out times"
+            }
+          }
         }
       }
     }

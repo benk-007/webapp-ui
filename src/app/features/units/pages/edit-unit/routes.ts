@@ -26,6 +26,13 @@ export const routes: Routes = [
         data: {
           title: 'Rental details'
         }
+      },
+      {
+        path: 'checkin-policy',
+        loadComponent: () => import('./rental-checkin/rental-checkin.component').then(m => m.RentalCheckinComponent),
+        data: {
+          title: 'Rental checkin'
+        }
       }
     ]
   }
