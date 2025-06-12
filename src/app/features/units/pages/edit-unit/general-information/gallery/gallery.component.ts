@@ -18,6 +18,7 @@ import {ConfirmModalComponent} from "../../../../../../shared/components/confirm
   ],
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.scss',
+  standalone: true,
   providers: [BsModalService]
 })
 export class GalleryComponent implements OnInit, OnDestroy {

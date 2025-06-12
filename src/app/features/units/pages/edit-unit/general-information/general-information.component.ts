@@ -52,6 +52,7 @@ import {GalleryComponent} from "./gallery/gallery.component";
     GalleryComponent
   ],
   templateUrl: './general-information.component.html',
+  standalone: true,
   styleUrl: './general-information.component.scss'
 })
 export class GeneralInformationComponent implements OnDestroy {

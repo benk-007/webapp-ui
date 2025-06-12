@@ -16,6 +16,7 @@ import {Subscription} from "rxjs";
   ],
   templateUrl: './country-select.component.html',
   styleUrl: './country-select.component.scss',
+  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

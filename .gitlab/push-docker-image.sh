@@ -8,8 +8,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VERSION=$(node -pe "require('$SCRIPT_DIR/../package.json').version")
 
 # Build Docker image with the retrieved version
-docker build  --build-arg PROFILE=production -t registry.gitlab.com/xstay1/pms-ui:$VERSION -t registry.gitlab.com/xstay1/pms-ui:latest .
+docker build  --build-arg PROFILE=production -t registry.gitlab.com/sforhet/pms/webapp-ui:$VERSION -t registry.gitlab.com/sforhet/pms/webapp-ui:latest .
 
 # Push Docker images
-docker push registry.gitlab.com/xstay1/pms-ui:$VERSION
-docker push registry.gitlab.com/xstay1/pms-ui:latest
+docker push registry.gitlab.com/sforhet/pms/webapp-ui:$VERSION
+docker push registry.gitlab.com/sforhet/pms/webapp-ui:latest
