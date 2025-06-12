@@ -258,7 +258,6 @@
 
       <c-row *ngIf="rentalDetailsForm" formGroupName="amenities">
         <c-col [md]="3" *ngFor="let amenity of filteredAmenities">
-          {{ rentalDetailsForm.get('amenities.' + amenity.key)?.value | json }}
           <c-form-check class="mt-2">
             <input cFormCheckInput [id]="amenity.key" type="checkbox"
                    [checked]="rentalDetailsForm.get('amenities.' + amenity.key)?.value"
