@@ -1,399 +1,678 @@
-<form (submit)="submit()" [formGroup]="rentalDetailsForm">
+<form *ngIf="rentalDetailsForm" (submit)="submit()" [formGroup]="rentalDetailsForm">
   <c-row class="mt-3">
-    <c-col [md]="8">
+    <!--Type input-->
+    <c-col [md]="4">
+      <label cLabel
+             for="type"
+             class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.type-input.label'|translate }}</label>
+      <select cSelect id="type" formControlName="type">
+        <option *ngFor="let unitType of unitTypes"
+                [value]="unitType">{{ ('units.edit-unit.tabs.rental-details.sections.general.form.type-input.values.' + unitType)|translate }}
+        </option>
+      </select>
+      @if (((rentalDetailsForm.get('type')?.touched || rentalDetailsForm.get('type')?.dirty))) {
+        @if (rentalDetailsForm.controls['type'].hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+        }
+      }
+    </c-col>
 
-      <!--Type & Floor size inputs-->
-      <c-row class="mb-3">
-        <!--Type input-->
-        <c-col [md]="6">
-          <label cLabel
-                 for="type"
-                 class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.type-input.label'|translate }}</label>
-          <select cSelect id="type" formControlName="type">
-            <option *ngFor="let unitType of unitTypes"
-                    [value]="unitType">{{ ('units.edit-unit.tabs.rental-details.sections.general.form.type-input.values.' + unitType)|translate }}
-            </option>
-          </select>
-          @if (((rentalDetailsForm.get('type')?.touched || rentalDetailsForm.get('type')?.dirty))) {
-            @if (rentalDetailsForm.controls['type'].hasError('required')) {
-              <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
-            }
-          }
-        </c-col>
+    <!--Floor size input-->
+    <c-col [md]="4">
+      <label cLabel
+             for="floor-size"
+             class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.floor-size-input.label'|translate }}</label>
+      <c-input-group>
+        <input id="floor-size" cFormControl formControlName="floorSize" type="number"/>
+        <c-dropdown>
+          <button cButton cDropdownToggle color="secondary" variant="outline">
+            {{ rentalDetailsForm.value?.floorSizeUnit }}
+          </button>
+          <div cDropdownMenu>
+            <button cDropdownItem *ngFor="let floorSizeUnit of floorSizeUnits"
+                    (click)="setFloorSizeUnit(floorSizeUnit)">{{ floorSizeUnit }}
+            </button>
+          </div>
+        </c-dropdown>
+      </c-input-group>
+      @if (((rentalDetailsForm.get('floorSize')?.touched || rentalDetailsForm.get('floorSize')?.dirty))) {
+        @if (rentalDetailsForm.controls['floorSize'].hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+        }
+      }
+    </c-col>
 
-        <!--Floor size input-->
-        <c-col [md]="6">
-          <label cLabel
-                 for="floor-size" class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.floor-size-input.label'|translate }}</label>
-          <c-input-group>
-            <input id="floor-size" cFormControl formControlName="floorSize" type="number"/>
-            <c-dropdown>
-              <button cButton cDropdownToggle color="secondary" variant="outline">
-                {{ rentalDetailsForm.value?.floorSizeUnit }}
-              </button>
-              <div cDropdownMenu>
-                <button cDropdownItem *ngFor="let floorSizeUnit of floorSizeUnits"
-                        (click)="setFloorSizeUnit(floorSizeUnit)">{{ floorSizeUnit }}
-                </button>
-              </div>
-            </c-dropdown>
-          </c-input-group>
-          @if (((rentalDetailsForm.get('floorSize')?.touched || rentalDetailsForm.get('floorSize')?.dirty))) {
-            @if (rentalDetailsForm.controls['floorSize'].hasError('required')) {
-              <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
-            }
-          }
-        </c-col>
-      </c-row>
-      <!--Occupancy & Additional sections-->
-      <c-row class="mb-3">
-        <!--Occupancy section-->
-        <c-col [md]="6">
-          <c-row>
-            <!--Title-->
-            <h6 class="section-title underline mb-3 mt-2">
-              {{ 'units.edit-unit.tabs.rental-details.sections.occupancy.title'|translate }}
-            </h6>
+    <!--Form buttons-->
+    <c-col [md]="4" class="d-flex justify-content-end align-items-center">
+      <button cButton type="submit" size="sm"
+              [disabled]="!rentalDetailsForm.valid">{{ 'commons.form.buttons.update'|translate }}
+      </button>
+    </c-col>
+  </c-row>
 
-            <!--Min occupancy input-->
-            <c-col [md]="12" class="mb-3" formGroupName="minOccupancy">
-              <c-row class="flex-nowrap align-items-end" [gutter]="2">
-                @let minAdultsControl = rentalDetailsForm.get('minOccupancy.adults')!;
-                @let minChildrenControl = rentalDetailsForm.get('minOccupancy.children')!;
-                @let minInfantsControl = rentalDetailsForm.get('minOccupancy.infants')!;
+  <!--Occupancy, Additional information & Description-->
+  <c-row class="mt-3">
 
-                <c-col>
-                  <label cLabel class="invisible"
-                         for="min-occupancy">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate }}</label>
-                  <input [plaintext]="true" cFormControl id="min-occupancy" readonly type="text"
-                         [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate"/>
-                  @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="min-adults"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
-                  <input cFormControl id="min-adults" type="number" formControlName="adults"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
-                  @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !minAdultsControl.hasError('required') && (minChildrenControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="min-children"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
-                  <input cFormControl id="min-children" type="number" formControlName="children"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"/>
-                  @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !minChildrenControl.hasError('required') && (minAdultsControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="min-infants"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
-                  <input cFormControl id="min-infants" type="number" formControlName="infants"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"/>
-                  @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !minInfantsControl.hasError('required') && (minAdultsControl.hasError('required') || minChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-              </c-row>
-            </c-col>
-
-            <!--Max occupancy input-->
-            <c-col [md]="12" formGroupName="maxOccupancy">
-              <c-row class="flex-nowrap align-items-end" [gutter]="2">
-                @let maxAdultsControl = rentalDetailsForm.get('maxOccupancy.adults')!;
-                @let maxChildrenControl = rentalDetailsForm.get('maxOccupancy.children')!;
-                @let maxInfantsControl = rentalDetailsForm.get('maxOccupancy.infants')!;
-                <c-col>
-                  <label cLabel class="invisible"
-                         for="staticEmail2">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate }}</label>
-                  <input [plaintext]="true" cFormControl id="staticEmail2" readonly type="text"
-                         [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate"/>
-                  @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="max-adults"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
-                  <input cFormControl id="max-adults" type="number" formControlName="adults"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
-                  @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !maxAdultsControl.hasError('required') && (maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="max-children"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
-                  <input cFormControl id="max-children"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"
-                         type="number"
-                         formControlName="children"/>
-                  @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !maxChildrenControl.hasError('required') && (maxAdultsControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-                <c-col class="w-auto">
-                  <label cLabel for="max-infants"
-                         class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
-                  <input cFormControl id="max-infants"
-                         [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"
-                         type="number" formControlName="infants"/>
-                  @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
-                    <c-form-feedback [valid]="false"
-                                     [ngClass]="{'invisible': !maxInfantsControl.hasError('required') && (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
-                    </c-form-feedback>
-                  }
-                </c-col>
-              </c-row>
-            </c-col>
-          </c-row>
-        </c-col>
-        <!--Additional information section-->
-        <c-col [md]="6">
-          <c-row class="mb-3">
-            <!--Title-->
-            <h6 class="section-title underline mb-3 mt-2">
-              {{ 'units.edit-unit.tabs.rental-details.sections.additional-information.title'|translate }}
-            </h6>
-            <!--Children allowed input-->
-            <c-col [md]="4">
-              <label cLabel class="invisible" for="childrenAllowed">Children allowed</label>
-              <c-form-check class="mt-2">
-                <input cFormCheckInput id="childrenAllowed" type="checkbox" formControlName="childrenAllowed"/>
-                <label cFormCheckLabel
-                       for="childrenAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.children-allowed-input.label'|translate }}</label>
-              </c-form-check>
-            </c-col>
-
-            <!--Events allowed input-->
-            <c-col [md]="4">
-              <label cLabel class="invisible" for="eventsAllowed">Events allowed</label>
-              <c-form-check class="mt-2">
-                <input cFormCheckInput id="eventsAllowed" type="checkbox" formControlName="eventsAllowed"/>
-                <label cFormCheckLabel
-                       for="eventsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.events-allowed-input.label'|translate }}</label>
-              </c-form-check>
-            </c-col>
-
-            <!--Traveller Age input-->
-            <c-col [md]="4">
-              <label cLabel
-                     for="travellerAge">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.traveller-age-input.label'|translate }}</label>
-              <input cFormControl id="travellerAge" type="text" formControlName="travellerAge"/>
-            </c-col>
-
-            <!--Smoking allowed input-->
-            <c-col [md]="4">
-              <label cLabel class="invisible" for="smokingAllowed">Smoking allowed</label>
-              <c-form-check class="mt-4">
-                <input cFormCheckInput id="smokingAllowed" type="checkbox" formControlName="smokingAllowed"/>
-                <label cFormCheckLabel
-                       for="smokingAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.smoking-allowed-input.label'|translate }}</label>
-              </c-form-check>
-            </c-col>
-
-            <!--Pets allowed-->
-            <c-col [md]="4">
-              <label cLabel class="invisible" for="petsAllowed">Pets allowed</label>
-              <c-form-check class="mt-4">
-                <input cFormCheckInput id="petsAllowed" type="checkbox" formControlName="petsAllowed"/>
-                <label cFormCheckLabel
-                       for="petsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.pets-allowed-input.label'|translate }}</label>
-              </c-form-check>
-            </c-col>
-
-          </c-row>
-        </c-col>
-      </c-row>
-      <!--Rooms & Bedding sections-->
+    <!--Occupancy section-->
+    <c-col [md]="4">
       <c-row>
-        <!--Title & add button-->
-        <c-col [md]="12">
-          <c-row class="align-items-center">
-            <c-col [md]="6">
-              <h6 class="section-title underline mb-3 mt-2">
-                {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.title' | translate }}
-              </h6>
-            </c-col>
+        <!--Title-->
+        <h6 class="section-title underline mb-3 mt-2">
+          {{ 'units.edit-unit.tabs.rental-details.sections.occupancy.title'|translate }}
+        </h6>
 
-            <c-col [md]="6" class="d-flex justify-content-end align-items-center">
-              <div>
-                <button cButton type="button" color="secondary" size="sm" variant="outline" (click)="addRoom()">
-                  {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.add-room'|translate }}
-                </button>
-              </div>
+        <!--Min occupancy input-->
+        <c-col [md]="12" class="mb-3" formGroupName="minOccupancy">
+          <c-row class="flex-nowrap align-items-end" [gutter]="2">
+            @let minAdultsControl = rentalDetailsForm.get('minOccupancy.adults')!;
+            @let minChildrenControl = rentalDetailsForm.get('minOccupancy.children')!;
+            @let minInfantsControl = rentalDetailsForm.get('minOccupancy.infants')!;
+
+            <c-col>
+              <label cLabel class="invisible"
+                     for="min-occupancy">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate }}</label>
+              <input [plaintext]="true" cFormControl id="min-occupancy" readonly type="text"
+                     [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate"/>
+              @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-adults"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
+              <input cFormControl id="min-adults" type="number" formControlName="adults"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
+              @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !minAdultsControl.hasError('required') && (minChildrenControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-children"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
+              <input cFormControl id="min-children" type="number" formControlName="children"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"/>
+              @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !minChildrenControl.hasError('required') && (minAdultsControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="min-infants"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
+              <input cFormControl id="min-infants" type="number" formControlName="infants"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"/>
+              @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !minInfantsControl.hasError('required') && (minAdultsControl.hasError('required') || minChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
             </c-col>
           </c-row>
         </c-col>
 
-        <ng-container formArrayName="rooms">
+        <!--Max occupancy input-->
+        <c-col [md]="12" formGroupName="maxOccupancy">
+          <c-row class="flex-nowrap align-items-end" [gutter]="2">
+            @let maxAdultsControl = rentalDetailsForm.get('maxOccupancy.adults')!;
+            @let maxChildrenControl = rentalDetailsForm.get('maxOccupancy.children')!;
+            @let maxInfantsControl = rentalDetailsForm.get('maxOccupancy.infants')!;
+            <c-col>
+              <label cLabel class="invisible"
+                     for="staticEmail2">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate }}</label>
+              <input [plaintext]="true" cFormControl id="staticEmail2" readonly type="text"
+                     [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate"/>
+              @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-adults"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
+              <input cFormControl id="max-adults" type="number" formControlName="adults"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
+              @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !maxAdultsControl.hasError('required') && (maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-children"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
+              <input cFormControl id="max-children"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"
+                     type="number"
+                     formControlName="children"/>
+              @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !maxChildrenControl.hasError('required') && (maxAdultsControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
+            </c-col>
+            <c-col class="w-auto">
+              <label cLabel for="max-infants"
+                     class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
+              <input cFormControl id="max-infants"
+                     [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"
+                     type="number" formControlName="infants"/>
+              @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                <c-form-feedback [valid]="false"
+                                 [ngClass]="{'invisible': !maxInfantsControl.hasError('required') && (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              }
+            </c-col>
+          </c-row>
+        </c-col>
+      </c-row>
+    </c-col>
 
-          <c-col [md]="6" *ngFor="let room of rooms.controls;  let roomIndex = index" [formGroupName]="roomIndex"
-                 class="room">
-            <c-card>
-              <c-card-body>
-                <!--Room title & delete button-->
-                <c-row class="mb-3">
-                  <!--Title-->
-                  <c-col [md]="8">
-                    <h6 class="text-primary"
-                        cCardTitle>{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.title'|translate }} {{ roomIndex + 1 }}</h6>
-                  </c-col>
+    <!--Additional information section-->
+    <c-col [md]="4">
+      <!--Title-->
+      <h6 class="section-title underline mb-3 mt-2">
+        {{ 'units.edit-unit.tabs.rental-details.sections.additional-information.title'|translate }}
+      </h6>
+      <c-row>
+        <!--Children allowed input-->
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="childrenAllowed">Children allowed</label>
+          <c-form-check class="mt-2">
+            <input cFormCheckInput id="childrenAllowed" type="checkbox" formControlName="childrenAllowed"/>
+            <label cFormCheckLabel
+                   for="childrenAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.children-allowed-input.label'|translate }}</label>
+          </c-form-check>
+        </c-col>
+        <!--Events allowed input-->
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="eventsAllowed">Events allowed</label>
+          <c-form-check class="mt-2">
+            <input cFormCheckInput id="eventsAllowed" type="checkbox" formControlName="eventsAllowed"/>
+            <label cFormCheckLabel
+                   for="eventsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.events-allowed-input.label'|translate }}</label>
+          </c-form-check>
+        </c-col>
+        <!--Traveller Age input-->
+        <c-col [md]="4">
+          <label cLabel
+                 for="travellerAge">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.traveller-age-input.label'|translate }}</label>
+          <input cFormControl id="travellerAge" type="text" formControlName="travellerAge"/>
+        </c-col>
+      </c-row>
+      <c-row>
+        <!--Smoking allowed input-->
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="smokingAllowed">Smoking allowed</label>
+          <c-form-check class="mt-4">
+            <input cFormCheckInput id="smokingAllowed" type="checkbox" formControlName="smokingAllowed"/>
+            <label cFormCheckLabel
+                   for="smokingAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.smoking-allowed-input.label'|translate }}</label>
+          </c-form-check>
+        </c-col>
+        <!--Pets allowed-->
+        <c-col [md]="4">
+          <label cLabel class="invisible" for="petsAllowed">Pets allowed</label>
+          <c-form-check class="mt-4">
+            <input cFormCheckInput id="petsAllowed" type="checkbox" formControlName="petsAllowed"/>
+            <label cFormCheckLabel
+                   for="petsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.pets-allowed-input.label'|translate }}</label>
+          </c-form-check>
+        </c-col>
+      </c-row>
+    </c-col>
 
-                  <!--Delete button-->
-                  <c-col [md]="4" class="d-flex justify-content-end" *ngIf="roomIndex!=0">
-                    <button cButton size="sm" color="danger" variant="outline" (click)="removeRoom(roomIndex)">
-                      <svg [cIcon]="icons.cilTrash"></svg>
-                    </button>
+    <!--Description input-->
+    <c-col [md]="4">
+      <label cLabel for="description">{{ 'commons.form.description-input.label'|translate }}</label>
+      <textarea id="description" cFormControl rows="6" formControlName="description"></textarea>
+    </c-col>
+
+  </c-row>
+
+  <!--Amenities-->
+  <c-row class="mt-3">
+    <!--Title-->
+    <h6 class="section-title underline mb-3 mt-2">
+      {{ 'units.edit-unit.tabs.rental-details.sections.amenities.title'|translate }}
+    </h6>
+
+    <!--Search input-->
+    <c-col [md]="12">
+      <c-row class="mb-3">
+        <c-col [md]="3">
+          <c-input-group sizing="sm" class="search-input">
+        <span cInputGroupText>
+          <svg [cIcon]="icons.cilSearch"></svg>
+        </span>
+            <input id="searchBar" cFormControl (input)="triggerBasicSearch($event)"
+                   [placeholder]="'commons.form.search-input.placeholder'|translate"/>
+          </c-input-group>
+        </c-col>
+      </c-row>
+    </c-col>
+
+    <!--Amenities list-->
+    <c-col [md]="12">
+
+      <c-row *ngIf="rentalDetailsForm" formGroupName="amenities">
+        <c-col [md]="3" *ngFor="let amenity of filteredAmenities">
+          {{ rentalDetailsForm.get('amenities.' + amenity.key)?.value | json }}
+          <c-form-check class="mt-2">
+            <input cFormCheckInput [id]="amenity.key" type="checkbox"
+                   [checked]="rentalDetailsForm.get('amenities.' + amenity.key)?.value"
+                   (change)="setAmenity($event, amenity.key)"/>
+            <label cFormCheckLabel
+                   [for]="amenity.key">
+              {{ 'commons.amenities.'.concat(amenity.key)|translate }}
+            </label>
+          </c-form-check>
+        </c-col>
+      </c-row>
+
+
+    </c-col>
+
+  </c-row>
+
+  <!--  <c-row class="mt-3">
+
+      <c-col [md]="8">
+
+        &lt;!&ndash;Type & Floor size inputs&ndash;&gt;
+        <c-row class="mb-3">
+          &lt;!&ndash;Type input&ndash;&gt;
+          <c-col [md]="6">
+            <label cLabel
+                   for="type"
+                   class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.type-input.label'|translate }}</label>
+            <select cSelect id="type" formControlName="type">
+              <option *ngFor="let unitType of unitTypes"
+                      [value]="unitType">{{ ('units.edit-unit.tabs.rental-details.sections.general.form.type-input.values.' + unitType)|translate }}
+              </option>
+            </select>
+            @if (((rentalDetailsForm.get('type')?.touched || rentalDetailsForm.get('type')?.dirty))) {
+              @if (rentalDetailsForm.controls['type'].hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          &lt;!&ndash;Floor size input&ndash;&gt;
+          <c-col [md]="6">
+            <label cLabel
+                   for="floor-size"
+                   class="required">{{ 'units.edit-unit.tabs.rental-details.sections.general.form.floor-size-input.label'|translate }}</label>
+            <c-input-group>
+              <input id="floor-size" cFormControl formControlName="floorSize" type="number"/>
+              <c-dropdown>
+                <button cButton cDropdownToggle color="secondary" variant="outline">
+                  {{ rentalDetailsForm.value?.floorSizeUnit }}
+                </button>
+                <div cDropdownMenu>
+                  <button cDropdownItem *ngFor="let floorSizeUnit of floorSizeUnits"
+                          (click)="setFloorSizeUnit(floorSizeUnit)">{{ floorSizeUnit }}
+                  </button>
+                </div>
+              </c-dropdown>
+            </c-input-group>
+            @if (((rentalDetailsForm.get('floorSize')?.touched || rentalDetailsForm.get('floorSize')?.dirty))) {
+              @if (rentalDetailsForm.controls['floorSize'].hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+        </c-row>
+        &lt;!&ndash;Occupancy & Additional sections&ndash;&gt;
+        &lt;!&ndash;<c-row class="mb-3">
+          &lt;!&ndash;Occupancy section&ndash;&gt;
+          <c-col [md]="6">
+            <c-row>
+              &lt;!&ndash;Title&ndash;&gt;
+              <h6 class="section-title underline mb-3 mt-2">
+                {{ 'units.edit-unit.tabs.rental-details.sections.occupancy.title'|translate }}
+              </h6>
+
+              &lt;!&ndash;Min occupancy input&ndash;&gt;
+              <c-col [md]="12" class="mb-3" formGroupName="minOccupancy">
+                <c-row class="flex-nowrap align-items-end" [gutter]="2">
+                  @let minAdultsControl = rentalDetailsForm.get('minOccupancy.adults')!;
+                  @let minChildrenControl = rentalDetailsForm.get('minOccupancy.children')!;
+                  @let minInfantsControl = rentalDetailsForm.get('minOccupancy.infants')!;
+
+                  <c-col>
+                    <label cLabel class="invisible"
+                           for="min-occupancy">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate }}</label>
+                    <input [plaintext]="true" cFormControl id="min-occupancy" readonly type="text"
+                           [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.min-occupancy.label'|translate"/>
+                    @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
+                    }
                   </c-col>
-                </c-row>
-                <!--Type, Size and Bathroom inputs-->
-                <c-row class="mb-3">
-                  <!--Type input-->
-                  <c-col [md]="5">
-                    <label cLabel
-                           for="room-type"
-                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.type-input.label'|translate }}</label>
-                    <select cSelect id="room-type" formControlName="type">
-                      <option *ngFor="let roomType of roomTypes"
-                              [value]="roomType">{{ ('units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.type-input.values.' + roomType)|translate }}
-                      </option>
-                    </select>
-                    @let typeControl = room.get('type')!;
-                    @if ((typeControl.touched || typeControl.dirty) && typeControl.hasError('required')) {
-                      <c-form-feedback [valid]="false">
-                        {{ 'commons.errors.required' | translate }}
+                  <c-col class="w-auto">
+                    <label cLabel for="min-adults"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
+                    <input cFormControl id="min-adults" type="number" formControlName="adults"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
+                    @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !minAdultsControl.hasError('required') && (minChildrenControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
                       </c-form-feedback>
                     }
                   </c-col>
-
-                  <c-col [md]="3">
-                    <label cLabel
-                           for="max-adults">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.size-input.label'|translate }}</label>
-                    <input cFormControl id="max-adults" type="number" formControlName="floorSize"/>
+                  <c-col class="w-auto">
+                    <label cLabel for="min-children"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
+                    <input cFormControl id="min-children" type="number" formControlName="children"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"/>
+                    @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !minChildrenControl.hasError('required') && (minAdultsControl.hasError('required') || minInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                      </c-form-feedback>
+                    }
                   </c-col>
-
-                  <c-col [md]="4">
-                    <label cLabel
-                           for="max-adults"
-                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bathroom-input.label'|translate }}</label>
-                    <input cFormControl id="max-adults" type="number" formControlName="bathroom"/>
-                    @let bathControl = room.get('bathroom')!;
-                    @if ((bathControl.touched || bathControl.dirty) && bathControl.hasError('required')) {
-                      <c-form-feedback [valid]="false">
-                        {{ 'commons.errors.required' | translate }}
+                  <c-col class="w-auto">
+                    <label cLabel for="min-infants"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
+                    <input cFormControl id="min-infants" type="number" formControlName="infants"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"/>
+                    @if (minAdultsControl.hasError('required') || minChildrenControl.hasError('required') || minInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !minInfantsControl.hasError('required') && (minAdultsControl.hasError('required') || minChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
                       </c-form-feedback>
                     }
                   </c-col>
                 </c-row>
-                <!--Bed type and number inputs-->
-                <ng-container formArrayName="beds">
+              </c-col>
 
-                  <c-row class="mb-3"
-                         *ngFor="let bed of roomBeds(roomIndex).controls; let bedIndex = index"
-                         [formGroupName]="bedIndex">
-                    <c-col [md]="3">
-                      <label cLabel="col"
-                             for="type"
-                             class="required"> {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bed-input.label'|translate }} </label>
+              &lt;!&ndash;Max occupancy input&ndash;&gt;
+              <c-col [md]="12" formGroupName="maxOccupancy">
+                <c-row class="flex-nowrap align-items-end" [gutter]="2">
+                  @let maxAdultsControl = rentalDetailsForm.get('maxOccupancy.adults')!;
+                  @let maxChildrenControl = rentalDetailsForm.get('maxOccupancy.children')!;
+                  @let maxInfantsControl = rentalDetailsForm.get('maxOccupancy.infants')!;
+                  <c-col>
+                    <label cLabel class="invisible"
+                           for="staticEmail2">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate }}</label>
+                    <input [plaintext]="true" cFormControl id="staticEmail2" readonly type="text"
+                           [value]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.max-occupancy.label'|translate"/>
+                    @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false" class="invisible"> error</c-form-feedback>
+                    }
+                  </c-col>
+                  <c-col class="w-auto">
+                    <label cLabel for="max-adults"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.label'|translate }}</label>
+                    <input cFormControl id="max-adults" type="number" formControlName="adults"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.adults-input.placeholder'|translate"/>
+                    @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !maxAdultsControl.hasError('required') && (maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                      </c-form-feedback>
+                    }
+                  </c-col>
+                  <c-col class="w-auto">
+                    <label cLabel for="max-children"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.label'|translate }}</label>
+                    <input cFormControl id="max-children"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.children-input.placeholder'|translate"
+                           type="number"
+                           formControlName="children"/>
+                    @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !maxChildrenControl.hasError('required') && (maxAdultsControl.hasError('required') || maxInfantsControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                      </c-form-feedback>
+                    }
+                  </c-col>
+                  <c-col class="w-auto">
+                    <label cLabel for="max-infants"
+                           class="required">{{ 'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.label'|translate }}</label>
+                    <input cFormControl id="max-infants"
+                           [placeholder]="'units.edit-unit.tabs.rental-details.sections.occupancy.form.infants-input.placeholder'|translate"
+                           type="number" formControlName="infants"/>
+                    @if (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required') || maxInfantsControl.hasError('required')) {
+                      <c-form-feedback [valid]="false"
+                                       [ngClass]="{'invisible': !maxInfantsControl.hasError('required') && (maxAdultsControl.hasError('required') || maxChildrenControl.hasError('required'))}">{{ 'commons.errors.required'|translate }}
+                      </c-form-feedback>
+                    }
+                  </c-col>
+                </c-row>
+              </c-col>
+            </c-row>
+          </c-col>
+          &lt;!&ndash;Additional information section&ndash;&gt;
+          <c-col [md]="6">
+            <c-row class="mb-3">
+              &lt;!&ndash;Title&ndash;&gt;
+              <h6 class="section-title underline mb-3 mt-2">
+                {{ 'units.edit-unit.tabs.rental-details.sections.additional-information.title'|translate }}
+              </h6>
+              &lt;!&ndash;Children allowed input&ndash;&gt;
+              <c-col [md]="4">
+                <label cLabel class="invisible" for="childrenAllowed">Children allowed</label>
+                <c-form-check class="mt-2">
+                  <input cFormCheckInput id="childrenAllowed" type="checkbox" formControlName="childrenAllowed"/>
+                  <label cFormCheckLabel
+                         for="childrenAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.children-allowed-input.label'|translate }}</label>
+                </c-form-check>
+              </c-col>
+
+              &lt;!&ndash;Events allowed input&ndash;&gt;
+              <c-col [md]="4">
+                <label cLabel class="invisible" for="eventsAllowed">Events allowed</label>
+                <c-form-check class="mt-2">
+                  <input cFormCheckInput id="eventsAllowed" type="checkbox" formControlName="eventsAllowed"/>
+                  <label cFormCheckLabel
+                         for="eventsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.events-allowed-input.label'|translate }}</label>
+                </c-form-check>
+              </c-col>
+
+              &lt;!&ndash;Traveller Age input&ndash;&gt;
+              <c-col [md]="4">
+                <label cLabel
+                       for="travellerAge">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.traveller-age-input.label'|translate }}</label>
+                <input cFormControl id="travellerAge" type="text" formControlName="travellerAge"/>
+              </c-col>
+
+              &lt;!&ndash;Smoking allowed input&ndash;&gt;
+              <c-col [md]="4">
+                <label cLabel class="invisible" for="smokingAllowed">Smoking allowed</label>
+                <c-form-check class="mt-4">
+                  <input cFormCheckInput id="smokingAllowed" type="checkbox" formControlName="smokingAllowed"/>
+                  <label cFormCheckLabel
+                         for="smokingAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.smoking-allowed-input.label'|translate }}</label>
+                </c-form-check>
+              </c-col>
+
+              &lt;!&ndash;Pets allowed&ndash;&gt;
+              <c-col [md]="4">
+                <label cLabel class="invisible" for="petsAllowed">Pets allowed</label>
+                <c-form-check class="mt-4">
+                  <input cFormCheckInput id="petsAllowed" type="checkbox" formControlName="petsAllowed"/>
+                  <label cFormCheckLabel
+                         for="petsAllowed">{{ 'units.edit-unit.tabs.rental-details.sections.additional-information.form.pets-allowed-input.label'|translate }}</label>
+                </c-form-check>
+              </c-col>
+
+            </c-row>
+          </c-col>
+        </c-row>&ndash;&gt;
+        &lt;!&ndash;Rooms & Bedding sections&ndash;&gt;
+        <c-row>
+          &lt;!&ndash;Title & add button&ndash;&gt;
+          <c-col [md]="12">
+            <c-row class="align-items-center">
+              <c-col [md]="6">
+                <h6 class="section-title underline mb-3 mt-2">
+                  {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.title' | translate }}
+                </h6>
+              </c-col>
+
+              <c-col [md]="6" class="d-flex justify-content-end align-items-center">
+                <div>
+                  <button cButton type="button" color="secondary" size="sm" variant="outline" (click)="addRoom()">
+                    {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.add-room'|translate }}
+                  </button>
+                </div>
+              </c-col>
+            </c-row>
+          </c-col>
+
+          <ng-container formArrayName="rooms">
+
+            <c-col [md]="6" *ngFor="let room of rooms.controls;  let roomIndex = index" [formGroupName]="roomIndex"
+                   class="room">
+              <c-card>
+                <c-card-body>
+                  &lt;!&ndash;Room title & delete button&ndash;&gt;
+                  <c-row class="mb-3">
+                    &lt;!&ndash;Title&ndash;&gt;
+                    <c-col [md]="8">
+                      <h6 class="text-primary"
+                          cCardTitle>{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.title'|translate }} {{ roomIndex + 1 }}</h6>
                     </c-col>
+
+                    &lt;!&ndash;Delete button&ndash;&gt;
+                    <c-col [md]="4" class="d-flex justify-content-end" *ngIf="roomIndex!=0">
+                      <button cButton size="sm" color="danger" variant="outline" (click)="removeRoom(roomIndex)">
+                        <svg [cIcon]="icons.cilTrash"></svg>
+                      </button>
+                    </c-col>
+                  </c-row>
+                  &lt;!&ndash;Type, Size and Bathroom inputs&ndash;&gt;
+                  <c-row class="mb-3">
+                    &lt;!&ndash;Type input&ndash;&gt;
                     <c-col [md]="5">
+                      <label cLabel
+                             for="room-type"
+                             class="required">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.type-input.label'|translate }}</label>
                       <select cSelect id="room-type" formControlName="type">
-                        <option *ngFor="let bedType of bedTypes"
-                                [value]="bedType">{{ ('units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bed-input.values.' + bedType)|translate }}
+                        <option *ngFor="let roomType of roomTypes"
+                                [value]="roomType">{{ ('units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.type-input.values.' + roomType)|translate }}
                         </option>
                       </select>
-                      @let typeControl = bed.get('type')!;
+                      @let typeControl = room.get('type')!;
                       @if ((typeControl.touched || typeControl.dirty) && typeControl.hasError('required')) {
                         <c-form-feedback [valid]="false">
                           {{ 'commons.errors.required' | translate }}
                         </c-form-feedback>
                       }
                     </c-col>
-                    <c-col [md]="1" class="p-0 d-flex justify-content-center">
-                      <span class="mt-2 d-inline-block">X</span>
+
+                    <c-col [md]="3">
+                      <label cLabel
+                             for="max-adults">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.size-input.label'|translate }}</label>
+                      <input cFormControl id="max-adults" type="number" formControlName="floorSize"/>
                     </c-col>
-                    <c-col [md]="2">
-                      <input
-                        cFormControl
-                        id="quantity"
-                        formControlName="quantity"
-                        type="number" placeholder="0">
-                      @let quantityControl = bed.get('quantity')!;
-                      @if ((quantityControl.touched || quantityControl.dirty) && quantityControl.hasError('required')) {
+
+                    <c-col [md]="4">
+                      <label cLabel
+                             for="max-adults"
+                             class="required">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bathroom-input.label'|translate }}</label>
+                      <input cFormControl id="max-adults" type="number" formControlName="bathroom"/>
+                      @let bathControl = room.get('bathroom')!;
+                      @if ((bathControl.touched || bathControl.dirty) && bathControl.hasError('required')) {
                         <c-form-feedback [valid]="false">
                           {{ 'commons.errors.required' | translate }}
                         </c-form-feedback>
                       }
                     </c-col>
-                    <c-col [md]="1" class="d-flex justify-content-end">
-                      <button cButton color="link" class="text-danger" (click)="removeBed(roomIndex, bedIndex)"
-                              *ngIf="bedIndex!=0">
-                        <svg [cIcon]="icons.cilX" size="lg"></svg>
-                      </button>
-                    </c-col>
                   </c-row>
+                  &lt;!&ndash;Bed type and number inputs&ndash;&gt;
+                  <ng-container formArrayName="beds">
 
-                  <c-row>
-                    <c-col [md]="12" class="d-flex justify-content-end">
-                      <button cButton size="sm" color="primary" variant="outline"
-                              (click)="addBed(roomIndex)">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.add-btn.label'|translate }}
-                      </button>
-                    </c-col>
-                  </c-row>
+                    <c-row class="mb-3"
+                           *ngFor="let bed of roomBeds(roomIndex).controls; let bedIndex = index"
+                           [formGroupName]="bedIndex">
+                      <c-col [md]="3">
+                        <label cLabel="col"
+                               for="type"
+                               class="required"> {{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bed-input.label'|translate }} </label>
+                      </c-col>
+                      <c-col [md]="5">
+                        <select cSelect id="room-type" formControlName="type">
+                          <option *ngFor="let bedType of bedTypes"
+                                  [value]="bedType">{{ ('units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.bed-input.values.' + bedType)|translate }}
+                          </option>
+                        </select>
+                        @let typeControl = bed.get('type')!;
+                        @if ((typeControl.touched || typeControl.dirty) && typeControl.hasError('required')) {
+                          <c-form-feedback [valid]="false">
+                            {{ 'commons.errors.required' | translate }}
+                          </c-form-feedback>
+                        }
+                      </c-col>
+                      <c-col [md]="1" class="p-0 d-flex justify-content-center">
+                        <span class="mt-2 d-inline-block">X</span>
+                      </c-col>
+                      <c-col [md]="2">
+                        <input
+                          cFormControl
+                          id="quantity"
+                          formControlName="quantity"
+                          type="number" placeholder="0">
+                        @let quantityControl = bed.get('quantity')!;
+                        @if ((quantityControl.touched || quantityControl.dirty) && quantityControl.hasError('required')) {
+                          <c-form-feedback [valid]="false">
+                            {{ 'commons.errors.required' | translate }}
+                          </c-form-feedback>
+                        }
+                      </c-col>
+                      <c-col [md]="1" class="d-flex justify-content-end">
+                        <button cButton color="link" class="text-danger" (click)="removeBed(roomIndex, bedIndex)"
+                                *ngIf="bedIndex!=0">
+                          <svg [cIcon]="icons.cilX" size="lg"></svg>
+                        </button>
+                      </c-col>
+                    </c-row>
 
-                </ng-container>
-              </c-card-body>
-            </c-card>
+                    <c-row>
+                      <c-col [md]="12" class="d-flex justify-content-end">
+                        <button cButton size="sm" color="primary" variant="outline"
+                                (click)="addBed(roomIndex)">{{ 'units.edit-unit.tabs.rental-details.sections.rooms-bedding.room.form.add-btn.label'|translate }}
+                        </button>
+                      </c-col>
+                    </c-row>
+
+                  </ng-container>
+                </c-card-body>
+              </c-card>
+            </c-col>
+          </ng-container>
+
+        </c-row>
+      </c-col>
+
+      &lt;!&ndash;Submit, Description and amenities&ndash;&gt;
+      <c-col [md]="4">
+        &lt;!&ndash;Submit button&ndash;&gt;
+        <c-row>
+          <c-col [md]="12" class="d-flex justify-content-end">
+            <button cButton type="submit" size="sm"
+                    [disabled]="!rentalDetailsForm.valid">{{ 'commons.form.buttons.update'|translate }}
+            </button>
           </c-col>
-        </ng-container>
+        </c-row>
 
-      </c-row>
-    </c-col>
+        &lt;!&ndash;Description input&ndash;&gt;
+        <c-row class="mt-3">
+          <c-col [md]="12">
+            <label cLabel for="description">{{ 'commons.form.description-input.label'|translate }}</label>
+            <textarea id="description" cFormControl rows="7" formControlName="description"></textarea>
+          </c-col>
+        </c-row>
 
-    <!--Submit, Description and amenities-->
-    <c-col [md]="4">
-      <!--Submit button-->
-      <c-row>
-        <c-col [md]="12" class="d-flex justify-content-end">
-          <button cButton type="submit" size="sm"
-                  [disabled]="!rentalDetailsForm.valid">{{ 'commons.form.buttons.update'|translate }}
-          </button>
-        </c-col>
-      </c-row>
+        &lt;!&ndash;Amenities section&ndash;&gt;
+        <c-row class="mt-3">
+          &lt;!&ndash;Title&ndash;&gt;
+          <h6 class="section-title underline mb-3 mt-2">
+            {{ 'units.edit-unit.tabs.rental-details.sections.amenities.title'|translate }}
+          </h6>
+        </c-row>
 
-      <!--Description input-->
-      <c-row class="mt-3">
-        <c-col [md]="12">
-          <label cLabel for="description">{{ 'commons.form.description-input.label'|translate }}</label>
-          <textarea id="description" cFormControl rows="7" formControlName="description"></textarea>
-        </c-col>
-      </c-row>
+      </c-col>
 
-      <!--Amenities section-->
-      <c-row class="mt-3">
-        <!--Title-->
-        <h6 class="section-title underline mb-3 mt-2">
-          {{ 'units.edit-unit.tabs.rental-details.sections.amenities.title'|translate }}
-        </h6>
-      </c-row>
-
-    </c-col>
-
-  </c-row>
+    </c-row>-->
 
 </form>
