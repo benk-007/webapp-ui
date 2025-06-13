@@ -136,16 +136,16 @@ export class RentalDetailsComponent implements OnDestroy {
         console.log('Your update api response is:', data);
         this.handleUnitDetailsSuccessResponse(data);
         this.toastrService.info(
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.message')
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.success.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.title'));
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.success.title'));
       },
       error: (err) => {
         console.error('An error occurred when updating unit details with id:', this.unitId, 'More info:', err);
         this.toastrService.warning(
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.message')
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.error.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.title'));
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.error.title'));
       }
     }))
   }

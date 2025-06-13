@@ -59,11 +59,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
           } else {
             this.images.push(data);
           }
-          this.toastrService.success(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.upload.success.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.upload.success.title'))
+          this.toastrService.success(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.upload.success.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.upload.success.title'))
         },
         error: err => {
           console.error('An error occurred when uploading image for unit with id:', this.unitId, 'Error message is:', err);
-          this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.upload.error.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.upload.error.title'))
+          this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.upload.error.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.upload.error.title'))
         }
       }));
     }
@@ -71,8 +71,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   confirmImageDeletion(image: ImageGetModel) {
     let initialState = {
-      title: this.translateService.instant('units.edit-unit.tabs.general-information.gallery.delete-modal.title'),
-      message: this.translateService.instant('units.edit-unit.tabs.general-information.gallery.delete-modal.message')
+      title: this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.delete-modal.title'),
+      message: this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.delete-modal.message')
     }
     let confirmModalRef = this.modalService.show(ConfirmModalComponent, {initialState});
     this.subscriptions.push((confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(
@@ -92,11 +92,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
         this.coverImage = data;
         this.coverImage.imageUrl = image.imageUrl;
         this.images = this.images.filter(item => item.id != data.id);
-        this.toastrService.info(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.cover.success.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.cover.success.title'))
+        this.toastrService.info(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.cover.success.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.cover.success.title'))
       },
       error: err => {
         console.log('An error occurred when setting image as cover. Error message is:', err);
-        this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.cover.error.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.cover.error.title'))
+        this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.cover.error.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.cover.error.title'))
       }
     }))
   }
@@ -110,11 +110,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
         } else {
           this.coverImage = null;
         }
-        this.toastrService.info(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.delete.success.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.delete.success.title'))
+        this.toastrService.info(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.delete.success.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.delete.success.title'))
       },
       error: err => {
         console.log('An error occurred when deleting image with id:', image.id, 'Error message is:', err);
-        this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.delete.error.message'), this.translateService.instant('units.edit-unit.tabs.general-information.gallery.notifications.delete.error.title'))
+        this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.delete.error.message'), this.translateService.instant('units.edit-unit.tabs.basic-information.gallery.notifications.delete.error.title'))
       }
     }))
   }

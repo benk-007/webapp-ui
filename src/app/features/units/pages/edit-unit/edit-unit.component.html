@@ -2,17 +2,17 @@
 </app-page-title>
 
 <ul class="nav nav-underline">
-  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.general-information.hint'|translate" placement="auto">
-    <a class="nav-link active" routerLink="infos"
-       routerLinkActive="active">{{ 'units.edit-unit.tabs.general-information.title'|translate }}</a>
+  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.basic-information.hint'|translate" placement="auto">
+    <a class="nav-link active" routerLink="basic-infos"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.basic-information.title'|translate }}</a>
   </li>
-  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.rental-details.hint'|translate" placement="auto">
-    <a class="nav-link" routerLink="details"
-       routerLinkActive="active">{{ 'units.edit-unit.tabs.rental-details.title'|translate }}</a>
+  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.detail-information.hint'|translate" placement="auto">
+    <a class="nav-link" routerLink="detail-infos"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.detail-information.title'|translate }}</a>
   </li>
-  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.checkin-policy.hint'|translate" placement="auto">
-    <a class="nav-link" routerLink="checkin-policy"
-       routerLinkActive="active">{{ 'units.edit-unit.tabs.checkin-policy.title'|translate }}</a>
+  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.rooms-bedding.hint'|translate" placement="auto">
+    <a class="nav-link" routerLink="bedding-rooms"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
   </li>
   <li class="nav-item">
     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -23,12 +23,12 @@
 
 <!--<c-tabs>
   <c-tabs-list variant="underline-border">
-    <a class="btn" routerLink="infos" cTab>{{ 'units.edit-unit.tabs.general-information.title'|translate }}</a>
-    <button cTab [itemKey]="0" [tooltip]="'units.edit-unit.tabs.general-information.hint'|translate"
-            placement="auto">{{ 'units.edit-unit.tabs.general-information.title'|translate }}
+    <a class="btn" routerLink="infos" cTab>{{ 'units.edit-unit.tabs.basic-information.title'|translate }}</a>
+    <button cTab [itemKey]="0" [tooltip]="'units.edit-unit.tabs.basic-information.hint'|translate"
+            placement="auto">{{ 'units.edit-unit.tabs.basic-information.title'|translate }}
     </button>
-    <button cTab [itemKey]="1" [tooltip]="'units.edit-unit.tabs.rental-details.hint'|translate"
-            placement="auto">{{ 'units.edit-unit.tabs.rental-details.title'|translate }}
+    <button cTab [itemKey]="1" [tooltip]="'units.edit-unit.tabs.detail-information.hint'|translate"
+            placement="auto">{{ 'units.edit-unit.tabs.detail-information.title'|translate }}
     </button>
     <button cTab [itemKey]="2">Contact</button>
     <button cTab [itemKey]="3" disabled>Disabled</button>
