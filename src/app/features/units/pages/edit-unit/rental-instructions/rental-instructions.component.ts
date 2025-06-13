@@ -9,6 +9,7 @@ import { UnitInstructionsGetModel } from '../../../models/unit-instructions-get.
 import { UnitInstructionsPatchModel } from '../../../models/unit-instructions-patch.model';
 import { CommonModule } from '@angular/common';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import * as moment from 'moment-timezone';
 
 // CoreUI Imports
 import {
@@ -50,33 +51,18 @@ interface TimeZone {
 })
 export class RentalInstructionsComponent implements OnInit, OnDestroy {
 
-  instructionsForm: FormGroup; //Le formulaire réactif principal
-  private unitId!: string; //Identifiant unique de l'unité de location
-  private subscriptions: Subscription[] = []; //Gestion des abonnements RxJS
-  isLoading = false; //État de chargement des données
-  isSaving = false; //État de sauvegarde
+  instructionsForm: FormGroup;
+  private unitId!: string;
+  private subscriptions: Subscription[] = [];
+  isLoading = false;
+  isSaving = false;
 
-  // Propriétés pour les timepickers
+  // Propriétés pour les timepickers (SPINNERS CACHÉS)
   isMeridian = false; // Format 24h
-  showSpinners = true; // Afficher les spinners
+  showSpinners = false; // Cacher les spinners
 
-  // Liste des fuseaux horaires
-  timeZones: TimeZone[] = [
-    { value: 'Africa/Casablanca', label: 'Africa/Casablanca (GMT+1)' },
-    { value: 'Europe/London', label: 'Europe/London (GMT+0/GMT+1)' },
-    { value: 'Europe/Paris', label: 'Europe/Paris (GMT+1/GMT+2)' },
-    { value: 'Europe/Berlin', label: 'Europe/Berlin (GMT+1/GMT+2)' },
-    { value: 'Europe/Rome', label: 'Europe/Rome (GMT+1/GMT+2)' },
-    { value: 'Europe/Madrid', label: 'Europe/Madrid (GMT+1/GMT+2)' },
-    { value: 'America/New_York', label: 'America/New_York (GMT-5/GMT-4)' },
-    { value: 'America/Los_Angeles', label: 'America/Los_Angeles (GMT-8/GMT-7)' },
-    { value: 'America/Chicago', label: 'America/Chicago (GMT-6/GMT-5)' },
-    { value: 'Asia/Tokyo', label: 'Asia/Tokyo (GMT+9)' },
-    { value: 'Asia/Shanghai', label: 'Asia/Shanghai (GMT+8)' },
-    { value: 'Asia/Dubai', label: 'Asia/Dubai (GMT+4)' },
-    { value: 'Australia/Sydney', label: 'Australia/Sydney (GMT+10/GMT+11)' },
-    { value: 'UTC', label: 'UTC (GMT+0)' }
-  ];
+  // Liste des fuseaux horaires avec moment-timezone
+  timeZones: TimeZone[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -86,16 +72,16 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
     private toastrService: ToastrService
   ) {
     this.instructionsForm = this.createForm();
+    this.initializeTimeZones();
+    this.setupTimeZoneWatcher();
   }
 
-  //Cycle de vie et initialisation
   ngOnInit(): void {
-    // Récupérer l'unitId depuis la route parent
     this.subscriptions.push(
       this.activatedRoute.parent?.paramMap.subscribe(params => {
         this.unitId = params.get('unitId') as string;
         if (this.unitId) {
-          this.loadInstructions(); // Chargement des données
+          this.loadInstructions();
         }
       }) || new Subscription()
     );
@@ -106,10 +92,61 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Initialiser les fuseaux horaires avec moment-timezone
+   */
+  private initializeTimeZones(): void {
+    const commonTimezones = [
+      'Africa/Casablanca',
+      'Europe/London',
+      'Europe/Paris',
+      'Europe/Berlin',
+      'Europe/Rome',
+      'Europe/Madrid',
+      'America/New_York',
+      'America/Los_Angeles',
+      'America/Chicago',
+      'Asia/Tokyo',
+      'Asia/Shanghai',
+      'Asia/Dubai',
+      'Australia/Sydney',
+      'UTC'
+    ];
+
+    this.timeZones = commonTimezones.map(tz => ({
+      value: tz,
+      label: `${tz.replace('_', ' ')} (${moment.tz(tz).format('Z')})`
+    }));
+  }
+
+  /**
+   * Observer les changements de fuseau horaire pour recalculer les heures
+   */
+  private setupTimeZoneWatcher(): void {
+    this.instructionsForm.get('timeZone')?.valueChanges.subscribe(newTimeZone => {
+      if (newTimeZone) {
+        this.adjustTimesForTimeZone(newTimeZone);
+      }
+    });
+  }
+
+  /**
+   * Ajuster les heures selon le nouveau fuseau horaire
+   */
+  private adjustTimesForTimeZone(timeZone: string): void {
+    const checkInTime = this.instructionsForm.get('checkInTime')?.value;
+    const checkOutTime = this.instructionsForm.get('checkOutTime')?.value;
+
+    if (checkInTime && checkOutTime) {
+      // Réajuster les heures selon le nouveau fuseau (optionnel)
+      // Pour l'instant, on garde les heures locales telles quelles
+      console.log(`Timezone changed to: ${timeZone}`);
+    }
+  }
+
+  /**
    * Créer le formulaire réactif avec les validations
    */
   private createForm(): FormGroup {
-    // Créer des dates par défaut
     const defaultCheckInTime = new Date();
     defaultCheckInTime.setHours(15, 0, 0, 0); // 15:00
 
@@ -117,18 +154,13 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
     defaultCheckOutTime.setHours(11, 0, 0, 0); // 11:00
 
     return this.formBuilder.group({
-      // Champs pour les heures avec validation
       checkInTime: [defaultCheckInTime, Validators.required],
       checkOutTime: [defaultCheckOutTime, Validators.required],
-      timeZone: ['UTC', Validators.required], // Valeur par défaut
-
-      // Codes & Passwords (optionnels)
+      timeZone: ['UTC', Validators.required],
       wifiName: [''],
       wifiPassword: [''],
       securityCode: [''],
-      keyPickup: [''], //Instructions récupération clés
-
-      // Instructions (optionnels pour cette étape)
+      keyPickup: [''],
       checkInInstructions: [''],
       checkOutInstructions: [''],
       directions: [''],
@@ -159,7 +191,6 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading instructions:', error);
           this.isLoading = false;
-
           this.toastrService.error(
             this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.load-error.message'),
             this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.load-error.title')
@@ -170,32 +201,40 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Remplir le formulaire avec les données reçues
+   * Remplir le formulaire avec les données reçues du backend
+   * Convertir les heures UTC reçues vers le fuseau horaire local
    */
   private populateForm(instructions: UnitInstructionsGetModel): void {
-    // Convertir les heures string en objets Date
+    const timeZone = instructions.checkTimes?.timeZone || 'UTC';
+
+    // Convertir les heures UTC reçues du backend vers le fuseau horaire choisi
     let checkInTime = new Date();
     let checkOutTime = new Date();
 
     if (instructions.checkTimes?.checkInTime) {
-      const [hours, minutes] = instructions.checkTimes.checkInTime.split(':');
-      checkInTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      // Créer un moment UTC et le convertir vers le fuseau horaire
+      const utcCheckIn = moment.utc(instructions.checkTimes.checkInTime, 'HH:mm');
+      const localCheckIn = utcCheckIn.tz(timeZone);
+
+      checkInTime.setHours(localCheckIn.hour(), localCheckIn.minute(), 0, 0);
     } else {
-      checkInTime.setHours(15, 0, 0, 0); // 15:00 par défaut
+      checkInTime.setHours(15, 0, 0, 0);
     }
 
     if (instructions.checkTimes?.checkOutTime) {
-      const [hours, minutes] = instructions.checkTimes.checkOutTime.split(':');
-      checkOutTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      // Créer un moment UTC et le convertir vers le fuseau horaire
+      const utcCheckOut = moment.utc(instructions.checkTimes.checkOutTime, 'HH:mm');
+      const localCheckOut = utcCheckOut.tz(timeZone);
+
+      checkOutTime.setHours(localCheckOut.hour(), localCheckOut.minute(), 0, 0);
     } else {
-      checkOutTime.setHours(11, 0, 0, 0); // 11:00 par défaut
+      checkOutTime.setHours(11, 0, 0, 0);
     }
 
-    // Remplir le formulaire avec TOUS les champs, y compris les heures
     this.instructionsForm.patchValue({
       checkInTime: checkInTime,
       checkOutTime: checkOutTime,
-      timeZone: instructions.checkTimes?.timeZone || 'UTC',
+      timeZone: timeZone,
       wifiName: instructions.accessCodes?.wifiName || '',
       wifiPassword: instructions.accessCodes?.wifiPassword || '',
       securityCode: instructions.accessCodes?.securityCode || '',
@@ -208,21 +247,30 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
       paymentTerms: instructions.payment?.paymentTerms || '',
       paymentInstructions: instructions.payment?.paymentInstructions || ''
     });
+
+    this.instructionsForm.markAsPristine();
+    this.instructionsForm.updateValueAndValidity();
   }
 
   /**
    * Soumettre le formulaire (sauvegarde)
+   * Convertir les heures locales vers UTC avant envoi au backend
    */
   onSave(): void {
     if (this.instructionsForm.valid) {
       this.isSaving = true;
       const formValue = this.instructionsForm.value;
 
-      // Convertir les objets Date en format HH:mm pour l'API
-      const checkInTimeString = this.formatTimeForApi(formValue.checkInTime);
-      const checkOutTimeString = this.formatTimeForApi(formValue.checkOutTime);
+      // Convertir les heures locales vers UTC selon le fuseau horaire sélectionné
+      const checkInTimeString = this.formatTimeForApiWithTimezone(
+        formValue.checkInTime,
+        formValue.timeZone
+      );
+      const checkOutTimeString = this.formatTimeForApiWithTimezone(
+        formValue.checkOutTime,
+        formValue.timeZone
+      );
 
-      // Nouvelle structure pour l'API
       const payload: UnitInstructionsPatchModel = {
         checkTimes: {
           checkInTime: checkInTimeString,
@@ -248,7 +296,6 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
         }
       };
 
-      // Affichage du JSON pour debug
       console.log('Payload to be sent:', JSON.stringify(payload, null, 2));
 
       this.subscriptions.push(
@@ -257,90 +304,76 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             console.log('Instructions saved successfully:', response);
 
-            // Toast de succès
-            this.toastrService.success(
+            this.toastrService.info(
               this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.success.message'),
-              this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.success.title'),
-              {
-                timeOut: 5000,
-                closeButton: true,
-                progressBar: true,
-                positionClass: 'toast-top-right'
-              }
+              this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.success.title')
             );
 
-            // Marquer le formulaire comme non modifié après la sauvegarde
             this.instructionsForm.markAsPristine();
           },
           error: (error) => {
             console.error('Error saving instructions:', error);
             this.isSaving = false;
 
-            // Toast d'erreur
             this.toastrService.error(
               this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.error.message'),
-              this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.error.title'),
-              {
-                timeOut: 8000,
-                closeButton: true,
-                progressBar: true,
-                positionClass: 'toast-top-right'
-              }
+              this.translateService.instant('units.edit-unit.tabs.rental-instructions.notifications.error.title')
             );
           }
         })
       );
     } else {
-      // Marquer tous les champs comme touchés pour afficher les erreurs
       this.markFormGroupTouched(this.instructionsForm);
-
-      // Toast d'avertissement pour validation
       this.toastrService.warning(
         'Please fill in all required fields correctly including check-in and check-out times.',
-        'Form Validation',
-        {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-          positionClass: 'toast-top-right'
-        }
+        'Form Validation'
       );
     }
   }
 
   /**
-   * Annuler les modifications (reset du formulaire)
+   * Convertir une heure locale vers UTC selon le fuseau horaire
    */
+  private formatTimeForApiWithTimezone(date: Date, timeZone: string): string {
+    if (!date || !timeZone) return '';
+
+    // Créer un moment dans le fuseau horaire spécifié
+    const localTime = moment.tz({
+      hour: date.getHours(),
+      minute: date.getMinutes()
+    }, timeZone);
+
+    // Convertir vers UTC
+    const utcTime = localTime.utc();
+
+    // Retourner au format HH:mm
+    return utcTime.format('HH:mm');
+  }
+
+  /**
+   * Convertir un objet Date en format HH:mm simple (sans conversion timezone)
+   */
+  private formatTimeForApi(date: Date): string {
+    if (!date) return '';
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
   onCancel(): void {
     if (this.isFormDirty) {
       if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
-        this.loadInstructions(); // Recharger les données originales
-
-        this.toastrService.info(
-          'Changes have been discarded.',
-          'Cancel',
-          {
-            timeOut: 3000,
-            closeButton: true,
-            progressBar: true,
-            positionClass: 'toast-top-right'
-          }
-        );
+        this.loadInstructions();
+        this.toastrService.info('Changes have been discarded.', 'Cancel');
       }
     }
   }
 
-  /**
-   * Vérifier si un champ a des erreurs et est touché
-   */
   hasError(fieldName: string): boolean {
     const field = this.instructionsForm.get(fieldName);
     return !!(field?.invalid && field?.touched);
   }
 
-  /**
-   * Marquer tous les champs du formulaire comme touchés
-   */
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
@@ -352,46 +385,33 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Obtenir la valeur d'un champ spécifique
-   */
   getFieldValue(fieldName: string): any {
     return this.instructionsForm.get(fieldName)?.value;
   }
 
-  /**
-   * Vérifier si le formulaire est sale (modifié)
-   */
   get isFormDirty(): boolean {
     return this.instructionsForm.dirty;
   }
 
-  /**
-   * Vérifier si le formulaire est valide
-   */
   get isFormValid(): boolean {
     return this.instructionsForm.valid;
   }
 
   /**
-   * Convertir un objet Date en format HH:mm pour l'API
-   */
-  private formatTimeForApi(date: Date): string {
-    if (!date) return '';
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
-
-  /**
-   * Getter pour le debug payload
+   * Getter pour le debug payload - montre les conversions timezone
    */
   get debugPayload(): any {
     const formValue = this.instructionsForm.value;
+
     return {
-      checkTimes: {
+      localTimes: {
         checkInTime: this.formatTimeForApi(formValue.checkInTime),
         checkOutTime: this.formatTimeForApi(formValue.checkOutTime),
+        timeZone: formValue.timeZone
+      },
+      utcTimes: {
+        checkInTime: this.formatTimeForApiWithTimezone(formValue.checkInTime, formValue.timeZone),
+        checkOutTime: this.formatTimeForApiWithTimezone(formValue.checkOutTime, formValue.timeZone),
         timeZone: formValue.timeZone
       },
       accessCodes: {

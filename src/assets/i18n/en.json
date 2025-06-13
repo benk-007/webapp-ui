@@ -771,6 +771,7 @@
             "payment-instructions": {
               "title": "PAYMENT INSTRUCTIONS"
             }
+<<<<<<< Updated upstream
           },
           "form": {
             "check-in-time": {
@@ -833,55 +834,119 @@
             "mobile": "Mobile",
             "last-activity": "Created on",
             "actions": "Actions"
+=======
+>>>>>>> Stashed changes
           },
-          "body": {
-            "disabled-user": "This account is disabled",
-            "not-activated-user": "This account is not yet activated",
-            "activated-user": "This account health is good"
-          }
-        }
-      },
-      "create-user": {
-        "title": "Add user",
-        "form": {
-          "fullname-input": {
-            "label": "Full name"
-          },
-          "email-input": {
-            "label": "Email"
-          },
-          "mobile-input": {
-            "label": "Mobile"
-          },
-          "role-input": {
-            "label": "Role"
+          "form": {
+            "check-in-time": {
+              "label": "Check-in Time"
+            },
+            "check-out-time": {
+              "label": "Check-out Time"
+            },
+            "time-zone": {
+              "label": "Time Zone",
+              "placeholder": "Select time zone"
+            },
+            "wifi-name": {
+              "label": "WiFi Name",
+              "placeholder": "WiFi Name"
+            },
+            "wifi-password": {
+              "label": "WiFi Password",
+              "placeholder": "WiFi Password"
+            },
+            "security-code": {
+              "label": "Security Code",
+              "placeholder": "Security Code"
+            },
+            "key-pickup": {
+              "label": "Key Pickup",
+              "placeholder": "Key Pickup"
+            }
           },
           "notifications": {
             "success": {
-              "title": "User created",
-              "message": "User :name has been successfully created"
+              "title": "Instructions updated",
+              "message": "Rental instructions have been successfully updated."
             },
             "error": {
-              "title": "User creation failed",
-              "message": "An error occurred while creating the user. Please try again or contact the support team."
+              "title": "Instructions update error",
+              "message": "An error occurred when updating rental instructions."
+            },
+            "load-error": {
+              "title": "Loading error",
+              "message": "An error occurred when loading rental instructions."
             }
           }
         }
-      },
-      "edit-user": {
-        "title": "Edit user",
-        "form": {
-          "enabled-input": {
-            "label": "Enabled"
+      }
+    },
+    "settings": {
+      "user-settings": {
+        "list-users": {
+          "title": "Account users",
+          "cta": {
+            "add-btn": "+ Add user"
           },
-          "notifications": {
-            "success": {
-              "title": "User updated",
-              "message": "User :name has been successfully updated"
+          "table": {
+            "header": {
+              "fullname": "Full name",
+              "role": "Role",
+              "email": "Email",
+              "mobile": "Mobile",
+              "last-activity": "Created on",
+              "actions": "Actions"
             },
-            "error": {
-              "title": "User update failed",
-              "message": "An error occurred while updating the user. Please try again or contact the support team."
+            "body": {
+              "disabled-user": "This account is disabled",
+              "not-activated-user": "This account is not yet activated",
+              "activated-user": "This account health is good"
+            }
+          }
+        },
+        "create-user": {
+          "title": "Add user",
+          "form": {
+            "fullname-input": {
+              "label": "Full name"
+            },
+            "email-input": {
+              "label": "Email"
+            },
+            "mobile-input": {
+              "label": "Mobile"
+            },
+            "role-input": {
+              "label": "Role"
+            },
+            "notifications": {
+              "success": {
+                "title": "User created",
+                "message": "User :name has been successfully created"
+              },
+              "error": {
+                "title": "User creation failed",
+                "message": "An error occurred while creating the user. Please try again or contact the support team."
+              }
+            }
+          }
+        },
+        "edit-user": {
+          "title": "Edit user",
+          "form": {
+            "enabled-input": {
+              "label": "Enabled"
+            },
+            "notifications": {
+              "success": {
+                "title": "User updated",
+                "message": "User :name has been successfully updated"
+              },
+              "error": {
+                "title": "User update failed",
+                "message": "An error occurred while updating the user. Please try again or contact the support team."
+              }
             }
           }
         }

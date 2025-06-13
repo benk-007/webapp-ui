@@ -29,8 +29,14 @@ export const commonProperties = {
   unitList: UNIT_SERVICE + 'units',
   unitById: UNIT_SERVICE + 'units/:unitId',
   unitInfosById: UNIT_SERVICE + 'units/:unitId/infos',
+<<<<<<< Updated upstream
   unitDetailsById: UNIT_SERVICE + 'units/:unitId/details',
   unitInstructionsById: UNIT_SERVICE + 'units/:unitId/inst',
+=======
+  unitInstructionsById: UNIT_SERVICE + 'units/:unitId/inst',  // Nouvelle route
+
+
+>>>>>>> Stashed changes
   //unit images
   unitImages: UNIT_SERVICE + 'images',
   unitImageById: UNIT_SERVICE + 'images/:imageId',
