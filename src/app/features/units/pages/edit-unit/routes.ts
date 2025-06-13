@@ -1,4 +1,5 @@
 import {Routes} from "@angular/router";
+import {RentalInstructionsComponent} from "./rental-instructions/rental-instructions.component";
 
 export const routes: Routes = [
   {
@@ -27,6 +28,13 @@ export const routes: Routes = [
           title: 'Rental details'
         }
       },
+      {
+        path: 'instructions',
+        loadComponent: () => import('./rental-instructions/rental-instructions.component').then(m => m.RentalInstructionsComponent),
+        data: {
+          title: 'Rental instructions'
+        }
+      }
     ]
   }
 ]

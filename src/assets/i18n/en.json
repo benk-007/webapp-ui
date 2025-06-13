@@ -740,12 +740,78 @@
             }
           }
         },
-        "checkin-policy": {
+        "rental-instructions": {
           "title": "Rental instructions",
-          "hint": "salam 3alikoum",
+          "hint": "Configure check-in/out procedures, house rules, and payment instructions",
           "sections": {
-            "checkin-times": {
-              "title": "Check-in/Check-out times"
+            "check-times": {
+              "title": "CHECK-IN / CHECK-OUT TIMES"
+            },
+            "codes-passwords": {
+              "title": "CODES & PASSWORDS"
+            },
+            "check-in-instructions": {
+              "title": "CHECK-IN INSTRUCTIONS"
+            },
+            "check-out-instructions": {
+              "title": "CHECK-OUT INSTRUCTIONS"
+            },
+            "directions": {
+              "title": "DIRECTIONS"
+            },
+            "house-rules": {
+              "title": "HOUSE RULES"
+            },
+            "special-instructions": {
+              "title": "SPECIAL INSTRUCTIONS"
+            },
+            "payment-terms": {
+              "title": "PAYMENT TERMS"
+            },
+            "payment-instructions": {
+              "title": "PAYMENT INSTRUCTIONS"
+            }
+          },
+          "form": {
+            "check-in-time": {
+              "label": "Check-in Time"
+            },
+            "check-out-time": {
+              "label": "Check-out Time"
+            },
+            "time-zone": {
+              "label": "Time Zone",
+              "placeholder": "Select time zone"
+            },
+            "wifi-name": {
+              "label": "WiFi Name",
+              "placeholder": "WiFi Name"
+            },
+            "wifi-password": {
+              "label": "WiFi Password",
+              "placeholder": "WiFi Password"
+            },
+            "security-code": {
+              "label": "Security Code",
+              "placeholder": "Security Code"
+            },
+            "key-pickup": {
+              "label": "Key Pickup",
+              "placeholder": "Key Pickup"
+            }
+          },
+          "notifications": {
+            "success": {
+              "title": "Instructions updated",
+              "message": "Rental instructions have been successfully updated."
+            },
+            "error": {
+              "title": "Instructions update error",
+              "message": "An error occurred when updating rental instructions."
+            },
+            "load-error": {
+              "title": "Loading error",
+              "message": "An error occurred when loading rental instructions."
             }
           }
         }

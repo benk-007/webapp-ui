@@ -1,0 +1,380 @@
+@use "../../../../../../scss/variables" as vars;
+
+// Section titles styling (cohérent avec le style existant)
+.section-title {
+  font-weight: 600;
+  color: vars.$dark;
+  margin-bottom: 1rem;
+
+  &.underline {
+    position: relative;
+    padding-bottom: 0.5rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background-color: vars.$primary;
+    }
+  }
+}
+
+// Form styling pour cohérence avec le reste de l'app
+form[cForm] {
+  .required {
+    &::after {
+      content: ' *';
+      color: vars.$danger;
+      font-weight: bold;
+    }
+  }
+
+  // CoreUI Form Controls customization
+  input[cFormControl],
+  select[cFormControl],
+  select.form-select,
+  textarea[cFormControl] {
+    border-radius: 6px;
+    border: 1px solid vars.$border-color;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+      border-color: vars.$primary;
+      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: vars.$danger;
+
+      &:focus {
+        border-color: vars.$danger;
+        box-shadow: 0 0 0 0.2rem rgba(vars.$danger, 0.25);
+      }
+    }
+
+    &.ng-valid.ng-touched {
+      border-color: vars.$success;
+
+      &:focus {
+        border-color: vars.$success;
+        box-shadow: 0 0 0 0.2rem rgba(vars.$success, 0.25);
+      }
+    }
+  }
+
+  // Time inputs specific styling
+  input[type="time"] {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  // Select dropdown styling
+  select[cFormControl],
+  select.form-select {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    appearance: none;
+    cursor: pointer;
+
+    &:focus {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    }
+
+    // Style pour les options
+    option {
+      padding: 0.5rem;
+      color: vars.$dark;
+      background-color: #fff;
+
+      &:hover {
+        background-color: vars.$primary01;
+      }
+
+      &:checked,
+      &:selected {
+        background-color: vars.$primary;
+        color: #fff;
+      }
+    }
+  }
+
+  // Textarea styling
+  textarea[cFormControl] {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 120px;
+
+    &::placeholder {
+      color: vars.$gray;
+      opacity: 0.7;
+    }
+  }
+
+  // Form feedback styling
+  c-form-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: vars.$danger;
+  }
+
+  // Labels styling
+  label[cLabel] {
+    font-weight: 500;
+    color: vars.$dark;
+    margin-bottom: 0.5rem;
+
+    &.required {
+      font-weight: 600;
+    }
+  }
+}
+
+// Loading state
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+
+  c-spinner {
+    color: vars.$primary;
+  }
+}
+
+// Action buttons
+.action-buttons {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid vars.$border-color;
+
+  .gap-2 {
+    gap: 0.5rem;
+  }
+
+  button[cButton] {
+    min-width: 120px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+
+    &[color="primary"] {
+      background-color: vars.$primary;
+      border-color: vars.$primary;
+
+      &:hover:not(:disabled) {
+        background-color: darken(vars.$primary, 7%);
+        border-color: darken(vars.$primary, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+    }
+
+    &[variant="outline"] {
+      color: vars.$gray;
+      border-color: vars.$border-color;
+      background-color: transparent;
+
+      &:hover:not(:disabled) {
+        background-color: vars.$light;
+        border-color: vars.$gray;
+        color: vars.$dark;
+      }
+    }
+  }
+}
+
+// Debug JSON Display (à supprimer en production)
+.debug-json {
+  background-color: vars.$light;
+  border: 1px solid vars.$border-color;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  h6 {
+    color: vars.$gray;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  pre {
+    font-size: 0.75rem;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid vars.$border-color;
+    border-radius: 4px;
+    padding: 0.75rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  c-row {
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .action-buttons {
+    c-col {
+      text-align: center;
+
+      .d-flex {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      button[cButton] {
+        width: 100%;
+      }
+    }
+  }
+
+  // Stack form fields on mobile
+  c-col[md="6"] {
+    margin-bottom: 1rem;
+  }
+}
+
+// Spacing adjustments
+c-row {
+  margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.mt-4 {
+    margin-top: 2rem !important;
+  }
+}
+
+c-col {
+  &.mb-3 {
+    margin-bottom: 1rem !important;
+  }
+
+  &.mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  &.mt-2 {
+    margin-top: 0.5rem !important;
+  }
+}
+
+// Timepicker styling
+timepicker {
+  .btn-outline-secondary {
+    border-color: vars.$border-color;
+    color: vars.$dark;
+
+    &:hover {
+      background-color: vars.$primary;
+      border-color: vars.$primary;
+      color: white;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+    }
+  }
+
+  .form-control {
+    border-color: vars.$border-color;
+    text-align: center;
+    font-weight: 500;
+
+    &:focus {
+      border-color: vars.$primary;
+      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+    }
+  }
+
+  table {
+    margin: 0 auto;
+
+    td {
+      padding: 0.25rem;
+
+      input.form-control {
+        border-radius: 6px;
+        border: 1px solid vars.$border-color;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        padding: 0.5rem;
+        min-width: 60px;
+
+        &:focus {
+          border-color: vars.$primary;
+          box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+        }
+      }
+
+      button {
+        border-radius: 4px;
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+        min-width: 30px;
+
+        &.btn-outline-secondary {
+          border-color: vars.$border-color;
+
+          &:hover {
+            background-color: vars.$primary;
+            border-color: vars.$primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Style pour les timepickers dans le contexte du formulaire
+form[cForm] {
+  timepicker {
+    display: block;
+    margin-top: 0.25rem;
+  }
+}
+
+// Amélioration visuelle des champs requis
+.required {
+  position: relative;
+}
+
+// Style pour les champs invalides
+.ng-invalid.ng-touched {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+// Style pour les toasts (si nécessaire)
+.toast-container {
+  z-index: 1050;
+}

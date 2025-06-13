@@ -30,7 +30,7 @@ export const commonProperties = {
   unitById: UNIT_SERVICE + 'units/:unitId',
   unitInfosById: UNIT_SERVICE + 'units/:unitId/infos',
   unitDetailsById: UNIT_SERVICE + 'units/:unitId/details',
-
+  unitInstructionsById: UNIT_SERVICE + 'units/:unitId/inst',
   //unit images
   unitImages: UNIT_SERVICE + 'images',
   unitImageById: UNIT_SERVICE + 'images/:imageId',
