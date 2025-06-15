@@ -771,7 +771,6 @@
             "payment-instructions": {
               "title": "PAYMENT INSTRUCTIONS"
             }
-<<<<<<< Updated upstream
           },
           "form": {
             "check-in-time": {
@@ -834,8 +833,6 @@
             "mobile": "Mobile",
             "last-activity": "Created on",
             "actions": "Actions"
-=======
->>>>>>> Stashed changes
           },
           "form": {
             "check-in-time": {

@@ -9,11 +9,9 @@ import {UnitInfosGetModel} from "../models/unit-infos-get.model";
 import {UnitInfosPatchModel} from "../models/unit-infos-patch.model";
 import {UnitInstructionsGetModel} from "../models/unit-instructions-get.model";
 import {UnitInstructionsPatchModel} from "../models/unit-instructions-patch.model";
-<<<<<<< Updated upstream
 import {UnitDetailsGetModel} from "../models/details/unit-details-get.model";
 import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model";
-=======
->>>>>>> Stashed changes
+
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +41,6 @@ export class UnitApiService {
     return this.httpClient.get<UnitInfosGetModel>(environment.apiBaseUrl.concat(environment.unitInfosById).replace(':unitId', unitId));
   }
 
-<<<<<<< Updated upstream
   getUnitDetailsById(unitId: string) {
     return this.httpClient.get<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId))
   }
@@ -52,8 +49,6 @@ export class UnitApiService {
     return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
   }
 
-=======
->>>>>>> Stashed changes
   // Nouvelles méthodes pour les instructions
   getUnitInstructionsById(unitId: string) {
     return this.httpClient.get<UnitInstructionsGetModel>(

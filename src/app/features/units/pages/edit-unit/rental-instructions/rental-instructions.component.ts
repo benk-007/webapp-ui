@@ -95,52 +95,24 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
    * Initialiser les fuseaux horaires avec moment-timezone
    */
   private initializeTimeZones(): void {
-    const commonTimezones = [
-      'Africa/Casablanca',
-      'Europe/London',
-      'Europe/Paris',
-      'Europe/Berlin',
-      'Europe/Rome',
-      'Europe/Madrid',
-      'America/New_York',
-      'America/Los_Angeles',
-      'America/Chicago',
-      'Asia/Tokyo',
-      'Asia/Shanghai',
-      'Asia/Dubai',
-      'Australia/Sydney',
-      'UTC'
-    ];
-
-    this.timeZones = commonTimezones.map(tz => ({
-      value: tz,
-      label: `${tz.replace('_', ' ')} (${moment.tz(tz).format('Z')})`
-    }));
+    this.timeZones = moment.tz.names()
+      .map(tz => ({
+        value: tz,
+        label: `${tz.replace(/_/g, ' ')} (${moment.tz(tz).format('Z')})`
+      }))
+      .sort((a, b) => moment.tz(a.value).utcOffset() - moment.tz(b.value).utcOffset());
   }
 
   /**
-   * Observer les changements de fuseau horaire pour recalculer les heures
+   * Observer les changements de fuseau horaire
    */
   private setupTimeZoneWatcher(): void {
     this.instructionsForm.get('timeZone')?.valueChanges.subscribe(newTimeZone => {
       if (newTimeZone) {
-        this.adjustTimesForTimeZone(newTimeZone);
+        console.log(`Timezone changed to: ${newTimeZone}`);
+        // Plus de conversion automatique - on garde les heures telles quelles
       }
     });
-  }
-
-  /**
-   * Ajuster les heures selon le nouveau fuseau horaire
-   */
-  private adjustTimesForTimeZone(timeZone: string): void {
-    const checkInTime = this.instructionsForm.get('checkInTime')?.value;
-    const checkOutTime = this.instructionsForm.get('checkOutTime')?.value;
-
-    if (checkInTime && checkOutTime) {
-      // Réajuster les heures selon le nouveau fuseau (optionnel)
-      // Pour l'instant, on garde les heures locales telles quelles
-      console.log(`Timezone changed to: ${timeZone}`);
-    }
   }
 
   /**
@@ -202,31 +174,26 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
 
   /**
    * Remplir le formulaire avec les données reçues du backend
-   * Convertir les heures UTC reçues vers le fuseau horaire local
    */
   private populateForm(instructions: UnitInstructionsGetModel): void {
     const timeZone = instructions.checkTimes?.timeZone || 'UTC';
 
-    // Convertir les heures UTC reçues du backend vers le fuseau horaire choisi
+    // CHANGEMENT : On utilise directement les heures reçues sans conversion
     let checkInTime = new Date();
     let checkOutTime = new Date();
 
     if (instructions.checkTimes?.checkInTime) {
-      // Créer un moment UTC et le convertir vers le fuseau horaire
-      const utcCheckIn = moment.utc(instructions.checkTimes.checkInTime, 'HH:mm');
-      const localCheckIn = utcCheckIn.tz(timeZone);
-
-      checkInTime.setHours(localCheckIn.hour(), localCheckIn.minute(), 0, 0);
+      // Parser l'heure directement sans conversion timezone
+      const [hours, minutes] = instructions.checkTimes.checkInTime.split(':').map(Number);
+      checkInTime.setHours(hours, minutes, 0, 0);
     } else {
       checkInTime.setHours(15, 0, 0, 0);
     }
 
     if (instructions.checkTimes?.checkOutTime) {
-      // Créer un moment UTC et le convertir vers le fuseau horaire
-      const utcCheckOut = moment.utc(instructions.checkTimes.checkOutTime, 'HH:mm');
-      const localCheckOut = utcCheckOut.tz(timeZone);
-
-      checkOutTime.setHours(localCheckOut.hour(), localCheckOut.minute(), 0, 0);
+      // Parser l'heure directement sans conversion timezone
+      const [hours, minutes] = instructions.checkTimes.checkOutTime.split(':').map(Number);
+      checkOutTime.setHours(hours, minutes, 0, 0);
     } else {
       checkOutTime.setHours(11, 0, 0, 0);
     }
@@ -254,22 +221,15 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
 
   /**
    * Soumettre le formulaire (sauvegarde)
-   * Convertir les heures locales vers UTC avant envoi au backend
    */
   onSave(): void {
     if (this.instructionsForm.valid) {
       this.isSaving = true;
       const formValue = this.instructionsForm.value;
 
-      // Convertir les heures locales vers UTC selon le fuseau horaire sélectionné
-      const checkInTimeString = this.formatTimeForApiWithTimezone(
-        formValue.checkInTime,
-        formValue.timeZone
-      );
-      const checkOutTimeString = this.formatTimeForApiWithTimezone(
-        formValue.checkOutTime,
-        formValue.timeZone
-      );
+      // CHANGEMENT : On utilise formatTimeForApi au lieu de formatTimeForApiWithTimezone
+      const checkInTimeString = this.formatTimeForApi(formValue.checkInTime);
+      const checkOutTimeString = this.formatTimeForApi(formValue.checkOutTime);
 
       const payload: UnitInstructionsPatchModel = {
         checkTimes: {
@@ -296,7 +256,7 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
         }
       };
 
-      console.log('Payload to be sent:', JSON.stringify(payload, null, 2));
+      console.log('Payload to be sent (NO timezone conversion):', JSON.stringify(payload, null, 2));
 
       this.subscriptions.push(
         this.unitApiService.updateUnitInstructionsById(this.unitId, payload).subscribe({
@@ -332,26 +292,7 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Convertir une heure locale vers UTC selon le fuseau horaire
-   */
-  private formatTimeForApiWithTimezone(date: Date, timeZone: string): string {
-    if (!date || !timeZone) return '';
-
-    // Créer un moment dans le fuseau horaire spécifié
-    const localTime = moment.tz({
-      hour: date.getHours(),
-      minute: date.getMinutes()
-    }, timeZone);
-
-    // Convertir vers UTC
-    const utcTime = localTime.utc();
-
-    // Retourner au format HH:mm
-    return utcTime.format('HH:mm');
-  }
-
-  /**
-   * Convertir un objet Date en format HH:mm simple (sans conversion timezone)
+   * Convertir un objet Date en format HH:mm simple (AUCUNE conversion timezone)
    */
   private formatTimeForApi(date: Date): string {
     if (!date) return '';
@@ -359,6 +300,7 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
+
 
   onCancel(): void {
     if (this.isFormDirty) {
@@ -398,20 +340,15 @@ export class RentalInstructionsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Getter pour le debug payload - montre les conversions timezone
+   * CHANGEMENT : Debug payload simplifié sans conversion timezone
    */
   get debugPayload(): any {
     const formValue = this.instructionsForm.value;
 
     return {
-      localTimes: {
+      checkTimes: {
         checkInTime: this.formatTimeForApi(formValue.checkInTime),
         checkOutTime: this.formatTimeForApi(formValue.checkOutTime),
-        timeZone: formValue.timeZone
-      },
-      utcTimes: {
-        checkInTime: this.formatTimeForApiWithTimezone(formValue.checkInTime, formValue.timeZone),
-        checkOutTime: this.formatTimeForApiWithTimezone(formValue.checkOutTime, formValue.timeZone),
         timeZone: formValue.timeZone
       },
       accessCodes: {
