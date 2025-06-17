@@ -43,8 +43,7 @@ import {JsonPipe} from "@angular/common";
     NgLabelTemplateDirective,
     FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective,
-    JsonPipe
+    FormCheckLabelDirective
   ],
   templateUrl: './user-cu-modal.component.html',
   styleUrl: './user-cu-modal.component.scss'

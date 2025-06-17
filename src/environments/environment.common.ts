@@ -1,6 +1,8 @@
+import {GuestListComponent} from "../app/features/guests/pages/guest-list/guest-list.component";
+
 export const UAA_SERVICE = 'authMgtApi/';
 export const UNIT_SERVICE = 'unitMgtApi/';
-
+export const GUEST_SERVICE ='guestMgtApi/'
 
 export const commonProperties = {
   //authentication
@@ -35,4 +37,8 @@ export const commonProperties = {
   //unit images
   unitImages: UNIT_SERVICE + 'images',
   unitImageById: UNIT_SERVICE + 'images/:imageId',
+
+  //guests
+  guestList: GUEST_SERVICE + 'guests',
+  guestById: GUEST_SERVICE + 'guests/:guestId',
 }
