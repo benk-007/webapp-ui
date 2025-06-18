@@ -1,0 +1,104 @@
+@use "../../../../../../scss/variables" as vars;
+
+// Debug JSON Display (garder pour le développement)
+.debug-json {
+  background-color: vars.$light;
+  border: 1px solid vars.$border-color;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  h6 {
+    color: vars.$gray;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  pre {
+    font-size: 0.75rem;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid vars.$border-color;
+    border-radius: 4px;
+    padding: 0.75rem;
+  }
+}
+
+// Loading state
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+
+  c-spinner {
+    color: vars.$primary;
+  }
+}
+
+// Timepicker styling spécifique (CACHER LES SPINNERS)
+timepicker {
+  display: block;
+  margin-top: 0.25rem;
+
+  // Cacher tous les boutons spinner
+  .btn-outline-secondary {
+    display: none !important;
+  }
+
+  table td button {
+    display: none !important;
+  }
+
+  .form-control {
+    border-color: vars.$border-color;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    min-width: 60px;
+
+    &:focus {
+      border-color: vars.$primary;
+      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+    }
+  }
+
+  table {
+    margin: 0 auto;
+
+    td {
+      padding: 0.25rem;
+
+      input.form-control {
+        border-radius: 6px;
+        border: 1px solid vars.$border-color;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        padding: 0.5rem;
+        min-width: 60px;
+
+        &:focus {
+          border-color: vars.$primary;
+          box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.25);
+        }
+      }
+    }
+  }
+}
+
+// Supprimer les placeholders dans ce composant spécifiquement
+form[cForm] {
+  input[cFormControl],
+  select[cFormControl],
+  textarea[cFormControl] {
+    &::placeholder {
+      color: transparent !important;
+      opacity: 0 !important;
+    }
+  }
+}

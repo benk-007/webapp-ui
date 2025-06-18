@@ -7,11 +7,14 @@ import {UnitGetModel} from "../models/unit-get.model";
 import {environment} from "../../../../environments/environment";
 import {UnitInfosGetModel} from "../models/unit-infos-get.model";
 import {UnitInfosPatchModel} from "../models/unit-infos-patch.model";
+import {UnitInstructionsGetModel} from "../models/unit-instructions-get.model";
+import {UnitInstructionsPatchModel} from "../models/unit-instructions-patch.model";
 import {UnitDetailsGetModel} from "../models/details/unit-details-get.model";
 import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model";
 import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
 import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
+
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +51,21 @@ export class UnitApiService {
   updateUnitDetailsById(unitId: string, payload: UnitDetailsPatchModel) {
     return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
   }
+
+  // Nouvelles méthodes pour les instructions
+  getUnitInstructionsById(unitId: string) {
+    return this.httpClient.get<UnitInstructionsGetModel>(
+      environment.apiBaseUrl.concat(environment.unitInstructionsById).replace(':unitId', unitId)
+    );
+  }
+
+  updateUnitInstructionsById(unitId: string, payload: UnitInstructionsPatchModel) {
+    return this.httpClient.patch<UnitInstructionsGetModel>(
+      environment.apiBaseUrl.concat(environment.unitInstructionsById).replace(':unitId', unitId),
+      payload
+    );
+  }
+
 
   getUnitRooms(unitId: string) {
     return this.httpClient.get<PageModel<RoomGetModel>>(environment.apiBaseUrl.concat(environment.unitRoomsById).replace(':unitId', unitId));
