@@ -196,7 +196,7 @@ export class RoomComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           console.error('An error occurred when creating room. API error:', err);
-          this.toastrService.success(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.creation.error.message').replace(':room', this.roomForm.value.name),
+          this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.creation.error.message').replace(':room', this.roomForm.value.name),
             this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.creation.error.title'));
         }
       }))
@@ -208,12 +208,12 @@ export class RoomComponent implements OnInit, OnDestroy {
           console.log('Room updated successfully. API response is:', data);
           this.handleSuccessAction(data);
           this.createdEvent.emit({index: this.roomIndex, room: data});
-          this.toastrService.success(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.success.message').replace(':room', data.name),
+          this.toastrService.info(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.success.message').replace(':room', data.name),
             this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.success.title'));
         },
         error: (err: any) => {
           console.error('An error occurred when updating room. API error message:', err);
-          this.toastrService.success(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.error.message').replace(':room', this.roomForm.value.name),
+          this.toastrService.error(this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.error.message').replace(':room', this.roomForm.value.name),
             this.translateService.instant('units.edit-unit.tabs.rooms-bedding.notifications.edition.error.title'));
         }
       }))
