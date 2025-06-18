@@ -989,5 +989,122 @@
         }
       }
     }
+  },
+  "guests": {
+    "list": {
+      "title": "Guests",
+      "cta": {
+        "add-btn": "+ Add guest"
+      },
+      "table": {
+        "header": {
+          "fullname": "Full name",
+          "email": "Email",
+          "telephone": "Telephone",
+          "country": "Country",
+          "created-on": "Created on",
+          "actions": "Actions"
+        }
+      }
+    },
+    "create": {
+      "title": "Add guest",
+      "form": {
+        "firstName-input": {
+          "label": "First name"
+        },
+        "lastName-input": {
+          "label": "Last name"
+        },
+        "birthDate-input": {
+          "label": "Birth date"
+        },
+        "email-input": {
+          "label": "Email"
+        },
+        "mobile-input": {
+          "label": "Mobile"
+        },
+        "country-input": {
+          "label": "Country"
+        },
+        "city-input": {
+          "label": "City"
+        },
+        "postCode-input": {
+          "label": "postal Code"
+        },
+        "street1-input": {
+          "label": "street1"
+        },
+        "street2-input": {
+          "label": "street2"
+        },
+        "type-input": {
+          "label": "Document type",
+          "placeholder": "Select document type",
+          "error": {
+            "required": "Type is required"
+          }
+        },
+        "documentNumber-input": {
+          "label": "Document number",
+          "error": {
+            "required": "Document number is required"
+          }
+        },
+        "expirationDate-input": {
+          "label": "Expiration date",
+          "error": {
+            "required": "Expiration date is required"
+          }
+        },
+        "idDocuments": {
+          "add-button": "+ Add Document",
+          "remove-button-aria": "Remove document :index"
+        },
+        "add-document-button": {
+          "label": "+ Add more documents"
+        },
+        "remove-document-button": {
+          "label": "Remove document"
+        },
+        "enums": {
+          "documentType": {
+            "IDENTITY_CARD": "Identity Card",
+            "PASSPORT": "Passport",
+            "DRIVER_LICENCE": "Driver Licence"
+          }
+        },
+        "notifications": {
+          "success": {
+            "title": "Guest created",
+            "message": "Guest :name has been successfully created"
+          },
+          "error": {
+            "title": "Guest creation failed",
+            "message": "An error occurred while creating the guest. Please try again or contact the support team."
+          }
+        }
+      }
+    },
+    "edit": {
+      "title": "Edit guest",
+      "form": {
+        "enabled-input": {
+          "label": "Enabled"
+        },
+        "notifications": {
+          "success": {
+            "title": "Guest updated",
+            "message": "Guest :name has been successfully updated"
+          },
+          "error": {
+            "title": "Guest update failed",
+            "message": "An error occurred while updating the guest. Please try again or contact the support team."
+          }
+        }
+      }
+    }
   }
 }
