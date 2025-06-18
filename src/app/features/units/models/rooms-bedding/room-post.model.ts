@@ -1,15 +1,15 @@
 import {RoomTypeEnum} from "./room-type.enum";
-import {BedGetModel} from "./bed-get.model";
 import {RoomSubTypeEnum} from "./room-sub-type.enum";
 import {FloorSizeUnitEnum} from "../floor-size-unit.enum";
+import {BedGetModel} from "./bed-get.model";
 
-export interface RoomGetModel {
-  id?: string;
+export interface RoomPostModel {
   name?: string;
   type?: RoomTypeEnum;
   subType?: RoomSubTypeEnum;
   floorSize?: number;
   floorSizeUnit?: FloorSizeUnitEnum;
-  bathroom?: RoomGetModel;
+  bathroomId?: string;
+  description?: string;
   beds?: BedGetModel[];
 }

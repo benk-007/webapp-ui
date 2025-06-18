@@ -9,6 +9,9 @@ import {UnitInfosGetModel} from "../models/unit-infos-get.model";
 import {UnitInfosPatchModel} from "../models/unit-infos-patch.model";
 import {UnitDetailsGetModel} from "../models/details/unit-details-get.model";
 import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model";
+import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
+import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
+import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +47,21 @@ export class UnitApiService {
 
   updateUnitDetailsById(unitId: string, payload: UnitDetailsPatchModel) {
     return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
+  }
+
+  getUnitRooms(unitId: string) {
+    return this.httpClient.get<PageModel<RoomGetModel>>(environment.apiBaseUrl.concat(environment.unitRoomsById).replace(':unitId', unitId));
+  }
+
+  createRoom(payload: RoomPostModel, unitId: string) {
+    return this.httpClient.post<RoomGetModel>(environment.apiBaseUrl.concat(environment.unitRoomsById).replace(':unitId', unitId), payload);
+  }
+
+  updateRoom(payload: RoomPatchModel, unitId: string, roomId: string) {
+    return this.httpClient.patch<RoomGetModel>(environment.apiBaseUrl.concat(environment.unitRoomById).replace(':unitId', unitId).replace(':roomId', roomId), payload);
+  }
+
+  deleteRoom(unitId: string, roomId: string) {
+    return this.httpClient.delete<void>(environment.apiBaseUrl.concat(environment.unitRoomById).replace(':unitId', unitId).replace(':roomId', roomId));
   }
 }
