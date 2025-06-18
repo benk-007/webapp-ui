@@ -1,0 +1,75 @@
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  z-index: 2;
+}
+
+
+
+.resource-name {
+  width: 250px;
+  min-width: 200px;
+  max-width: 250px;
+  text-align: left;
+}
+
+
+/*
+.scheduler-wrapper {
+  overflow-x: auto;
+}
+
+.scheduler-table {
+  min-width: 1000px;
+  position: relative;
+}
+
+.fixed-col {
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #fff;
+}
+
+.scheduler-header .fixed-col {
+  z-index: 3;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: 600;
+}
+
+.day-cell {
+  width: 120px;
+  min-width: 120px;
+  text-align: center;
+}
+
+.resource-row {
+  height: 60px;
+  position: relative;
+}
+
+.event-block {
+  position: absolute;
+  top: 8px;
+  height: 44px;
+  background-color: #0d6efd;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  z-index: 5;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+!* Optional: subtle grid lines *!
+.day-cell, .fixed-col {
+  border: 1px solid #dee2e6;
+}
+*/
