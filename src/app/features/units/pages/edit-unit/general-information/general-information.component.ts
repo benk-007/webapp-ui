@@ -143,16 +143,16 @@ export class GeneralInformationComponent implements OnDestroy {
           ];
         }
         this.toastrService.info(
-          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.message')
+          this.translateService.instant('units.edit-unit.tabs.basic-information.notifications.success.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.title'));
+          this.translateService.instant('units.edit-unit.tabs.basic-information.notifications.success.title'));
       },
       error: (err) => {
         console.error('An error occurred during unit infos update. Api response is:', err);
         this.toastrService.warning(
-          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.error.message')
+          this.translateService.instant('units.edit-unit.tabs.basic-information.notifications.error.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.general-information.notifications.error.title'));
+          this.translateService.instant('units.edit-unit.tabs.basic-information.notifications.error.title'));
       }
     }))
   }

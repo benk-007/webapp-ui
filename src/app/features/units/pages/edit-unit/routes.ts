@@ -10,21 +10,28 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'infos',
+        redirectTo: 'basic-infos',
         pathMatch: 'full',
       },
       {
-        path: 'infos',
+        path: 'basic-infos',
         loadComponent: () => import('./general-information/general-information.component').then(m => m.GeneralInformationComponent),
         data: {
-          title: 'General information'
+          title: 'Basic information'
         }
       },
       {
-        path: 'details',
+        path: 'detail-infos',
         loadComponent: () => import('./rental-details/rental-details.component').then(m => m.RentalDetailsComponent),
         data: {
-          title: 'Rental details'
+          title: 'Detail information'
+        }
+      },
+      {
+        path: 'bedding-rooms',
+        loadComponent: () => import('./rooms-bedding/rooms-bedding.component').then(m => m.RoomsBeddingComponent),
+        data: {
+          title: 'Rooms & Bedding'
         }
       },
     ]

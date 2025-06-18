@@ -21,7 +21,7 @@ import {
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {UnitTypeEnum} from "../../../models/unit-type.enum";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FloorSizeUnitEnum} from "../../../models/floor-size-unit.enum";
 import {IconDirective} from "@coreui/icons-angular";
 import {cilSearch, cilTrash, cilX} from "@coreui/icons";
@@ -60,7 +60,6 @@ import {filter, map, tap} from "rxjs/operators";
     FormFeedbackComponent,
     NgClass,
     InputGroupTextDirective,
-    JsonPipe,
     NgIf
   ],
   templateUrl: './rental-details.component.html',
@@ -136,16 +135,16 @@ export class RentalDetailsComponent implements OnDestroy {
         console.log('Your update api response is:', data);
         this.handleUnitDetailsSuccessResponse(data);
         this.toastrService.info(
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.message')
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.success.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.success.title'));
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.success.title'));
       },
       error: (err) => {
         console.error('An error occurred when updating unit details with id:', this.unitId, 'More info:', err);
         this.toastrService.warning(
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.message')
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.error.message')
             .replace(':rentalName', this.unit.name),
-          this.translateService.instant('units.edit-unit.tabs.rental-details.notifications.error.title'));
+          this.translateService.instant('units.edit-unit.tabs.detail-information.notifications.error.title'));
       }
     }))
   }
@@ -218,7 +217,7 @@ export class RentalDetailsComponent implements OnDestroy {
 
   private handleUnitDetailsSuccessResponse(data: UnitDetailsGetModel) {
     this.unit = data;
-    const { amenities, ...unitDetailsWithoutAmenities } = data;
+    const {amenities, ...unitDetailsWithoutAmenities} = data;
     this.rentalDetailsForm.patchValue(unitDetailsWithoutAmenities);
     const amenitiesGroup = this.rentalDetailsForm.get('amenities') as FormGroup;
     for (const amenity of this.unit.amenities) {
@@ -231,7 +230,6 @@ export class RentalDetailsComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.map(subscription => subscription.unsubscribe());
   }
-
 
   /*      rooms: this.fb.array([
         this.fb.group({
@@ -304,7 +302,6 @@ export class RentalDetailsComponent implements OnDestroy {
     });
     this.rentalDetailsForm.setControl('rooms', roomsFormArray);
   }*/
-
 
 
 }

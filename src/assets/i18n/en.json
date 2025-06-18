@@ -11,14 +11,20 @@
       },
       "buttons": {
         "update": "Update",
+        "create": "Create",
         "confirm": "Confirm",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "delete": "Delete"
       },
       "search-input": {
         "placeholder": "Search ..."
       },
       "floor-size-input": {
-        "label": "Floor size"
+        "label": "Floor size",
+        "values": {
+          "SQM": "SQM",
+          "SQFT": "SQFT"
+        }
       },
       "save-btn": "Save",
       "update-btn": "Update",
@@ -537,8 +543,8 @@
       "default-title": "Edit unit",
       "title": "Unit: :unit",
       "tabs": {
-        "general-information": {
-          "title": "General information",
+        "basic-information": {
+          "title": "Basic information",
           "hint": "Set name, address, images and other basic information of the rental",
           "sections": {
             "other": {
@@ -612,8 +618,8 @@
             }
           }
         },
-        "rental-details": {
-          "title": "Rental details",
+        "detail-information": {
+          "title": "Detail information",
           "hint": "Specify rooms, bedding, occupancy, amenities and other rental values",
           "sections": {
             "general": {
@@ -740,12 +746,99 @@
             }
           }
         },
-        "checkin-policy": {
-          "title": "Rental instructions",
-          "hint": "salam 3alikoum",
+        "rooms-bedding": {
+          "title": "Rooms & bedding",
+          "hint": "Define rooms available in the unit and configure bedding options for each one. This helps guests understand the sleeping arrangements and capacity.",
           "sections": {
-            "checkin-times": {
-              "title": "Check-in/Check-out times"
+            "room": {
+              "title": "Room",
+              "form": {
+                "name-input": {
+                  "label": "Name"
+                },
+                "type-input": {
+                  "label": "Type",
+                  "values": {
+                    "BEDROOM": "Bedroom",
+                    "BATHROOM": "Bathroom",
+                    "KITCHEN": "Kitchen",
+                    "LIVING": "Living",
+                    "GENERAL": "General"
+                  }
+                },
+                "sub-type-input": {
+                  "label": "Sub Type",
+                  "values": {
+                    "LIVING_ROOM": "Living Room",
+                    "BED_IN_LIVING_ROOM": "Bed in Living Room",
+                    "MASTER": "Master",
+                    "CHILDREN": "Children",
+                    "GUEST": "Guest",
+                    "FULL": "Full",
+                    "HALF": "Half",
+                    "QUARTER": "Quarter",
+                    "KITCHENETTE": "Kitchenette",
+                    "THREE_QUARTER": "Three Quarter"
+                  }
+                },
+                "bathroom-input": {
+                  "label": "Attached Bathroom",
+                  "placeholder": "Select a bathroom"
+                },
+                "description-input": {
+                  "label": "Description",
+                  "placeholder": "Room description"
+                },
+                "add-btn": "Add room"
+              }
+            },
+            "bed": {
+              "form": {
+                "type-input": {
+                  "label": "Type",
+                  "values": {
+                    "SINGLE": "Single",
+                    "QUEEN": "Queen",
+                    "KING": "King",
+                    "BUNK": "Bunk",
+                    "SOFA": "Sofa",
+                    "TRUNDLE": "Trundle",
+                    "CRIB": "Crib"
+                  }
+                },
+                "quantity-input": {
+                  "label": "Quantity"
+                },
+                "add-btn": "Add bed option"
+              },
+              "messages": {
+                "general-room": "This is a flexible space for various uses such as guest area, study or home office.",
+                "kitchen-room": "Where coffee brews and breakfasts begin — your cozy kitchen corner awaits.",
+                "living-room": "The heart of your home — where movies roll, stories unfold, and comfort reigns.",
+                "bathroom": "Where hygiene meets comfort — the place for clean starts, fresh finishes, and daily showers."
+              }
+            }
+          },
+          "notifications": {
+            "creation": {
+              "success": {
+                "title": "Room created",
+                "message": "Room :room has been successfully created"
+              },
+              "error": {
+                "title": "Room creation failed",
+                "message": "An error occurred while creating the room: :room. Please try again or contact the support team."
+              }
+            },
+            "edition": {
+              "success": {
+                "title": "Room updated",
+                "message": "Room :room has been successfully updated"
+              },
+              "error": {
+                "title": "Room edition failed",
+                "message": "An error occurred while updating the room: :room. Please try again or contact the support team."
+              }
             }
           }
         }

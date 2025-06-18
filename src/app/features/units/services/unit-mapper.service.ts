@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model";
 import {AmenityEnum} from "../models/details/amenity.enum";
+import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
+import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 
 @Injectable({
   providedIn: 'root'
@@ -63,5 +65,53 @@ export class UnitMapperService {
         }
         payload.rooms = rooms;*/
 
+  }
+
+  formToRoomPatchModel(value: any): RoomPatchModel {
+    let bathroomId;
+    if (value.bathroom) {
+      if (value.bathroom == 'null') {
+        bathroomId = '';
+      } else {
+        bathroomId = value.bathroom.id;
+      }
+    } else {
+      bathroomId = '';
+    }
+    let payload: RoomPatchModel = {
+      name: value.name,
+      type: value.type,
+      subType: value.subType,
+      floorSize: value.floorSize,
+      floorSizeUnit: value.floorSizeUnit,
+      bathroomId: bathroomId,
+      description: value.description,
+      beds: value.beds
+    }
+    return payload;
+  }
+
+  formToRoomPostModel(value: any): RoomPostModel {
+    let bathroomId;
+    if (value.bathroom) {
+      if (value.bathroom == 'null') {
+        bathroomId = '';
+      } else {
+        bathroomId = value.bathroom.id;
+      }
+    } else {
+      bathroomId = '';
+    }
+    let payload: RoomPostModel = {
+      name: value.name,
+      type: value.type,
+      subType: value.subType,
+      floorSize: value.floorSize,
+      floorSizeUnit: value.floorSizeUnit,
+      bathroomId: bathroomId,
+      description: value.description,
+      beds: value.beds
+    }
+    return payload;
   }
 }
