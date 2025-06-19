@@ -1,18 +1,18 @@
-import { Component, EventEmitter, Output, OnDestroy, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
-  AbstractControl,
+  ValidationErrors,
   ValidatorFn,
-  ValidationErrors
+  Validators
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { ToastrService } from 'ngx-toastr';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
+import {Subscription} from 'rxjs';
+import {BsModalRef} from 'ngx-bootstrap/modal';
+import {ToastrService} from 'ngx-toastr';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {CountryISO, NgxIntlTelInputModule, SearchCountryField} from 'ngx-intl-tel-input';
 import {
   ButtonDirective,
   ColComponent,
@@ -22,11 +22,12 @@ import {
   FormLabelDirective,
   RowComponent,
 } from '@coreui/angular';
-import { GuestService } from '../../services/guest.service';
-import { GuestItemPostModel } from '../../models/guest-post.model';
-import { CountrySelectComponent } from '../../../../shared/components/country-select/country-select.component';
-import { CommonModule } from '@angular/common';
+import {GuestService} from '../../services/guest.service';
+import {GuestItemPostModel} from '../../models/guest-post.model';
+import {CountrySelectComponent} from '../../../../shared/components/country-select/country-select.component';
+import {CommonModule} from '@angular/common';
 import {NgSelectComponent} from "@ng-select/ng-select";
+import {DocumentTypeEnum} from "../../models/document-type.enum";
 
 @Component({
   selector: 'app-guest-create-modal',
@@ -51,8 +52,7 @@ import {NgSelectComponent} from "@ng-select/ng-select";
 })
 export class GuestCreateModalComponent implements OnInit, OnDestroy {
 
-  documentTypes = ['IDENTITY_CARD', 'PASSPORT', 'DRIVER_LICENCE'];
-
+  documentTypes = Object.values(DocumentTypeEnum);
   guestForm: FormGroup;
   @Output() actionConfirmed = new EventEmitter<void>();
   protected readonly SearchCountryField = SearchCountryField;
@@ -80,22 +80,22 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
       postCode: [null],
       street1: [null],
       street2: [null],
-      idDocument: this.fb.group({
+      identityDocument: this.fb.group({
         type: [null],
         documentNumber: [''],
         expirationDate: [null]
       }),
       documentImage: [null]
-    },{ validators: this.documentConsistencyValidator() });
+    }, {validators: this.documentConsistencyValidator()});
   }
 
   get idDocumentGroup(): FormGroup {
-    return this.guestForm.get('idDocument') as FormGroup;
+    return this.guestForm.get('identityDocument') as FormGroup;
   }
 
   ngOnInit(): void {
     this.idDocumentGroup.valueChanges.subscribe(() => {
-      this.guestForm.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      this.guestForm.updateValueAndValidity({onlySelf: true, emitEvent: false});
     });
   }
 
@@ -109,13 +109,13 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
       this.imageFile = file;
       this.guestForm.get('documentImage')?.setValue(file);
 
-      this.guestForm.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      this.guestForm.updateValueAndValidity({onlySelf: true, emitEvent: false});
     }
   }
 
   private documentConsistencyValidator(): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
-      const idDocument = form.get('idDocument') as FormGroup;
+      const idDocument = form.get('identityDocument') as FormGroup;
       const type = idDocument.get('type')?.value;
       const number = idDocument.get('documentNumber')?.value;
       const expiration = idDocument.get('expirationDate')?.value;
@@ -126,12 +126,12 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
 
       // Rule 1: once user starts filling any document field, all must be filled
       if (documentIncomplete) {
-        return { documentIncomplete: true };
+        return {documentIncomplete: true};
       }
 
       // Rule 2: if image is uploaded, document fields must be fully filled
       if (image && (!type || !number || !expiration)) {
-        return { documentRequiredWithImage: true };
+        return {documentRequiredWithImage: true};
       }
 
       return null;
@@ -167,16 +167,17 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
         postCode: formValue.postCode,
         street1: formValue.street1,
         street2: formValue.street2
-      },
-      idDocument: {
-        type: formValue.idDocument.type,
-        documentNumber: formValue.idDocument.documentNumber,
-        expirationDate: formValue.idDocument.expirationDate
       }
     };
+    if(formValue.identityDocument.documentNumber){
+      payload.identityDocument={
+        type: formValue.identityDocument.type,
+        documentNumber: formValue.identityDocument.documentNumber,
+        expirationDate: formValue.identityDocument.expirationDate
+      }
+    }
 
     console.log('Payload JSON:', payload);
-    console.log('Image file:', this.imageFile);
 
     const formData = new FormData();
     formData.append('guestJson', JSON.stringify(payload));

@@ -7,7 +7,7 @@ export interface GuestItemPostModel {
   firstName: string;
   lastName: string;
   birthDate: string;
-  address: AddressModel;
-  contact: ContactModel;
-  idDocument: DocumentModel;
+  address?: AddressModel;
+  contact?: ContactModel;
+  identityDocument?: DocumentModel;
 }

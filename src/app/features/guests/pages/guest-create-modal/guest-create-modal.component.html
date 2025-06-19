@@ -15,7 +15,7 @@
         <label cLabel class="required me-2" for="firstName">
           {{ 'guests.create.form.firstName-input.label' | translate }}
         </label>
-        <input cFormControl formControlName="firstName" id="firstName" type="text" />
+        <input cFormControl formControlName="firstName" id="firstName" type="text"/>
         @if (guestForm.get('firstName')?.touched || guestForm.get('firstName')?.dirty) {
           @if (guestForm.get('firstName')?.hasError('required')) {
             <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
@@ -28,7 +28,7 @@
         <label cLabel class="required me-2" for="lastName">
           {{ 'guests.create.form.lastName-input.label' | translate }}
         </label>
-        <input cFormControl formControlName="lastName" id="lastName" type="text" />
+        <input cFormControl formControlName="lastName" id="lastName" type="text"/>
         @if (guestForm.get('lastName')?.touched || guestForm.get('lastName')?.dirty) {
           @if (guestForm.get('lastName')?.hasError('required')) {
             <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
@@ -41,7 +41,7 @@
         <label cLabel class="required me-2" for="birthDate">
           {{ 'guests.create.form.birthDate-input.label' | translate }}
         </label>
-        <input cFormControl formControlName="birthDate" id="birthDate" type="date" />
+        <input cFormControl formControlName="birthDate" id="birthDate" type="date"/>
         @if (guestForm.get('birthDate')?.touched || guestForm.get('birthDate')?.dirty) {
           @if (guestForm.get('birthDate')?.hasError('required')) {
             <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
@@ -59,7 +59,7 @@
         <c-row>
           <c-col md="12" class="mb-3">
             <label cLabel for="street1">{{ 'guests.create.form.street1-input.label' | translate }}</label>
-            <input cFormControl formControlName="street1" id="street1" type="text" />
+            <input cFormControl formControlName="street1" id="street1" type="text"/>
           </c-col>
         </c-row>
 
@@ -67,13 +67,13 @@
           <!-- Street2 -->
           <c-col md="8" class="mb-3">
             <label cLabel for="street2">{{ 'guests.create.form.street2-input.label' | translate }}</label>
-            <input cFormControl formControlName="street2" id="street2" type="text" />
+            <input cFormControl formControlName="street2" id="street2" type="text"/>
           </c-col>
 
           <!-- postCode -->
           <c-col md="4" class="mb-3">
             <label cLabel for="postCode">{{ 'guests.create.form.postCode-input.label' | translate }}</label>
-            <input cFormControl formControlName="postCode" id="postCode" type="text" />
+            <input cFormControl formControlName="postCode" id="postCode" type="text"/>
           </c-col>
         </c-row>
 
@@ -81,7 +81,7 @@
           <!-- city -->
           <c-col md="6" class="mb-3">
             <label cLabel for="city">{{ 'guests.create.form.city-input.label' | translate }}</label>
-            <input cFormControl formControlName="city" id="city" type="text" />
+            <input cFormControl formControlName="city" id="city" type="text"/>
           </c-col>
 
           <!-- country -->
@@ -100,7 +100,7 @@
 
       </c-col>
 
-      <c-col md="5" >
+      <c-col md="5">
         <h6 class="card-title mb-3">{{ 'guests.create.form.contact.label'|translate }}</h6>
 
         <!-- contact -->
@@ -131,7 +131,7 @@
             <label cLabel class="required me-2" for="email">
               {{ 'guests.create.form.email-input.label' | translate }}
             </label>
-            <input cFormControl formControlName="email" id="email" type="text" />
+            <input cFormControl formControlName="email" id="email" type="text"/>
             @if (guestForm.get('email')?.touched || guestForm.get('email')?.dirty) {
               @if (guestForm.get('email')?.hasError('required')) {
                 <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
@@ -148,51 +148,52 @@
     </c-row>
 
 
-
     <!-- Document Section -->
     <div [formGroup]="idDocumentGroup">
-    <c-row class="mb-3 mt-2">
-      <h6 class="card-title mb-3">{{ 'guests.create.form.document.label'|translate }}</h6>
+      <c-row class="mb-3 mt-2">
+        <h6 class="card-title mb-3">{{ 'guests.create.form.document.label'|translate }}</h6>
 
-      <c-row class="mb-3">
-        <c-col [md]="6">
-          <label cLabel for="type">{{ 'guests.create.form.type-input.label' | translate }}</label>
+        <c-row class="mb-3">
+          <c-col [md]="6">
+            <label cLabel for="type">{{ 'guests.create.form.type-input.label' | translate }}</label>
 
-          <ng-select id="type" appearance="outline" [searchable]="false" [clearable]="false"
-                     [items]="documentTypes" formControlName="type">
-            <ng-template ng-label-tmp let-item="item">
-              <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
-            </ng-template>
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
-            </ng-template>
-          </ng-select>
-          @if (((guestForm.get('type')?.touched || guestForm.get('type')?.dirty))) {
-            @if (guestForm.get('type')?.hasError('required')) {
-              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
-            }
-          }
-        </c-col>
+            <ng-select id="type" appearance="outline" [searchable]="false" [clearable]="false"
+                       [items]="documentTypes" formControlName="type">
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
+              </ng-template>
+            </ng-select>
+            <!--TODO: resolve this required-->
+            <!--          @if (((guestForm.get('type')?.touched || guestForm.get('type')?.dirty))) {
+                        @if (guestForm.get('type')?.hasError('required')) {
+                          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+                        }
+                      }-->
+          </c-col>
 
-        <c-col [md]="6">
-          <label cLabel for="documentNumber">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
-          <input id="documentNumber" cFormControl formControlName="documentNumber" type="text" class="form-control" />
-        </c-col>
+          <c-col [md]="6">
+            <label cLabel for="documentNumber">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
+            <input id="documentNumber" cFormControl formControlName="documentNumber" type="text" class="form-control"/>
+          </c-col>
+        </c-row>
+
+        <c-row class="mb-3">
+          <c-col [md]="6">
+            <label cLabel for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
+            <input id="expirationDate" cFormControl formControlName="expirationDate" type="date" class="form-control"/>
+          </c-col>
+
+          <c-col [md]="6">
+            <label cLabel for="documentImage">{{ 'guests.create.form.documentImage-input.label' | translate }}</label>
+            <input id="documentImage" type="file" (change)="onImageSelected($event)" class="form-control"
+                   accept="image/*"/>
+          </c-col>
+        </c-row>
+
       </c-row>
-
-      <c-row class="mb-3">
-        <c-col [md]="6">
-          <label cLabel for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
-          <input id="expirationDate" cFormControl formControlName="expirationDate" type="date" class="form-control" />
-        </c-col>
-
-        <c-col [md]="6">
-          <label cLabel for="documentImage">{{ 'guests.create.form.documentImage-input.label' | translate }}</label>
-          <input id="documentImage" type="file" (change)="onImageSelected($event)" class="form-control" accept="image/*" />
-        </c-col>
-      </c-row>
-
-    </c-row>
 
     </div>
 
