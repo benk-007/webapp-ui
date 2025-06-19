@@ -25,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GuestService } from '../../services/guest.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GuestItemGetModel } from '../../models/guest-item-get.model';
-import { GuestCuModalComponent } from '../guest-cu-modal/guest-cu-modal.component';
+import { GuestCreateModalComponent } from '../guest-create-modal/guest-create-modal.component';
 import { DatePipe } from '@angular/common';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 import { TableControlComponent } from '../../../../shared/components/table-control/table-control.component';
@@ -34,7 +34,7 @@ import { AuditNamePipe } from '../../../../shared/pipes/audit-name.pipe';
 import { EmptyDataComponent } from '../../../../shared/components/empty-data/empty-data.component';
 import { ListContentComponent } from '../../../../shared/components/list-content/list-content.component';
 import { ToastrService } from 'ngx-toastr';
-import {BadgeComponent} from "../../../../shared/components/badge/badge.component";
+import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
 
 @Component({
   selector: 'app-guest-list',
@@ -118,13 +118,13 @@ export class GuestListComponent extends ListContentComponent {
     );
   }
 
-  openGuestCuModal(guest?: GuestItemGetModel) {
-    const guestCuModalRef = this.modalService.show(GuestCuModalComponent, {
-      initialState: guest ? { guestToEdit: guest } : {}
-    });
-
+  openGuestCreateModal() {
+    let initialState = {
+      class: 'modal-lg'
+    }
+    let guestCreateModalRef = this.modalService.show(GuestCreateModalComponent, initialState);
     this.subscriptions.push(
-      (guestCuModalRef.content as GuestCuModalComponent).actionConfirmed.subscribe(() => {
+      (guestCreateModalRef.content as GuestCreateModalComponent).actionConfirmed.subscribe(() => {
         this.refreshListContent();
       })
     );
@@ -150,4 +150,3 @@ export class GuestListComponent extends ListContentComponent {
     }
   }
 }
-

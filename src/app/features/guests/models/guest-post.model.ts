@@ -9,5 +9,5 @@ export interface GuestItemPostModel {
   birthDate: string;
   address: AddressModel;
   contact: ContactModel;
-  idDocuments: DocumentModel[];
+  idDocument: DocumentModel;
 }

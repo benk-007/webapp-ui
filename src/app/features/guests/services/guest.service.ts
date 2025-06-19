@@ -85,8 +85,8 @@ export class GuestService {
   }*/
 
 
-  postGuest(payload: GuestItemPostModel): Observable<GuestItemGetModel> {
-    return this.httpClient.post<GuestItemGetModel>(environment.apiBaseUrl.concat(environment.guestList), payload);
+  postGuest(formData: FormData) {
+    return this.httpClient.post(environment.apiBaseUrl.concat(environment.guestList), formData);
   }
 
   patchGuestById(payload: GuestItemPatchModel, guestId: string): Observable<GuestItemGetModel> {
@@ -101,4 +101,5 @@ export class GuestService {
       environment.apiBaseUrl.concat(environment.guestById).replace(':guestId', id)
     );
   }
+
 }
