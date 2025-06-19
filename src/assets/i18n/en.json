@@ -1069,7 +1069,7 @@
           }
         },
         "documentImage-input": {
-          "label": "Expiration date"
+          "label": "Document File"
         },
         "idDocuments": {
           "add-button": "+ Add Document",

@@ -26,7 +26,7 @@ import {GuestService} from '../../services/guest.service';
 import {GuestItemPostModel} from '../../models/guest-post.model';
 import {CountrySelectComponent} from '../../../../shared/components/country-select/country-select.component';
 import {CommonModule} from '@angular/common';
-import {NgSelectComponent} from "@ng-select/ng-select";
+import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from "@ng-select/ng-select";
 import {DocumentTypeEnum} from "../../models/document-type.enum";
 
 @Component({
@@ -45,7 +45,9 @@ import {DocumentTypeEnum} from "../../models/document-type.enum";
     TranslatePipe,
     CountrySelectComponent,
     CommonModule,
-    NgSelectComponent
+    NgSelectComponent,
+    NgLabelTemplateDirective,
+    NgOptionTemplateDirective
   ],
   templateUrl: './guest-create-modal.component.html',
   styleUrl: './guest-create-modal.component.scss'
@@ -72,10 +74,10 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
     this.guestForm = this.fb.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      birthDate: [null, [Validators.required]],
+      birthDate: [null],
       email: [null, [Validators.required, Validators.email]],
       mobile: [null],
-      country: [null, Validators.required],
+      country: [null],
       city: [null],
       postCode: [null],
       street1: [null],
@@ -177,16 +179,21 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log('Payload JSON:', payload);
 
     const formData = new FormData();
-    formData.append('guestJson', JSON.stringify(payload));
+
+    const guestJsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    formData.append('guestJson', guestJsonBlob);
 
     if (this.imageFile) {
       formData.append('documentImage', this.imageFile);
     }
 
-    console.log('Form data:', formData);
+    // (for debugging)
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
 
     this.subscriptions.push(this.guestService.postGuest(formData).subscribe({
       next: () => {

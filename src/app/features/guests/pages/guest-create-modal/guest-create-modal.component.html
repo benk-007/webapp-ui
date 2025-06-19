@@ -38,22 +38,17 @@
 
       <!-- Birth Date -->
       <c-col [md]="4" sm="12" class="mb-3">
-        <label cLabel class="required me-2" for="birthDate">
+        <label cLabel class="me-2" for="birthDate">
           {{ 'guests.create.form.birthDate-input.label' | translate }}
         </label>
         <input cFormControl formControlName="birthDate" id="birthDate" type="date"/>
-        @if (guestForm.get('birthDate')?.touched || guestForm.get('birthDate')?.dirty) {
-          @if (guestForm.get('birthDate')?.hasError('required')) {
-            <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
-          }
-        }
       </c-col>
     </c-row>
 
     <c-row class="mt-2">
 
       <c-col md="7">
-        <h6 class="card-title mb-3">{{ 'guests.create.form.address.label'|translate }}</h6>
+        <h6 class="section-title underline mb-3">{{ 'guests.create.form.address.label'|translate }}</h6>
 
         <!-- Street1 -->
         <c-row>
@@ -86,22 +81,17 @@
 
           <!-- country -->
           <c-col md="6" class="mb-3">
-            <label cLabel class="required me-2" for="country">
+            <label cLabel class="me-2" for="country">
               {{ 'guests.create.form.country-input.label' | translate }}
             </label>
             <app-country-select formControlName="country" id="country"></app-country-select>
-            @if (guestForm.get('country')?.touched || guestForm.get('country')?.dirty) {
-              @if (guestForm.get('country')?.hasError('required')) {
-                <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
-              }
-            }
           </c-col>
         </c-row>
 
       </c-col>
 
       <c-col md="5">
-        <h6 class="card-title mb-3">{{ 'guests.create.form.contact.label'|translate }}</h6>
+        <h6 class="section-title underline mb-3">{{ 'guests.create.form.contact.label'|translate }}</h6>
 
         <!-- contact -->
         <c-row>
@@ -150,51 +140,50 @@
 
     <!-- Document Section -->
     <div [formGroup]="idDocumentGroup">
-      <c-row class="mb-3 mt-2">
-        <h6 class="card-title mb-3">{{ 'guests.create.form.document.label'|translate }}</h6>
+      <c-row>
+        <c-col md="12">
+          <h6 class="section-title underline mb-3 mt-2">{{ 'guests.create.form.document.label'|translate }}</h6>
+        </c-col>
 
-        <c-row class="mb-3">
-          <c-col [md]="6">
-            <label cLabel for="type">{{ 'guests.create.form.type-input.label' | translate }}</label>
+        <c-col md="12">
+          <c-row >
+            <c-col md="6" class="mb-3" >
+              <label cLabel for="type">{{ 'guests.create.form.type-input.label' | translate }}</label>
 
-            <ng-select id="type" appearance="outline" [searchable]="false" [clearable]="false"
-                       [items]="documentTypes" formControlName="type">
-              <ng-template ng-label-tmp let-item="item">
-                <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
-              </ng-template>
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
-              </ng-template>
-            </ng-select>
-            <!--TODO: resolve this required-->
-            <!--          @if (((guestForm.get('type')?.touched || guestForm.get('type')?.dirty))) {
-                        @if (guestForm.get('type')?.hasError('required')) {
-                          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
-                        }
-                      }-->
-          </c-col>
+              <ng-select id="type" appearance="outline" [searchable]="false" [clearable]="false"
+                         [items]="documentTypes" formControlName="type">
+                <ng-template ng-label-tmp let-item="item">
+                  <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  <span>{{ ('guests.create.form.enums.documentType.' + item) | translate }}</span>
+                </ng-template>
+              </ng-select>
+            </c-col>
 
-          <c-col [md]="6">
-            <label cLabel for="documentNumber">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
-            <input id="documentNumber" cFormControl formControlName="documentNumber" type="text" class="form-control"/>
-          </c-col>
-        </c-row>
+            <c-col md="6" class="mb-3" >
+              <label cLabel for="documentNumber">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
+              <input id="documentNumber" cFormControl formControlName="documentNumber" type="text" class="form-control"/>
+            </c-col>
+          </c-row>
+        </c-col>
 
-        <c-row class="mb-3">
-          <c-col [md]="6">
-            <label cLabel for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
-            <input id="expirationDate" cFormControl formControlName="expirationDate" type="date" class="form-control"/>
-          </c-col>
+        <c-col md="12">
+          <c-row class="mb-3">
+            <c-col [md]="6">
+              <label cLabel for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
+              <input id="expirationDate" cFormControl formControlName="expirationDate" type="date" class="form-control"/>
+            </c-col>
 
-          <c-col [md]="6">
-            <label cLabel for="documentImage">{{ 'guests.create.form.documentImage-input.label' | translate }}</label>
-            <input id="documentImage" type="file" (change)="onImageSelected($event)" class="form-control"
-                   accept="image/*"/>
-          </c-col>
-        </c-row>
+            <c-col [md]="6">
+              <label cLabel for="documentImage">{{ 'guests.create.form.documentImage-input.label' | translate }}</label>
+              <input id="documentImage" type="file" (change)="onImageSelected($event)" class="form-control"
+                     accept="image/*"/>
+            </c-col>
+          </c-row>
+        </c-col>
 
       </c-row>
-
     </div>
 
     <!-- Modal footer -->
