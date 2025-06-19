@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {
-  ButtonDirective,
+  AvatarComponent,
   FormControlDirective,
   InputGroupComponent,
   InputGroupTextDirective,
@@ -12,7 +12,7 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {cilSearch} from "@coreui/icons";
 
 @Component({
-  selector: 'app-scheduler',
+    selector: 'app-scheduler',
   imports: [
     TableDirective,
     TableColorDirective,
@@ -21,12 +21,12 @@ import {cilSearch} from "@coreui/icons";
     InputGroupComponent,
     InputGroupTextDirective,
     TranslatePipe,
-    ButtonDirective
+    AvatarComponent
   ],
-  templateUrl: './scheduler.component.html',
-  styleUrl: './scheduler.component.scss'
+    templateUrl: './scheduler.component.html',
+    styleUrl: './scheduler.component.scss'
 })
 export class SchedulerComponent {
-  icons = {cilSearch}
+    icons = {cilSearch}
 
 }
