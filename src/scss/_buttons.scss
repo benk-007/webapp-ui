@@ -26,6 +26,19 @@
     }
   }
 
+  &.btn-danger {
+    &.btn-light {
+      background-color: vars.$danger01;
+      color: vars.$danger !important;
+
+      &:hover {
+        background-color: vars.$danger;
+        color: white !important;
+      }
+    }
+  }
+
+
   &.btn-outline-secondary, &.btn-outline-success, &.btn-outline-danger, &.btn-outline-primary {
     &:hover {
       color: white;
@@ -34,8 +47,6 @@
 
   &.btn-danger {
     color: white;
-
-
   }
 
 

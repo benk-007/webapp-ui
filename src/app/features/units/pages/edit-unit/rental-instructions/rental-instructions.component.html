@@ -1,0 +1,280 @@
+<!-- Loading state -->
+@if (isLoading) {
+  <div class="loading-container">
+    <c-spinner></c-spinner>
+  </div>
+} @else {
+  <!-- Form Container -->
+  <form [formGroup]="instructionsForm" (ngSubmit)="onSave()" cForm>
+    <!-- ACTION BUTTONS comme dans general-information -->
+    <c-row class="m-3">
+      <c-col [md]="12" class="d-flex justify-content-end">
+        <button
+          cButton
+          type="submit"
+          size="sm"
+          [disabled]="!isFormValid || isSaving">
+          @if (isSaving) {
+            <c-spinner size="sm" class="me-2"></c-spinner>
+          }
+          {{ 'commons.form.buttons.update' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+    <c-row class="mt-3">
+      <!-- LEFT COLUMN: Check-in/Check-out Times -->
+      <c-col [md]="6">
+        <!-- Title comme dans rental-details -->
+        <h6 class="section-title underline mb-3 mt-2">
+          Check-in / Check-out times
+        </h6>
+
+        <c-row>
+          <!-- Check-in Time -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel class="required" for="checkInTime">
+              Check-in Time
+            </label>
+            <timepicker
+              formControlName="checkInTime"
+              [showMeridian]="isMeridian"
+              [showSpinners]="showSpinners"
+              id="checkInTime"
+              name="checkInTime">
+            </timepicker>
+            @if (hasError('checkInTime')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+            }
+          </c-col>
+
+          <!-- Check-out Time -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel class="required" for="checkOutTime">
+              Check-out Time
+            </label>
+            <timepicker
+              formControlName="checkOutTime"
+              [showMeridian]="isMeridian"
+              [showSpinners]="showSpinners"
+              id="checkOutTime"
+              name="checkOutTime">
+            </timepicker>
+            @if (hasError('checkOutTime')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+            }
+          </c-col>
+        </c-row>
+
+        <!-- Time Zone -->
+        <c-row>
+          <c-col [md]="12" class="mb-3">
+            <label cLabel class="required" for="timeZone">
+              Time Zone
+            </label>
+            <select
+              cFormControl
+              formControlName="timeZone"
+              id="timeZone"
+              name="timeZone"
+              class="form-select">
+              <option value="">Select time zone</option>
+              @for (timezone of timeZones; track timezone.value) {
+                <option [value]="timezone.value">{{ timezone.label }}</option>
+              }
+            </select>
+            @if (hasError('timeZone')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+            }
+          </c-col>
+        </c-row>
+      </c-col>
+
+      <!-- RIGHT COLUMN: Codes & Passwords -->
+      <c-col [md]="6">
+        <!-- Title comme dans rental-details -->
+        <h6 class="section-title underline mb-3 mt-2">
+          Codes & passwords
+        </h6>
+
+        <c-row>
+          <!-- WiFi Name -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel for="wifiName">
+              WiFi Name
+            </label>
+            <input
+              cFormControl
+              formControlName="wifiName"
+              id="wifiName"
+              name="wifiName"
+              [placeholder]="''"
+              type="text"/>
+          </c-col>
+
+          <!-- WiFi Password -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel for="wifiPassword">
+              WiFi Password
+            </label>
+            <input
+              cFormControl
+              formControlName="wifiPassword"
+              id="wifiPassword"
+              name="wifiPassword"
+              placeholder=""
+              type="text"/>
+          </c-col>
+        </c-row>
+
+        <c-row>
+          <!-- Security Code -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel for="securityCode">
+              Security Code
+            </label>
+            <input
+              cFormControl
+              formControlName="securityCode"
+              id="securityCode"
+              name="securityCode"
+              placeholder=""
+              type="text"/>
+          </c-col>
+
+          <!-- Key Pickup -->
+          <c-col [md]="6" class="mb-3">
+            <label cLabel for="keyPickup">
+              Key Pickup
+            </label>
+            <input
+              cFormControl
+              formControlName="keyPickup"
+              id="keyPickup"
+              name="keyPickup"
+              placeholder=""
+              type="text"/>
+          </c-col>
+        </c-row>
+      </c-col>
+    </c-row>
+
+    <!-- INSTRUCTIONS SECTIONS -->
+    <c-row class="mt-3">
+      <!-- LEFT COLUMN: Check-in Instructions, Directions, Special Instructions -->
+      <c-col [md]="6">
+        <!-- Check-in Instructions -->
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3">
+            Check-in instructions
+          </h6>
+          <label cLabel for="checkInInstructions" class="visually-hidden">Check-in Instructions</label>
+          <textarea
+            cFormControl
+            formControlName="checkInInstructions"
+            id="checkInInstructions"
+            name="checkInInstructions"
+            placeholder=""
+            rows="6">
+          </textarea>
+        </div>
+
+        <!-- Directions -->
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3 mt-2">
+            Directions
+          </h6>
+          <label cLabel for="directions" class="visually-hidden">Directions</label>
+          <textarea
+            cFormControl
+            formControlName="directions"
+            id="directions"
+            name="directions"
+            placeholder=""
+            rows="6">
+          </textarea>
+        </div>
+
+        <!-- Special Instructions -->
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3 mt-2">
+            Special instructions
+          </h6>
+          <label cLabel for="specialInstructions" class="visually-hidden">Special Instructions</label>
+          <textarea
+            cFormControl
+            formControlName="specialInstructions"
+            id="specialInstructions"
+            name="specialInstructions"
+            placeholder=""
+            rows="4">
+          </textarea>
+        </div>
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3 mt-2">
+            Payment instructions
+          </h6>
+          <label cLabel for="paymentInstructions" class="visually-hidden">Payment Instructions</label>
+          <textarea
+            cFormControl
+            formControlName="paymentInstructions"
+            id="paymentInstructions"
+            name="paymentInstructions"
+            placeholder=""
+            rows="4">
+          </textarea>
+        </div>
+      </c-col>
+
+      <!-- RIGHT COLUMN: Check-out Instructions, House Rules -->
+      <c-col [md]="6">
+        <!-- Check-out Instructions -->
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3">
+            Check-out instructions
+          </h6>
+          <label cLabel for="checkOutInstructions" class="visually-hidden">Check-out Instructions</label>
+          <textarea
+            cFormControl
+            formControlName="checkOutInstructions"
+            id="checkOutInstructions"
+            name="checkOutInstructions"
+            placeholder=""
+            rows="6">
+          </textarea>
+        </div>
+
+        <!-- House Rules -->
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3 mt-2">
+            House rules
+          </h6>
+          <label cLabel for="houseRules" class="visually-hidden">House Rules</label>
+          <textarea
+            cFormControl
+            formControlName="houseRules"
+            id="houseRules"
+            name="houseRules"
+            placeholder=""
+            rows="6">
+          </textarea>
+        </div>
+
+        <div class="mb-3">
+          <h6 class="section-title underline mb-3 mt-2">
+            Payment terms
+          </h6>
+          <label cLabel for="paymentTerms" class="visually-hidden">Payment Terms</label>
+          <textarea
+            cFormControl
+            formControlName="paymentTerms"
+            id="paymentTerms"
+            name="paymentTerms"
+            placeholder=""
+            rows="4">
+          </textarea>
+        </div>
+      </c-col>
+    </c-row>
+
+  </form>
+}
