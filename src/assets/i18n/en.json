@@ -1091,7 +1091,7 @@
         "notifications": {
           "success": {
             "title": "Guest created",
-            "message": "Guest :name has been successfully created"
+            "message": "Guest has been successfully created"
           },
           "error": {
             "title": "Guest creation failed",
