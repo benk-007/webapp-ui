@@ -183,10 +183,10 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
     const formData = new FormData();
 
     const guestJsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    formData.append('guestJson', guestJsonBlob);
+    formData.append('payload', guestJsonBlob);
 
     if (this.imageFile) {
-      formData.append('documentImage', this.imageFile);
+      formData.append('file', this.imageFile);
     }
 
     // (for debugging)
