@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import {GuestEditComponent} from "./pages/guest-edit/guest-edit.component";
 
 export const routes: Routes = [
   {
@@ -19,6 +20,13 @@ export const routes: Routes = [
           title: 'List'
         }
       },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/guest-edit/guest-edit.component').then(m => m.GuestEditComponent),
+        data: {
+          title: 'Edit Guest'
+        }
+      }
     ]
   }
 ];

@@ -11,5 +11,4 @@ export interface GuestItemGetModel {
   birthDate: string;
   address: AddressModel;
   contact: ContactModel;
-  idDocuments: DocumentModel[];
 }

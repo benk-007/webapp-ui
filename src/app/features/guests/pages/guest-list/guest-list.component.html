@@ -78,7 +78,7 @@
               </td>
               <td>
                   <!-- Edit button -->
-                  <button cButton size="sm" color="primary" class="btn-light" disabled>
+                  <button cButton size="sm" color="primary" class="btn-light" [routerLink]="['/guests/', guest.id]">
                     <svg [cIcon]="icons.cilPen" size="sm"></svg>
                   </button>
                   <!-- Delete button -->

@@ -84,6 +84,14 @@ export class GuestService {
     return of(mockData); // simulates HTTP call
   }*/
 
+  getGuestById(guestId: string): Observable<GuestItemGetModel> {
+    return this.httpClient.get<GuestItemGetModel>(
+      environment.apiBaseUrl.concat(environment.guestById).replace(':guestId', guestId)
+    );
+  }
+
+
+
 
   postGuest(formData: FormData) {
     return this.httpClient.post(environment.apiBaseUrl.concat(environment.guestList), formData);
@@ -101,5 +109,6 @@ export class GuestService {
       environment.apiBaseUrl.concat(environment.guestById).replace(':guestId', id)
     );
   }
+
 
 }

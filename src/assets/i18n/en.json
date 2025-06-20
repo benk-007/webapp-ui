@@ -1100,21 +1100,75 @@
         }
       }
     },
-    "edit": {
-      "title": "Edit guest",
+    "edit-guest": {
+      "default-title": "Edit Guest",
       "form": {
-        "enabled-input": {
-          "label": "Enabled"
+        "general": {
+          "title": "General Information"
         },
-        "notifications": {
-          "success": {
-            "title": "Guest updated",
-            "message": "Guest :name has been successfully updated"
+        "firstName": {
+          "label": "First Name",
+          "placeholder": "Enter first name"
+        },
+        "lastName": {
+          "label": "Last Name",
+          "placeholder": "Enter last name"
+        },
+        "birthDate": {
+          "label": "Birth Date",
+          "placeholder": "Select birth date"
+        },
+        "address": {
+          "title": "Address",
+          "street1": {
+            "label": "Street 1",
+            "placeholder": "Enter street 1"
           },
-          "error": {
-            "title": "Guest update failed",
-            "message": "An error occurred while updating the guest. Please try again or contact the support team."
+          "street2": {
+            "label": "Street 2",
+            "placeholder": "Enter street 2"
+          },
+          "postCode": {
+            "label": "Post Code",
+            "placeholder": "Enter post code"
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Enter city"
+          },
+          "country": {
+            "label": "Country"
           }
+        },
+        "contact": {
+          "title": "Contact",
+          "mobile": {
+            "label": "Mobile"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "Enter email"
+          }
+        }
+      },
+      "tabs": {
+        "reservations": {
+          "title": "Reservations",
+          "hint": "Manage reservations for this guest"
+        },
+        "documents": {
+          "title": "Documents",
+          "hint": "Manage identification documents"
+        }
+      },
+      "notifications": {
+        "success": {
+          "title": "Guest updated",
+          "message": "Guest :name has been successfully updated"
+        },
+        "error": {
+          "title": "Guest update failed",
+          "message": "An error occurred while updating the guest. Please try again or contact the support team."
         }
       }
     }

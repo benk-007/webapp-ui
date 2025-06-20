@@ -21,7 +21,7 @@ import {
   cilTrash
 } from '@coreui/icons';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { GuestService } from '../../services/guest.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GuestItemGetModel } from '../../models/guest-item-get.model';
@@ -56,7 +56,8 @@ import { BadgeComponent } from '../../../../shared/components/badge/badge.compon
     SelectableTableDirective,
     TableDirective,
     EmptyDataComponent,
-    BadgeComponent
+    BadgeComponent,
+    RouterLink
   ],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.scss',
