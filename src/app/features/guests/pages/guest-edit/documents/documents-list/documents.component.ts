@@ -18,7 +18,7 @@ import {
   cilSwapVertical,
   cilTrash
 } from '@coreui/icons';
-import { TranslatePipe } from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip';
@@ -34,6 +34,7 @@ import {AuditNamePipe} from "../../../../../../shared/pipes/audit-name.pipe";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
 import {DocumentImageService} from "../../sevices/document-image.service";
 import {DocumentCreateModalComponent} from "../documents-create-modal/documents-create-modal.component";
+import {ConfirmModalComponent} from "../../../../../../shared/components/confirm-modal/confirm-modal.component";
 
 
 @Component({
@@ -81,7 +82,8 @@ export class DocumentsComponent extends ListContentComponent {
       public readonly documentService: DocumentService,
       private readonly toastr: ToastrService,
       private readonly DocumentImageService: DocumentImageService,
-      private readonly modalService: BsModalService
+      private readonly modalService: BsModalService,
+      private translateService: TranslateService,
   ) {
     super(router, route);
   }
@@ -133,18 +135,34 @@ export class DocumentsComponent extends ListContentComponent {
 
 
   deleteDocument(document: DocumentItemGetModel): void {
-    if (confirm(`Are you sure you want to delete document ${document.documentNumber}?`)) {
-      this.documentService.deleteDocumentById(document.id, this.guestId).subscribe({
-        next: () => {
-          this.refreshListContent();
-          this.toastr.success('Document deleted successfully.');
-        },
-        error: () => {
-          this.toastr.error('An error occurred while deleting the document.');
-        }
-      });
-    }
+    const initialState = {
+      title: this.translateService.instant('documents.list.delete-modal.title'),
+      message: this.translateService.instant('documents.list.delete-modal.message', { documentNumber: document.documentNumber })
+    };
+
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.documentService.deleteDocumentById(document.id, this.guestId).subscribe({
+          next: () => {
+            this.refreshListContent();
+            this.toastr.success(
+              this.translateService.instant('documents.list.notifications.delete.success.message', { documentNumber: document.documentNumber }),
+              this.translateService.instant('documents.list.notifications.delete.success.title')
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant('documents.list.notifications.delete.error.message'),
+              this.translateService.instant('documents.list.notifications.delete.error.title')
+            );
+          }
+        });
+      })
+    );
   }
+
 
   openDocumentCreateModal(): void {
     const initialState = { class: 'modal-lg' };

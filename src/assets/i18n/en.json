@@ -1001,6 +1001,22 @@
       "cta": {
         "add-btn": "+ Add guest"
       },
+      "delete-modal": {
+        "title": "Delete Guest",
+        "message": "Are you sure you want to delete {{name}}?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Guest deleted",
+            "message": "{{name}} has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion failed",
+            "message": "An error occurred while deleting the guest."
+          }
+        }
+      },
       "table": {
         "header": {
           "fullname": "Full name",
@@ -1185,6 +1201,22 @@
       "cta": {
         "add-btn": "+ Add document"
       },
+      "delete-modal": {
+        "title": "Delete Document",
+        "message": "Are you sure you want to delete document {{documentNumber}}?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Document deleted",
+            "message": "Document {{documentNumber}} deleted successfully."
+          },
+          "error": {
+            "title": "Delete failed",
+            "message": "An error occurred while deleting the document."
+          }
+        }
+      },
       "table": {
         "header": {
           "type": "Type",
@@ -1264,6 +1296,18 @@
           "error": {
             "title": "Upload Failed",
             "message": "An error occurred while uploading the image."
+          }
+        },
+        "image-delete": {
+          "title": "Delete Image",
+          "message": "Are you sure you want to delete the document image?",
+          "success": {
+            "title": "Image Deleted",
+            "message": "The image has been deleted successfully."
+          },
+          "error": {
+            "title": "Delete Failed",
+            "message": "An error occurred while deleting the image."
           }
         }
       },

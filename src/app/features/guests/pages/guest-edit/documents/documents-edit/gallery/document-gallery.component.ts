@@ -6,6 +6,9 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ToastrService } from "ngx-toastr";
 import { DocumentImageGetModel } from "../../../../../models/document-image-get.model";
 import { DocumentImageService } from "../../../sevices/document-image.service";
+import { BsModalService } from 'ngx-bootstrap/modal';
+import {ConfirmModalComponent} from "../../../../../../../shared/components/confirm-modal/confirm-modal.component";
+
 
 @Component({
   selector: 'app-document-gallery',
@@ -15,6 +18,7 @@ import { DocumentImageService } from "../../../sevices/document-image.service";
     ColComponent,
     TranslatePipe
   ],
+  providers: [BsModalService],
   templateUrl: './document-gallery.component.html',
   styleUrl: './document-gallery.component.scss'
 })
@@ -32,7 +36,8 @@ export class DocumentGalleryComponent implements OnInit, OnDestroy {
     private readonly imageService: DocumentImageService,
     private readonly sanitizer: DomSanitizer,
     private readonly toastr: ToastrService,
-    private readonly translate: TranslateService
+    private readonly translate: TranslateService,
+    private readonly modalService: BsModalService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +90,6 @@ export class DocumentGalleryComponent implements OnInit, OnDestroy {
     formData.append('file', file);
 
     if (this.image) {
-      // First delete existing image
       this.subscriptions.push(
         this.imageService.deleteById(this.image.id).subscribe({
           next: () => {
@@ -120,6 +124,44 @@ export class DocumentGalleryComponent implements OnInit, OnDestroy {
           this.toastr.error(
             this.translate.instant('documents.edit.notifications.image-upload.error.message'),
             this.translate.instant('documents.edit.notifications.image-upload.error.title')
+          );
+        }
+      })
+    );
+  }
+
+  confirmImageDeletion() {
+    const initialState = {
+      title: this.translate.instant('documents.edit.notifications.image-delete.title'),
+      message: this.translate.instant('documents.edit.notifications.image-delete.message')
+    };
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.deleteImage();
+      })
+    );
+  }
+
+  private deleteImage() {
+    if (!this.image) return;
+
+    this.subscriptions.push(
+      this.imageService.deleteById(this.image.id).subscribe({
+        next: () => {
+          console.log('Image deleted successfully');
+          this.image = undefined;
+          this.imageUrl = undefined;
+          this.toastr.success(
+            this.translate.instant('documents.edit.notifications.image-delete.success.message'),
+            this.translate.instant('documents.edit.notifications.image-delete.success.title')
+          );
+          this.retrieveImage();
+        },
+        error: () => {
+          this.toastr.error(
+            this.translate.instant('documents.edit.notifications.image-delete.error.message'),
+            this.translate.instant('documents.edit.notifications.image-delete.error.title')
           );
         }
       })

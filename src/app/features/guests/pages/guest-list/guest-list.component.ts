@@ -20,7 +20,7 @@ import {
   cilSwapVertical,
   cilTrash
 } from '@coreui/icons';
-import { TranslatePipe } from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { GuestService } from '../../services/guest.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -35,6 +35,7 @@ import { EmptyDataComponent } from '../../../../shared/components/empty-data/emp
 import { ListContentComponent } from '../../../../shared/components/list-content/list-content.component';
 import { ToastrService } from 'ngx-toastr';
 import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
+import {ConfirmModalComponent} from "../../../../shared/components/confirm-modal/confirm-modal.component";
 
 @Component({
   selector: 'app-guest-list',
@@ -57,7 +58,7 @@ import { BadgeComponent } from '../../../../shared/components/badge/badge.compon
     TableDirective,
     EmptyDataComponent,
     BadgeComponent,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.scss',
@@ -88,7 +89,8 @@ export class GuestListComponent extends ListContentComponent {
     public override route: ActivatedRoute,
     public readonly guestService: GuestService,
     public readonly modalService: BsModalService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private translateService: TranslateService,
   ) {
     super(router, route);
   }
@@ -132,22 +134,32 @@ export class GuestListComponent extends ListContentComponent {
   }
 
   deleteGuest(guest: GuestItemGetModel): void {
-    if (confirm(`Are you sure you want to delete ${guest.firstName} ${guest.lastName}?`)) {
-      this.guestService.deleteGuestById(guest.id).subscribe({
-        next: () => {
-          this.refreshListContent();
-          this.toastr.success(
-            `Guest ${guest.firstName} ${guest.lastName} deleted successfully.`,
-            'Guest deleted'
-          );
-        },
-        error: () => {
-          this.toastr.error(
-            'An error occurred while deleting the guest.',
-            'Delete failed'
-          );
-        }
-      });
-    }
+    const initialState = {
+      title: this.translateService.instant('guests.list.delete-modal.title'),
+      message: this.translateService.instant('guests.list.delete-modal.message', { name: `${guest.firstName} ${guest.lastName}` })
+    };
+
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.guestService.deleteGuestById(guest.id).subscribe({
+          next: () => {
+            this.refreshListContent();
+            this.toastr.success(
+              this.translateService.instant('guests.list.notifications.delete.success.message', { name: `${guest.firstName} ${guest.lastName}` }),
+              this.translateService.instant('guests.list.notifications.delete.success.title')
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant('guests.list.notifications.delete.error.message'),
+              this.translateService.instant('guests.list.notifications.delete.error.title')
+            );
+          }
+        });
+      })
+    );
   }
+
 }
