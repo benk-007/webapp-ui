@@ -69,7 +69,7 @@
               </td>
               <td><span>{{ guest.contact?.email }}</span></td>
               <td>{{ guest.contact?.mobile ? guest.contact.mobile : ' - ' }}</td>
-              <td>{{ 'commons.countries.' + guest.address?.country | translate }}</td>
+              <td>{{ guest.address?.country != null ? (('commons.countries.' + guest.address.country) | translate)  : ' - ' }}</td>
               <td>
                 <app-badge>
                   <i class="bi bi-clock me-1"></i>

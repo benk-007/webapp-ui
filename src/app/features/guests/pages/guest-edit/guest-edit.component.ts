@@ -63,7 +63,7 @@ export class GuestEditComponent implements OnDestroy {
         country: [null]
       }),
       contact: this.fb.group({
-        email: [null, [Validators.required]],
+        email: [null, [Validators.required, Validators.email]],
         mobile: [null]
       }),
     });
@@ -78,10 +78,6 @@ export class GuestEditComponent implements OnDestroy {
         if (guestId) {
           this.guestId = guestId;
           this.retrieveGuest();
-
-          if (this.activatedRoute.snapshot.url.length === 0) {
-            this.router.navigate(['reservations'], { relativeTo: this.activatedRoute });
-          }
         }
       })
     );
@@ -131,16 +127,16 @@ export class GuestEditComponent implements OnDestroy {
         this.guestService.patchGuestById(payload, this.guestId).subscribe({
           next: () => {
             console.log('Guest updated successfully.');
-            this.toastrService.success(
-                this.translateService.instant('guests.edit.notifications.success.message'),
-                this.translateService.instant('guests.edit.notifications.success.title')
+            this.toastrService.info(
+                this.translateService.instant('guests.edit-guest.notifications.info.message'),
+                this.translateService.instant('guests.edit-guest.notifications.info.title')
             );
           },
           error: (err) => {
             console.error('Failed to update guest:', err);
             this.toastrService.error(
-                this.translateService.instant('guests.edit.notifications.error.message'),
-                this.translateService.instant('guests.edit.notifications.error.title')
+                this.translateService.instant('guests.edit-guest.notifications.error.message'),
+                this.translateService.instant('guests.edit-guest.notifications.error.title')
             );
           }
         })

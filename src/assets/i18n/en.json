@@ -1,5 +1,9 @@
 {
   "commons": {
+    "boolean": {
+      "true" : "yes",
+      "false": "no"
+    },
     "errors": {
       "required": "This field is required",
       "email": "Enter a valid email address",
@@ -32,7 +36,8 @@
     },
     "snippets": {
       "audit": {
-        "created-by": "Created by"
+        "created-by": "Created by",
+        "by": "By"
       },
       "no-result": "No results match your search. Please try adjusting your keywords or filters.",
       "loading": "Loading"
@@ -1163,9 +1168,9 @@
         }
       },
       "notifications": {
-        "success": {
+        "info": {
           "title": "Guest updated",
-          "message": "Guest :name has been successfully updated"
+          "message": "Guest has been successfully updated"
         },
         "error": {
           "title": "Guest update failed",
@@ -1173,5 +1178,97 @@
         }
       }
     }
+  },
+  "documents": {
+    "list": {
+      "empty-data": "No documents found.",
+      "cta": {
+        "add-btn": "+ Add document"
+      },
+      "table": {
+        "header": {
+          "type": "Type",
+          "documentNumber": "Document Number",
+          "expirationDate": "Expiration Date",
+          "hasImage": "Has Image",
+          "created-on": "Created On",
+          "actions": "Actions"
+        }
+      }
+    },
+    "create": {
+      "title": "Create Document",
+      "section": {
+        "document": "Document Information"
+      },
+      "form": {
+        "type-input": {
+          "label": "Document Type"
+        },
+        "documentNumber-input": {
+          "label": "Document Number"
+        },
+        "expirationDate-input": {
+          "label": "Expiration Date"
+        },
+        "documentImage-input": {
+          "label": "Document Image"
+        }
+      },
+      "notifications": {
+        "success": {
+          "title": "Document Created",
+          "message": "The document has been successfully created."
+        },
+        "error": {
+          "title": "Creation Failed",
+          "message": "An error occurred while creating the document."
+        }
+      }
+    },
+    "edit": {
+      "title": "Edit Document",
+      "section": {
+        "document": "Document Information",
+        "image": "Document Image"
+      },
+      "form": {
+        "type-input": {
+          "label": "Document Type"
+        },
+        "documentNumber-input": {
+          "label": "Document Number"
+        },
+        "expirationDate-input": {
+          "label": "Expiration Date"
+        }
+      },
+      "gallery": {
+        "upload-btn": "Upload Document Image",
+        "replace-btn": "Replace Image"
+      },
+      "notifications": {
+        "info": {
+          "title": "Document Updated",
+          "message": "The document has been successfully updated."
+        },
+        "error": {
+          "title": "Update Failed",
+          "message": "An error occurred while updating the document."
+        },
+        "image-upload": {
+          "success": {
+            "title": "Image Uploaded",
+            "message": "The image has been uploaded successfully."
+          },
+          "error": {
+            "title": "Upload Failed",
+            "message": "An error occurred while uploading the image."
+          }
+        }
+      },
+      "load-error": "An error occurred while loading document data."
+    }
   }
+
 }

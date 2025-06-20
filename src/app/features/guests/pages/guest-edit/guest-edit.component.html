@@ -39,7 +39,7 @@
         </c-col>
 
         <c-col [md]="4" sm="12" class="mb-3">
-          <label cLabel class="required me-2" for="birthDate">
+          <label cLabel for="birthDate">
             {{ 'guests.edit-guest.form.birthDate.label' | translate }}
           </label>
           <input cFormControl formControlName="birthDate" id="birthDate" name="birthDate"
@@ -105,7 +105,7 @@
 
                 <c-row>
                   <c-col md="12" class="mb-3">
-                    <label cLabel class="required me-2" for="mobile">
+                    <label cLabel for="mobile">
                       {{ 'guests.edit-guest.form.contact.mobile.label' | translate }}
                     </label>
                     <ngx-intl-tel-input
@@ -132,10 +132,21 @@
 
                 <c-row >
                   <c-col md="12" class="mb-3">
-                    <label cLabel for="email">{{ 'guests.edit-guest.form.contact.email.label' | translate }}</label>
+                    <label cLabel class="required me-2" for="email">
+                      {{ 'guests.edit-guest.form.contact.email.label' | translate }}
+                    </label>
                     <input cFormControl formControlName="email" id="email" name="email"
                            [placeholder]="'guests.edit-guest.form.contact.email.placeholder' | translate" type="text" />
+
+                    @if (((guestForm.get('contact.email')?.touched || guestForm.get('contact.email')?.dirty))) {
+                      @if (guestForm.get('contact.email')?.hasError('required')) {
+                        <c-form-feedback [valid]="false">
+                          {{ 'commons.errors.required' | translate }}
+                        </c-form-feedback>
+                      }
+                    }
                   </c-col>
+
                 </c-row>
               </div>
           </c-col>
@@ -146,9 +157,12 @@
       <!-- Submit button -->
       <c-row class="m-3">
         <c-col [md]="12" class="d-flex justify-content-end">
-          <button cButton type="submit" size="sm">{{ 'commons.form.buttons.update' | translate }}</button>
+          <button cButton type="submit" size="sm" [disabled]="guestForm.invalid">
+            {{ 'commons.form.buttons.update' | translate }}
+          </button>
         </c-col>
       </c-row>
+
 
     </form>
   </c-col>
@@ -156,7 +170,7 @@
 
 
 <!-- Tabs -->
-<ul class="nav nav-underline mb-4">
+<ul class="nav nav-underline mb-4 mt-4">
   <li class="nav-item" [tooltip]="'guests.edit-guest.tabs.reservations.hint'|translate" placement="auto">
     <a class="nav-link" routerLinkActive="active" routerLink="reservations">
       {{ 'guests.edit-guest.tabs.reservations.title'|translate }}
