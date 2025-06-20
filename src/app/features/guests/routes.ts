@@ -22,10 +22,7 @@ export const routes: Routes = [
       },
       {
         path: ':id',
-        loadComponent: () => import('./pages/guest-edit/guest-edit.component').then(m => m.GuestEditComponent),
-        data: {
-          title: 'Edit Guest'
-        }
+        loadChildren: () => import('./pages/guest-edit/routes').then((m) => m.routes)
       }
     ]
   }

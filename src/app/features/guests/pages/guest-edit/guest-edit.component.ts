@@ -7,7 +7,7 @@ import {
   FormFeedbackComponent, FormLabelDirective, RowComponent, InputGroupComponent, InputGroupTextDirective
 } from '@coreui/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { GuestService } from '../../services/guest.service';
@@ -27,7 +27,7 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
     FormFeedbackComponent, FormLabelDirective, FormsModule,
     ReactiveFormsModule, TranslatePipe, CountrySelectComponent,
     NgxIntlTelInputModule,
-    ButtonDirective, RouterOutlet, TooltipDirective, RouterLink
+    ButtonDirective, RouterOutlet, TooltipDirective, RouterLink, RouterLinkActive
   ],
   templateUrl: './guest-edit.component.html',
   styleUrl: './guest-edit.component.scss'
