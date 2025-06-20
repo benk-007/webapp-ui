@@ -7,7 +7,7 @@ import {
   FormFeedbackComponent, FormLabelDirective, RowComponent, InputGroupComponent, InputGroupTextDirective
 } from '@coreui/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import {ActivatedRoute, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { GuestService } from '../../services/guest.service';
@@ -27,7 +27,7 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
     FormFeedbackComponent, FormLabelDirective, FormsModule,
     ReactiveFormsModule, TranslatePipe, CountrySelectComponent,
     NgxIntlTelInputModule,
-    ButtonDirective, RouterOutlet, TooltipDirective
+    ButtonDirective, RouterOutlet, TooltipDirective, RouterLink
   ],
   templateUrl: './guest-edit.component.html',
   styleUrl: './guest-edit.component.scss'
@@ -48,7 +48,8 @@ export class GuestEditComponent implements OnDestroy {
     private readonly guestService: GuestService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly toastrService: ToastrService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly router: Router
   ) {
     this.guestForm = this.fb.group({
       firstName: [null, [Validators.required, noNumbersValidator()]],
@@ -77,6 +78,10 @@ export class GuestEditComponent implements OnDestroy {
         if (guestId) {
           this.guestId = guestId;
           this.retrieveGuest();
+
+          if (this.activatedRoute.snapshot.url.length === 0) {
+            this.router.navigate(['reservations'], { relativeTo: this.activatedRoute });
+          }
         }
       })
     );
@@ -112,27 +117,36 @@ export class GuestEditComponent implements OnDestroy {
       return;
     }
 
-    const patchPayload: GuestItemPatchModel = this.guestForm.value;
+    const payload: GuestItemPatchModel = {
+      ...this.guestForm.value,
+      contact: {
+        email: this.guestForm.value.contact.email,
+        mobile: this.guestForm.value.contact.mobile?.e164Number
+      }
+    };
+
+    console.log('PATCH Payload being sent:', payload);
 
     this.subscriptions.push(
-      this.guestService.patchGuestById(patchPayload, this.guestId).subscribe({
-        next: () => {
-          console.log('Guest updated successfully.');
-          this.toastrService.success(
-            this.translateService.instant('guests.edit.notifications.success.message'),
-            this.translateService.instant('guests.edit.notifications.success.title')
-          );
-        },
-        error: (err) => {
-          console.error('Failed to update guest:', err);
-          this.toastrService.error(
-            this.translateService.instant('guests.edit.notifications.error.message'),
-            this.translateService.instant('guests.edit.notifications.error.title')
-          );
-        }
-      })
+        this.guestService.patchGuestById(payload, this.guestId).subscribe({
+          next: () => {
+            console.log('Guest updated successfully.');
+            this.toastrService.success(
+                this.translateService.instant('guests.edit.notifications.success.message'),
+                this.translateService.instant('guests.edit.notifications.success.title')
+            );
+          },
+          error: (err) => {
+            console.error('Failed to update guest:', err);
+            this.toastrService.error(
+                this.translateService.instant('guests.edit.notifications.error.message'),
+                this.translateService.instant('guests.edit.notifications.error.title')
+            );
+          }
+        })
     );
   }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());

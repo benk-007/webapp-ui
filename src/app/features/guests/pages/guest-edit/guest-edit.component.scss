@@ -1,0 +1,30 @@
+@use "../../../../../scss/variables" as vars;
+
+ul.nav.nav-underline {
+  li.nav-item {
+    margin-bottom: -2px;
+    border-bottom: 2px;
+    a{
+      padding:8px;
+      color: vars.$gray !important;
+      &.active{
+        color: vars.$info !important;
+      }
+    }
+
+
+  }
+}
+
+/*.nav-underline-border .nav-link.active, .nav-underline-border .show > .nav-link {
+  font-weight: 700;
+  color: var(--cui-nav-underline-border-link-active-color);
+  border-bottom-color: currentcolor;
+}
+
+
+.nav-underline-border .nav-link {
+  padding: var(--cui-nav-underline-border-link-padding-y) var(--cui-nav-underline-border-link-padding-x);
+  margin-bottom: calc(-1 * var(--cui-nav-underline-border-border-width));
+  border-bottom: var(--cui-nav-underline-border-border-width) solid transparent;
+}*/

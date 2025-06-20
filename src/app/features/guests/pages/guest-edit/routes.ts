@@ -5,6 +5,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./guest-edit.component').then((m) => m.GuestEditComponent),
+    data: { title: 'Edit Guest' },
     children: [
       {
         path: '',

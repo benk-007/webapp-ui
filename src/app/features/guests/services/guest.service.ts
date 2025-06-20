@@ -90,9 +90,6 @@ export class GuestService {
     );
   }
 
-
-
-
   postGuest(formData: FormData) {
     return this.httpClient.post(environment.apiBaseUrl.concat(environment.guestList), formData);
   }
