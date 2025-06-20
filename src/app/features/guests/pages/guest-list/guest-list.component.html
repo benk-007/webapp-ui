@@ -94,7 +94,8 @@
 
   } @else {
     @if (!isSearchActive) {
-      No data
+      <app-empty-data imageSrc="assets/images/animations/no-guests.gif" [message]="'guests.list.empty-data'|translate">
+      </app-empty-data>
     } @else {
       <app-empty-data imageSrc="assets/images/animations/no-result.gif"></app-empty-data>
     }

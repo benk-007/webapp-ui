@@ -1005,7 +1005,8 @@
           "created-on": "Created on",
           "actions": "Actions"
         }
-      }
+      },
+      "empty-data": "Time to bring some life to your <span class=\"text-primary xstay\">xStay</span> account. Add your first guest now!"
     },
     "create": {
       "title": "Add guest",
