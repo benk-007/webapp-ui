@@ -89,18 +89,20 @@ export class DocumentsComponent extends ListContentComponent {
   override ngOnInit(): void {
     super.ngOnInit();
     this.size = 10;
+    this.subscriptions.push(
+      this.route.parent!.paramMap.subscribe(paramMap => {
+        console.log('your paramMap', paramMap);
+        const id = paramMap.get('id');
+        if (id) {
+          this.guestId = id;
+        }
+      })
+    );
+
     this.subscribeToQueryParam();
 
 
-    this.subscriptions.push(
-        this.route.parent!.paramMap.subscribe(paramMap => {
-          const id = paramMap.get('id');
-          if (id) {
-            this.guestId = id;
-            this.refreshListContent();
-          }
-        })
-    );
+
   }
 
   override retrieveListContent(params: any) {
