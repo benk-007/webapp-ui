@@ -3,7 +3,7 @@
     <h1 class="page-title mb-0">{{ 'guests.list.title' | translate }}</h1>
   </c-col>
   <c-col [md]="6" class="d-flex justify-content-end">
-    <button cButton size="sm" color="secondary" (click)="openGuestCuModal()">
+    <button cButton size="sm" color="secondary" (click)="openGuestCreateModal()">
       {{ 'guests.list.cta.add-btn' | translate }}
     </button>
   </c-col>
@@ -69,7 +69,7 @@
               </td>
               <td><span>{{ guest.contact?.email }}</span></td>
               <td>{{ guest.contact?.mobile ? guest.contact.mobile : ' - ' }}</td>
-              <td>{{ 'commons.countries.' + guest.address?.country | translate }}</td>
+              <td>{{ guest.address?.country != null ? (('commons.countries.' + guest.address.country) | translate)  : ' - ' }}</td>
               <td>
                 <app-badge>
                   <i class="bi bi-clock me-1"></i>
@@ -78,7 +78,7 @@
               </td>
               <td>
                   <!-- Edit button -->
-                  <button cButton size="sm" color="primary" class="btn-light" (click)="openGuestCuModal(guest)">
+                  <button cButton size="sm" color="primary" class="btn-light" [routerLink]="['/guests/', guest.id]">
                     <svg [cIcon]="icons.cilPen" size="sm"></svg>
                   </button>
                   <!-- Delete button -->

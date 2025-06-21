@@ -9,5 +9,4 @@ export interface GuestItemPatchModel {
   birthDate?: string;
   address?: AddressModel;
   contact?: ContactModel;
-  idDocuments?: DocumentModel[];
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuestCuModalComponent } from './guest-cu-modal.component';
+import { GalleryComponent } from './document-gallery.component';
 
-describe('GuestCuModalComponent', () => {
-  let component: GuestCuModalComponent;
-  let fixture: ComponentFixture<GuestCuModalComponent>;
+describe('GalleryComponent', () => {
+  let component: GalleryComponent;
+  let fixture: ComponentFixture<GalleryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GuestCuModalComponent]
+      imports: [GalleryComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GuestCuModalComponent);
+    fixture = TestBed.createComponent(GalleryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

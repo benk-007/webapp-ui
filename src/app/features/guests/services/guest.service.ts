@@ -84,9 +84,14 @@ export class GuestService {
     return of(mockData); // simulates HTTP call
   }*/
 
+  getGuestById(guestId: string): Observable<GuestItemGetModel> {
+    return this.httpClient.get<GuestItemGetModel>(
+      environment.apiBaseUrl.concat(environment.guestById).replace(':guestId', guestId)
+    );
+  }
 
-  postGuest(payload: GuestItemPostModel): Observable<GuestItemGetModel> {
-    return this.httpClient.post<GuestItemGetModel>(environment.apiBaseUrl.concat(environment.guestList), payload);
+  postGuest(formData: FormData) {
+    return this.httpClient.post(environment.apiBaseUrl.concat(environment.guestList), formData);
   }
 
   patchGuestById(payload: GuestItemPatchModel, guestId: string): Observable<GuestItemGetModel> {
@@ -101,4 +106,6 @@ export class GuestService {
       environment.apiBaseUrl.concat(environment.guestById).replace(':guestId', id)
     );
   }
+
+
 }
