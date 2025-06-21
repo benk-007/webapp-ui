@@ -26,6 +26,7 @@ import {BsModalService} from "ngx-bootstrap/modal";
 import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
 import {TooltipDirective} from "ngx-bootstrap/tooltip";
 import {EmptyDataComponent} from "../../../../../shared/components/empty-data/empty-data.component";
+import {PhoneFormatPipe} from "../../../../../shared/pipes/phone-format.pipe";
 
 @Component({
   selector: 'app-user-list',
@@ -48,7 +49,8 @@ import {EmptyDataComponent} from "../../../../../shared/components/empty-data/em
     AuditNamePipe,
     TooltipDirective,
     EmptyDataComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    PhoneFormatPipe
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',

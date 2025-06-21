@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { DocumentTypeEnum } from '../../../../models/document-type.enum';
 import { DocumentItemGetModel } from '../../../../models/document-item-get.model';
-import { DocumentService } from '../../sevices/document.service';
+import { DocumentService } from '../../../../services/document.service';
 
 import {
   NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective

@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { DocumentTypeEnum } from '../../../../models/document-type.enum';
-import { DocumentService } from '../../sevices/document.service';
+import { DocumentService } from '../../../../services/document.service';
 import {
   RowComponent, ColComponent, FormControlDirective, FormDirective, FormFeedbackComponent,
   FormLabelDirective, ButtonDirective

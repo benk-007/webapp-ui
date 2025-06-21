@@ -18,6 +18,7 @@ import { NgxIntlTelInputModule, CountryISO, SearchCountryField } from 'ngx-intl-
 import { noNumbersValidator } from '../../../../shared/validators/no-number.validator';
 import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
 import {TooltipDirective} from "ngx-bootstrap/tooltip";
+import {TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: 'app-guest-edit',
@@ -27,7 +28,7 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
     FormFeedbackComponent, FormLabelDirective, FormsModule,
     ReactiveFormsModule, TranslatePipe, CountrySelectComponent,
     NgxIntlTelInputModule,
-    ButtonDirective, RouterOutlet, TooltipDirective, RouterLink, RouterLinkActive
+    ButtonDirective, RouterOutlet, TooltipDirective, RouterLink, RouterLinkActive, TitleCasePipe
   ],
   templateUrl: './guest-edit.component.html',
   styleUrl: './guest-edit.component.scss'

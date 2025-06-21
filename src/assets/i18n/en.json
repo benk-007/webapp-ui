@@ -1,7 +1,7 @@
 {
   "commons": {
     "boolean": {
-      "true" : "yes",
+      "true": "yes",
       "false": "no"
     },
     "errors": {
@@ -1021,10 +1021,15 @@
         "header": {
           "fullname": "Full name",
           "email": "Email",
+          "identity-document": "Identity Document",
           "telephone": "Telephone",
           "country": "Country",
           "created-on": "Created on",
           "actions": "Actions"
+        },
+        "body": {
+          "provided": "Provided",
+          "not-provided": "Not provided"
         }
       },
       "empty-data": "Time to bring some life to your <span class=\"text-primary xstay\">xStay</span> account. Add your first guest now!"
@@ -1123,6 +1128,7 @@
       }
     },
     "edit-guest": {
+      "title": "Edit Guest:",
       "default-title": "Edit Guest",
       "form": {
         "general": {
@@ -1314,5 +1320,4 @@
       "load-error": "An error occurred while loading document data."
     }
   }
-
 }

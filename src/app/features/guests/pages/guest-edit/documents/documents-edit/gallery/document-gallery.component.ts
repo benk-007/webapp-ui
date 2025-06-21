@@ -5,7 +5,7 @@ import { Subscription } from "rxjs";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ToastrService } from "ngx-toastr";
 import { DocumentImageGetModel } from "../../../../../models/document-image-get.model";
-import { DocumentImageService } from "../../../sevices/document-image.service";
+import { DocumentImageService } from "../../../../../services/document-image.service";
 import { BsModalService } from 'ngx-bootstrap/modal';
 import {ConfirmModalComponent} from "../../../../../../../shared/components/confirm-modal/confirm-modal.component";
 

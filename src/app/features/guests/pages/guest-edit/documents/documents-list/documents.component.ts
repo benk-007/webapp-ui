@@ -28,11 +28,11 @@ import { ListContentComponent } from '../../../../../../shared/components/list-c
 import { DocumentItemGetModel } from '../../../../models/document-item-get.model';
 
 import { DatePipe } from '@angular/common';
-import {DocumentService} from "../../sevices/document.service";
+import {DocumentService} from "../../../../services/document.service";
 import {TableControlComponent} from "../../../../../../shared/components/table-control/table-control.component";
 import {AuditNamePipe} from "../../../../../../shared/pipes/audit-name.pipe";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
-import {DocumentImageService} from "../../sevices/document-image.service";
+import {DocumentImageService} from "../../../../services/document-image.service";
 import {DocumentCreateModalComponent} from "../documents-create-modal/documents-create-modal.component";
 import {ConfirmModalComponent} from "../../../../../../shared/components/confirm-modal/confirm-modal.component";
 
@@ -94,15 +94,7 @@ export class DocumentsComponent extends ListContentComponent {
     this.subscribeToQueryParam();
 
 
-    this.subscriptions.push(
-        this.route.parent!.paramMap.subscribe(paramMap => {
-          const id = paramMap.get('id');
-          if (id) {
-            this.guestId = id;
-            this.refreshListContent();
-          }
-        })
-    );
+
   }
 
   override retrieveListContent(params: any) {

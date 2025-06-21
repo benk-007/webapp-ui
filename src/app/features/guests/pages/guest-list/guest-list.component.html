@@ -42,9 +42,9 @@
         <tr>
           <th>{{ 'guests.list.table.header.fullname' | translate }}</th>
           <th>{{ 'guests.list.table.header.email' | translate }}</th>
+          <th>{{ 'guests.list.table.header.identity-document' | translate }}</th>
           <th>{{ 'guests.list.table.header.telephone' | translate }}</th>
           <th>{{ 'guests.list.table.header.country' | translate }}</th>
-          <th>{{ 'guests.list.table.header.created-on' | translate }}</th>
           <th>{{ 'guests.list.table.header.actions' | translate }}</th>
         </tr>
         </thead>
@@ -68,23 +68,23 @@
                 </div>
               </td>
               <td><span>{{ guest.contact?.email }}</span></td>
-              <td>{{ guest.contact?.mobile ? guest.contact.mobile : ' - ' }}</td>
-              <td>{{ guest.address?.country != null ? (('commons.countries.' + guest.address.country) | translate)  : ' - ' }}</td>
               <td>
-                <app-badge>
-                  <i class="bi bi-clock me-1"></i>
-                  {{ guest.audit.createdAt | date: 'mediumDate' }}
+                <app-badge [color]="guest.withIdentityDocument?'primary': 'danger'">
+                  <i class="bi bi-person-vcard-fill me-2"></i>
+                  {{ (guest.withIdentityDocument ? 'guests.list.table.body.provided' : 'guests.list.table.body.not-provided') | translate }}
                 </app-badge>
               </td>
+              <td>{{ guest.contact?.mobile ? guest.contact.mobile : ' - ' }}</td>
+              <td>{{ guest.address?.country != null ? (('commons.countries.' + guest.address.country) | translate) : ' - ' }}</td>
               <td>
-                  <!-- Edit button -->
-                  <button cButton size="sm" color="primary" class="btn-light" [routerLink]="['/guests/', guest.id]">
-                    <svg [cIcon]="icons.cilPen" size="sm"></svg>
-                  </button>
-                  <!-- Delete button -->
-                  <button cButton size="sm" color="danger" class="btn-light" (click)="deleteGuest(guest)">
-                    <svg [cIcon]="icons.cilTrash" size="sm"></svg>
-                  </button>
+                <!-- Edit button -->
+                <button cButton size="sm" color="primary" class="btn-light me-2" [routerLink]="['/guests/', guest.id]">
+                  <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                </button>
+                <!-- Delete button -->
+                <button cButton size="sm" color="danger" class="btn-light" (click)="deleteGuest(guest)">
+                  <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                </button>
               </td>
             </tr>
           }

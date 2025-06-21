@@ -1,13 +1,4 @@
-<c-row class="page-title mb-3">
-  <c-col [md]="6" class="d-flex align-items-center">
-    <h1 class="page-title mb-0">{{ 'settings.user-settings.list-users.title'|translate }}</h1>
-  </c-col>
-  <c-col [md]="6" class="d-flex justify-content-end">
-    <button cButton size="sm" color="secondary"
-            (click)="openUserCuModal()">{{ 'settings.user-settings.list-users.cta.add-btn'|translate }}
-    </button>
-  </c-col>
-</c-row>
+
 
 <c-row class="mb-3">
   <c-col [md]="2">
@@ -29,7 +20,7 @@
   </c-row>
   <c-row class="d-flex justify-content-center mt-1">
     <c-col [md]="4" class="d-flex justify-content-center text-center">
-      {{'commons.snippets.loading'|translate}}
+      {{ 'commons.snippets.loading'|translate }}
     </c-col>
   </c-row>
 } @else {
@@ -87,7 +78,7 @@
                   }
                 </td>
                 <td><span>{{ user.email }}</span></td>
-                <td>{{ user.mobile ? user.mobile : ' - ' }}</td>
+                <td>{{ user.mobile ? (user.mobile|phoneFormat) : ' - ' }}</td>
                 <td>
                   <app-badge>
                     <i class="bi bi-clock me-1"></i>

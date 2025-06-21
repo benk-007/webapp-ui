@@ -1,17 +1,15 @@
-import { Routes } from '@angular/router';
-import {DocumentsComponent} from "./documents/documents-list/documents.component";
-import {DocumentsEditComponent} from "./documents/documents-edit/documents-edit.component";
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
       import('./guest-edit.component').then((m) => m.GuestEditComponent),
-    data: { title: 'Edit Guest' },
+    data: {title: 'Edit Guest'},
     children: [
       {
         path: '',
-        redirectTo: 'reservations',
+        redirectTo: 'identity-documents',
         pathMatch: 'full',
       },
       {
@@ -25,27 +23,14 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'documents',
+        path: 'identity-documents',
         loadComponent: () =>
-          import('./documents/documents-list/documents.component').then(
-            (m) => m.DocumentsComponent
+          import('./identity-document-list/identity-document-list.component').then(
+            (m) => m.IdentityDocumentListComponent
           ),
         data: {
           title: 'Documents',
         },
-      },
-      {
-        path: 'documents',
-        children: [
-          {
-            path: '',
-            component: DocumentsComponent
-          },
-          {
-            path: ':documentId',
-            component: DocumentsEditComponent
-          }
-        ]
       }
     ],
   },
