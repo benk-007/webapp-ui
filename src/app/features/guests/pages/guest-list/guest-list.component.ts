@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
   AvatarComponent,
   ButtonDirective,
@@ -10,7 +10,7 @@ import {
   SpinnerComponent,
   TableDirective
 } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+import {IconDirective} from '@coreui/icons-angular';
 import {
   cilClock,
   cilPen,
@@ -20,21 +20,20 @@ import {
   cilSwapVertical,
   cilTrash
 } from '@coreui/icons';
-import { TranslatePipe } from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import { GuestService } from '../../services/guest.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { GuestItemGetModel } from '../../models/guest-item-get.model';
-import { GuestCreateModalComponent } from '../guest-create-modal/guest-create-modal.component';
-import { DatePipe } from '@angular/common';
-import { TooltipDirective } from 'ngx-bootstrap/tooltip';
-import { TableControlComponent } from '../../../../shared/components/table-control/table-control.component';
-import { SelectableTableDirective } from '../../../../shared/directives/selectable-table.directive';
-import { AuditNamePipe } from '../../../../shared/pipes/audit-name.pipe';
-import { EmptyDataComponent } from '../../../../shared/components/empty-data/empty-data.component';
-import { ListContentComponent } from '../../../../shared/components/list-content/list-content.component';
-import { ToastrService } from 'ngx-toastr';
-import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
+import {GuestService} from '../../services/guest.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {GuestItemGetModel} from '../../models/guest-item-get.model';
+import {GuestCreateModalComponent} from '../guest-create-modal/guest-create-modal.component';
+import {DatePipe} from '@angular/common';
+import {TableControlComponent} from '../../../../shared/components/table-control/table-control.component';
+import {SelectableTableDirective} from '../../../../shared/directives/selectable-table.directive';
+import {AuditNamePipe} from '../../../../shared/pipes/audit-name.pipe';
+import {EmptyDataComponent} from '../../../../shared/components/empty-data/empty-data.component';
+import {ListContentComponent} from '../../../../shared/components/list-content/list-content.component';
+import {ToastrService} from 'ngx-toastr';
+import {BadgeComponent} from '../../../../shared/components/badge/badge.component';
 
 @Component({
   selector: 'app-guest-list',
@@ -111,9 +110,6 @@ export class GuestListComponent extends ListContentComponent {
         },
         error: (err: any) => {
           console.warn('Error retrieving guests:', err);
-          if (!this.firstCallDone) {
-            this.firstCallDone = true;
-          }
         }
       })
     );
