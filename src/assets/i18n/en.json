@@ -1,5 +1,9 @@
 {
   "commons": {
+    "boolean": {
+      "true" : "yes",
+      "false": "no"
+    },
     "errors": {
       "required": "This field is required",
       "email": "Enter a valid email address",
@@ -32,7 +36,8 @@
     },
     "snippets": {
       "audit": {
-        "created-by": "Created by"
+        "created-by": "Created by",
+        "by": "By"
       },
       "no-result": "No results match your search. Please try adjusting your keywords or filters.",
       "loading": "Loading"
@@ -996,6 +1001,22 @@
       "cta": {
         "add-btn": "+ Add guest"
       },
+      "delete-modal": {
+        "title": "Delete Guest",
+        "message": "Are you sure you want to delete {{name}}?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Guest deleted",
+            "message": "{{name}} has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion failed",
+            "message": "An error occurred while deleting the guest."
+          }
+        }
+      },
       "table": {
         "header": {
           "fullname": "Full name",
@@ -1041,6 +1062,15 @@
         "street2-input": {
           "label": "street2"
         },
+        "contact": {
+          "label": "Contact"
+        },
+        "document": {
+          "label": "Document"
+        },
+        "address": {
+          "label": "Address"
+        },
         "type-input": {
           "label": "Document type",
           "placeholder": "Select document type",
@@ -1059,6 +1089,9 @@
           "error": {
             "required": "Expiration date is required"
           }
+        },
+        "documentImage-input": {
+          "label": "Document File"
         },
         "idDocuments": {
           "add-button": "+ Add Document",
@@ -1080,7 +1113,7 @@
         "notifications": {
           "success": {
             "title": "Guest created",
-            "message": "Guest :name has been successfully created"
+            "message": "Guest has been successfully created"
           },
           "error": {
             "title": "Guest creation failed",
@@ -1089,23 +1122,197 @@
         }
       }
     },
-    "edit": {
-      "title": "Edit guest",
+    "edit-guest": {
+      "default-title": "Edit Guest",
       "form": {
-        "enabled-input": {
-          "label": "Enabled"
+        "general": {
+          "title": "General Information"
         },
-        "notifications": {
-          "success": {
-            "title": "Guest updated",
-            "message": "Guest :name has been successfully updated"
+        "firstName": {
+          "label": "First Name",
+          "placeholder": "Enter first name"
+        },
+        "lastName": {
+          "label": "Last Name",
+          "placeholder": "Enter last name"
+        },
+        "birthDate": {
+          "label": "Birth Date",
+          "placeholder": "Select birth date"
+        },
+        "address": {
+          "title": "Address",
+          "street1": {
+            "label": "Street 1",
+            "placeholder": "Enter street 1"
           },
-          "error": {
-            "title": "Guest update failed",
-            "message": "An error occurred while updating the guest. Please try again or contact the support team."
+          "street2": {
+            "label": "Street 2",
+            "placeholder": "Enter street 2"
+          },
+          "postCode": {
+            "label": "Post Code",
+            "placeholder": "Enter post code"
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Enter city"
+          },
+          "country": {
+            "label": "Country"
           }
+        },
+        "contact": {
+          "title": "Contact",
+          "mobile": {
+            "label": "Mobile"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "Enter email"
+          }
+        }
+      },
+      "tabs": {
+        "reservations": {
+          "title": "Reservations",
+          "hint": "Manage reservations for this guest"
+        },
+        "documents": {
+          "title": "Documents",
+          "hint": "Manage identification documents"
+        }
+      },
+      "notifications": {
+        "info": {
+          "title": "Guest updated",
+          "message": "Guest has been successfully updated"
+        },
+        "error": {
+          "title": "Guest update failed",
+          "message": "An error occurred while updating the guest. Please try again or contact the support team."
         }
       }
     }
+  },
+  "documents": {
+    "list": {
+      "empty-data": "No documents found.",
+      "cta": {
+        "add-btn": "+ Add document"
+      },
+      "delete-modal": {
+        "title": "Delete Document",
+        "message": "Are you sure you want to delete document {{documentNumber}}?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Document deleted",
+            "message": "Document {{documentNumber}} deleted successfully."
+          },
+          "error": {
+            "title": "Delete failed",
+            "message": "An error occurred while deleting the document."
+          }
+        }
+      },
+      "table": {
+        "header": {
+          "type": "Type",
+          "documentNumber": "Document Number",
+          "expirationDate": "Expiration Date",
+          "hasImage": "Has Image",
+          "created-on": "Created On",
+          "actions": "Actions"
+        }
+      }
+    },
+    "create": {
+      "title": "Create Document",
+      "section": {
+        "document": "Document Information"
+      },
+      "form": {
+        "type-input": {
+          "label": "Document Type"
+        },
+        "documentNumber-input": {
+          "label": "Document Number"
+        },
+        "expirationDate-input": {
+          "label": "Expiration Date"
+        },
+        "documentImage-input": {
+          "label": "Document Image"
+        }
+      },
+      "notifications": {
+        "success": {
+          "title": "Document Created",
+          "message": "The document has been successfully created."
+        },
+        "error": {
+          "title": "Creation Failed",
+          "message": "An error occurred while creating the document."
+        }
+      }
+    },
+    "edit": {
+      "title": "Edit Document",
+      "section": {
+        "document": "Document Information",
+        "image": "Document Image"
+      },
+      "form": {
+        "type-input": {
+          "label": "Document Type"
+        },
+        "documentNumber-input": {
+          "label": "Document Number"
+        },
+        "expirationDate-input": {
+          "label": "Expiration Date"
+        }
+      },
+      "gallery": {
+        "upload-btn": "Upload Document Image",
+        "replace-btn": "Replace Image"
+      },
+      "notifications": {
+        "info": {
+          "title": "Document Updated",
+          "message": "The document has been successfully updated."
+        },
+        "error": {
+          "title": "Update Failed",
+          "message": "An error occurred while updating the document."
+        },
+        "image-upload": {
+          "success": {
+            "title": "Image Uploaded",
+            "message": "The image has been uploaded successfully."
+          },
+          "error": {
+            "title": "Upload Failed",
+            "message": "An error occurred while uploading the image."
+          }
+        },
+        "image-delete": {
+          "title": "Delete Image",
+          "message": "Are you sure you want to delete the document image?",
+          "success": {
+            "title": "Image Deleted",
+            "message": "The image has been deleted successfully."
+          },
+          "error": {
+            "title": "Delete Failed",
+            "message": "An error occurred while deleting the image."
+          }
+        }
+      },
+      "load-error": "An error occurred while loading document data."
+    }
   }
+
 }

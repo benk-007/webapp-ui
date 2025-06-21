@@ -20,12 +20,12 @@ import {
   cilSwapVertical,
   cilTrash
 } from '@coreui/icons';
-import { TranslatePipe } from '@ngx-translate/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { GuestService } from '../../services/guest.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GuestItemGetModel } from '../../models/guest-item-get.model';
-import { GuestCuModalComponent } from '../guest-cu-modal/guest-cu-modal.component';
+import { GuestCreateModalComponent } from '../guest-create-modal/guest-create-modal.component';
 import { DatePipe } from '@angular/common';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 import { TableControlComponent } from '../../../../shared/components/table-control/table-control.component';
@@ -34,7 +34,8 @@ import { AuditNamePipe } from '../../../../shared/pipes/audit-name.pipe';
 import { EmptyDataComponent } from '../../../../shared/components/empty-data/empty-data.component';
 import { ListContentComponent } from '../../../../shared/components/list-content/list-content.component';
 import { ToastrService } from 'ngx-toastr';
-import {BadgeComponent} from "../../../../shared/components/badge/badge.component";
+import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
+import {ConfirmModalComponent} from "../../../../shared/components/confirm-modal/confirm-modal.component";
 
 @Component({
   selector: 'app-guest-list',
@@ -56,7 +57,8 @@ import {BadgeComponent} from "../../../../shared/components/badge/badge.componen
     SelectableTableDirective,
     TableDirective,
     EmptyDataComponent,
-    BadgeComponent
+    BadgeComponent,
+    RouterLink,
   ],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.scss',
@@ -87,7 +89,8 @@ export class GuestListComponent extends ListContentComponent {
     public override route: ActivatedRoute,
     public readonly guestService: GuestService,
     public readonly modalService: BsModalService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private translateService: TranslateService,
   ) {
     super(router, route);
   }
@@ -118,36 +121,45 @@ export class GuestListComponent extends ListContentComponent {
     );
   }
 
-  openGuestCuModal(guest?: GuestItemGetModel) {
-    const guestCuModalRef = this.modalService.show(GuestCuModalComponent, {
-      initialState: guest ? { guestToEdit: guest } : {}
-    });
-
+  openGuestCreateModal() {
+    let initialState = {
+      class: 'modal-lg'
+    }
+    let guestCreateModalRef = this.modalService.show(GuestCreateModalComponent, initialState);
     this.subscriptions.push(
-      (guestCuModalRef.content as GuestCuModalComponent).actionConfirmed.subscribe(() => {
+      (guestCreateModalRef.content as GuestCreateModalComponent).actionConfirmed.subscribe(() => {
         this.refreshListContent();
       })
     );
   }
 
   deleteGuest(guest: GuestItemGetModel): void {
-    if (confirm(`Are you sure you want to delete ${guest.firstName} ${guest.lastName}?`)) {
-      this.guestService.deleteGuestById(guest.id).subscribe({
-        next: () => {
-          this.refreshListContent();
-          this.toastr.success(
-            `Guest ${guest.firstName} ${guest.lastName} deleted successfully.`,
-            'Guest deleted'
-          );
-        },
-        error: () => {
-          this.toastr.error(
-            'An error occurred while deleting the guest.',
-            'Delete failed'
-          );
-        }
-      });
-    }
-  }
-}
+    const initialState = {
+      title: this.translateService.instant('guests.list.delete-modal.title'),
+      message: this.translateService.instant('guests.list.delete-modal.message', { name: `${guest.firstName} ${guest.lastName}` })
+    };
 
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.guestService.deleteGuestById(guest.id).subscribe({
+          next: () => {
+            this.refreshListContent();
+            this.toastr.success(
+              this.translateService.instant('guests.list.notifications.delete.success.message', { name: `${guest.firstName} ${guest.lastName}` }),
+              this.translateService.instant('guests.list.notifications.delete.success.title')
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant('guests.list.notifications.delete.error.message'),
+              this.translateService.instant('guests.list.notifications.delete.error.title')
+            );
+          }
+        });
+      })
+    );
+  }
+
+}

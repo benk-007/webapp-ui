@@ -1,0 +1,102 @@
+<!-- Page title -->
+<c-row class="page-title mb-3">
+      <c-col [md]="4">
+        <c-input-group sizing="sm" class="search-input">
+      <span cInputGroupText>
+        <svg [cIcon]="icons.cilSearch"></svg>
+      </span>
+            <input id="searchBar" cFormControl (input)="triggerBasicSearch($event)"
+                   [placeholder]="'commons.form.search-input.placeholder' | translate"/>
+        </c-input-group>
+    </c-col>
+
+    <c-col [md]="8" class="d-flex justify-content-end">
+      <button cButton size="sm" color="secondary" (click)="openDocumentCreateModal()">
+        {{ 'documents.list.cta.add-btn' | translate }}
+      </button>
+    </c-col>
+</c-row>
+
+<app-table-control></app-table-control>
+
+@if (!firstCallDone) {
+    <c-row class="d-flex justify-content-center mt-5">
+        <c-spinner color="secondary"/>
+    </c-row>
+    <c-row class="d-flex justify-content-center mt-1">
+        <c-col [md]="4" class="d-flex justify-content-center text-center">
+            {{ 'commons.snippets.loading' | translate }}
+        </c-col>
+    </c-row>
+} @else {
+
+    @if (!isListEmpty) {
+
+        <div class="table-responsive">
+            <table cTable hover appSelectableTable [responsive]="true">
+                <thead>
+                <tr>
+                    <th>{{ 'documents.list.table.header.type' | translate }}</th>
+                    <th>{{ 'documents.list.table.header.documentNumber' | translate }}</th>
+                    <th>{{ 'documents.list.table.header.expirationDate' | translate }}</th>
+                    <th>{{ 'documents.list.table.header.hasImage' | translate }}</th>
+                    <th>{{ 'documents.list.table.header.created-on' | translate }}</th> <!-- NEW -->
+                    <th>{{ 'documents.list.table.header.actions' | translate }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    @for (doc of listContent; track doc.id) {
+                        <tr>
+                            <td>{{ 'guests.create.form.enums.documentType.' + doc.type | translate }}</td>
+                            <td>{{ doc.documentNumber }}</td>
+                            <td>{{ doc.expirationDate | date: 'mediumDate' }}</td>
+                            <td>
+                                @if (doc.hasImage === true) {
+                                    {{ 'commons.boolean.true' | translate }}
+                                } @else if (doc.hasImage === false) {
+                                    {{ 'commons.boolean.false' | translate }}
+                                } @else {
+                                    -
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                  <app-badge>
+                                    <i class="bi bi-clock me-1"></i>
+                                    {{ doc.audit.createdAt | date: 'mediumDate' }}
+                                  </app-badge>
+                                  <div class="small text-body-secondary text-nowrap">
+                                      <span>
+                                        {{ 'commons.snippets.audit.by' | translate }} {{ doc.audit.createdBy | auditName }}
+                                      </span>
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                              <!-- Edit button -->
+                              <button cButton size="sm" color="primary" class="btn-light"
+                                      [routerLink]="['/guests', guestId, 'documents', doc.id]">
+                                <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                              </button>
+
+                              <button cButton size="sm" color="danger" class="btn-light" (click)="deleteDocument(doc)">
+                                <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                              </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+    } @else {
+        @if (!isSearchActive) {
+            <app-empty-data imageSrc="assets/images/animations/no-documents.gif" [message]="'documents.list.empty-data'|translate">
+            </app-empty-data>
+        } @else {
+            <app-empty-data imageSrc="assets/images/animations/no-result.gif"></app-empty-data>
+        }
+    }
+}

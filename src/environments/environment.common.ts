@@ -41,4 +41,12 @@ export const commonProperties = {
   //guests
   guestList: GUEST_SERVICE + 'guests',
   guestById: GUEST_SERVICE + 'guests/:guestId',
+
+  //documents
+  idDocuments: GUEST_SERVICE + 'id-documents',
+
+  // id-document images
+  idDocumentImages: GUEST_SERVICE + 'images',
+  idDocumentImageById: GUEST_SERVICE + 'images/:imageId',
+
 }
