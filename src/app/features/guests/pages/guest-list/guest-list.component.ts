@@ -58,7 +58,7 @@ import {ConfirmModalComponent} from "../../../../shared/components/confirm-modal
     TableDirective,
     EmptyDataComponent,
     BadgeComponent,
-    RouterLink,
+    RouterLink
   ],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.scss',
@@ -113,9 +113,6 @@ export class GuestListComponent extends ListContentComponent {
         },
         error: (err: any) => {
           console.warn('Error retrieving guests:', err);
-          if (!this.firstCallDone) {
-            this.firstCallDone = true;
-          }
         }
       })
     );
@@ -161,5 +158,4 @@ export class GuestListComponent extends ListContentComponent {
       })
     );
   }
-
 }

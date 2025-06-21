@@ -28,6 +28,7 @@ import {CountrySelectComponent} from '../../../../shared/components/country-sele
 import {CommonModule} from '@angular/common';
 import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from "@ng-select/ng-select";
 import {DocumentTypeEnum} from "../../models/document-type.enum";
+import {documentConsistencyValidator} from "../../validators/document-consistency.validator";
 
 @Component({
   selector: 'app-guest-create-modal',
@@ -84,11 +85,11 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
       street2: [null],
       identityDocument: this.fb.group({
         type: [null],
-        documentNumber: [''],
-        expirationDate: [null]
+        documentNumber: [null],
+        expirationDate: [null],
+        documentImage: [null]
       }),
-      documentImage: [null]
-    }, {validators: this.documentConsistencyValidator()});
+    }, {validators: documentConsistencyValidator()});
   }
 
   get idDocumentGroup(): FormGroup {
@@ -96,9 +97,7 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.idDocumentGroup.valueChanges.subscribe(() => {
-      this.guestForm.updateValueAndValidity({onlySelf: true, emitEvent: false});
-    });
+
   }
 
   onImageSelected(event: any): void {
@@ -109,35 +108,10 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.imageFile = file;
-      this.guestForm.get('documentImage')?.setValue(file);
+      this.idDocumentGroup.get('documentImage')?.setValue(file);
 
-      this.guestForm.updateValueAndValidity({onlySelf: true, emitEvent: false});
+      this.idDocumentGroup.updateValueAndValidity({onlySelf: true, emitEvent: false});
     }
-  }
-
-  private documentConsistencyValidator(): ValidatorFn {
-    return (form: AbstractControl): ValidationErrors | null => {
-      const idDocument = form.get('identityDocument') as FormGroup;
-      const type = idDocument.get('type')?.value;
-      const number = idDocument.get('documentNumber')?.value;
-      const expiration = idDocument.get('expirationDate')?.value;
-      const image = this.imageFile;
-
-      const anyDocumentFieldFilled = type || number || expiration;
-      const documentIncomplete = (anyDocumentFieldFilled && (!type || !number || !expiration));
-
-      // Rule 1: once user starts filling any document field, all must be filled
-      if (documentIncomplete) {
-        return {documentIncomplete: true};
-      }
-
-      // Rule 2: if image is uploaded, document fields must be fully filled
-      if (image && (!type || !number || !expiration)) {
-        return {documentRequiredWithImage: true};
-      }
-
-      return null;
-    };
   }
 
   submit(): void {
@@ -171,8 +145,8 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
         street2: formValue.street2
       }
     };
-    if(formValue.identityDocument.documentNumber){
-      payload.identityDocument={
+    if (formValue.identityDocument.documentNumber) {
+      payload.identityDocument = {
         type: formValue.identityDocument.type,
         documentNumber: formValue.identityDocument.documentNumber,
         expirationDate: formValue.identityDocument.expirationDate
@@ -182,7 +156,7 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
 
-    const guestJsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    const guestJsonBlob = new Blob([JSON.stringify(payload)], {type: 'application/json'});
     formData.append('payload', guestJsonBlob);
 
     if (this.imageFile) {
@@ -223,5 +197,4 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  protected readonly FormGroup = FormGroup;
 }

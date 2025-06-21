@@ -98,9 +98,6 @@ export class UserListComponent extends ListContentComponent {
           },
           error: (err: any) => {
             console.warn('An error occurred when retrieving users list from API:', err);
-            if (!this.firstCallDone) {
-              this.firstCallDone = true;
-            }
           }
         })
     );
