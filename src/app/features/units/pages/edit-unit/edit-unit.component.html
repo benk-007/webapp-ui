@@ -14,9 +14,25 @@
     <a class="nav-link" routerLink="bedding-rooms"
        routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+  <!-- RATES DROPDOWN  -->
+  <li class="nav-item dropdown"
+      [tooltip]="'units.edit-unit.tabs.rates.hint'|translate"
+      placement="top"
+      (mouseenter)="openDropdown = true"
+      (mouseleave)="openDropdown = false"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: false }">
+
+    <a class="nav-link dropdown-toggle" role="button">
+      {{ 'units.edit-unit.tabs.rates.title'|translate }}
+    </a>
+
+    <ul class="dropdown-menu show" *ngIf="openDropdown">
+      <li><a class="dropdown-item" [routerLink]="['rates/table']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
+      <li><a class="dropdown-item" [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
+    </ul>
   </li>
+
 </ul>
 
 <router-outlet></router-outlet>
@@ -37,3 +53,4 @@
 
   </c-tabs-content>
 </c-tabs>-->
+
