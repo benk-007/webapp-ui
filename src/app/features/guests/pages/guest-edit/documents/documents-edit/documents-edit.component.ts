@@ -5,8 +5,8 @@ import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
 import { DocumentTypeEnum } from '../../../../models/document-type.enum';
-import { DocumentItemGetModel } from '../../../../models/document-item-get.model';
-import { DocumentService } from '../../../../services/document.service';
+import { IdentityDocumentItemGetModel } from '../../../../models/identity-document-item-get.model';
+import { IdentityDocumentService } from '../../../../services/identity-document.service';
 
 import {
   NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective
@@ -50,7 +50,7 @@ export class DocumentsEditComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly documentService: DocumentService,
+    private readonly documentService: IdentityDocumentService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly toastr: ToastrService,

@@ -9,15 +9,50 @@ import {
   cilSwapVertical,
   cilTrash
 } from "@coreui/icons";
-import {DocumentItemGetModel} from "../../../models/document-item-get.model";
+import {IdentityDocumentItemGetModel} from "../../../models/identity-document-item-get.model";
 import {ActivatedRoute, Router} from "@angular/router";
-import {DocumentService} from "../../../services/document.service";
+import {IdentityDocumentService} from "../../../services/identity-document.service";
 import {ToastrService} from "ngx-toastr";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
+import {
+  AvatarComponent,
+  ButtonDirective,
+  ColComponent,
+  FormControlDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  RowComponent,
+  SpinnerComponent,
+  TableDirective
+} from "@coreui/angular";
+import {IconDirective} from "@coreui/icons-angular";
+import {TableControlComponent} from "../../../../../shared/components/table-control/table-control.component";
+import {AuditNamePipe} from "../../../../../shared/pipes/audit-name.pipe";
+import {BadgeComponent} from "../../../../../shared/components/badge/badge.component";
+import {DatePipe, NgClass} from "@angular/common";
+import {EmptyDataComponent} from "../../../../../shared/components/empty-data/empty-data.component";
 
 @Component({
   selector: 'app-identity-document-list',
-  imports: [],
+  imports: [
+    ColComponent,
+    FormControlDirective,
+    IconDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    TranslatePipe,
+    ButtonDirective,
+    TableControlComponent,
+    AuditNamePipe,
+    BadgeComponent,
+    DatePipe,
+    EmptyDataComponent,
+    SpinnerComponent,
+    TableDirective,
+    AvatarComponent,
+    NgClass
+  ],
   templateUrl: './identity-document-list.component.html',
   styleUrl: './identity-document-list.component.scss'
 })
@@ -32,11 +67,11 @@ export class IdentityDocumentListComponent extends ListContentComponent {
     cilTrash
   };
   guestId!: string;
-  override listContent: DocumentItemGetModel[] = [];
+  override listContent: IdentityDocumentItemGetModel[] = [];
 
   constructor(public override router: Router,
               public override route: ActivatedRoute,
-              public readonly identityDocumentService: DocumentService,
+              public readonly identityDocumentService: IdentityDocumentService,
               private readonly toastr: ToastrService,
               private readonly translateService: TranslateService) {
     super(router, route);
@@ -56,4 +91,26 @@ export class IdentityDocumentListComponent extends ListContentComponent {
     );
   }
 
+  override retrieveListContent(params: any) {
+    super.retrieveListContent(params);
+    this.subscriptions.push(
+      this.identityDocumentService.getIdentityDocuments(this.guestId, this.page, this.size).subscribe({
+        next: (data) => {
+          console.log('Identity documents retrieved successfully. API response is:', data);
+          super.handleSuccessData(data);
+        },
+        error: (err) => {
+          console.warn('An error occurred when retrieving identity documents. API error is:', err);
+        }
+      })
+    );
+  }
+
+  confirmDeletion(identityDocument: IdentityDocumentItemGetModel) {
+
+  }
+
+  openIdentityDocumentCuModal(identityDocument?: IdentityDocumentItemGetModel) {
+
+  }
 }

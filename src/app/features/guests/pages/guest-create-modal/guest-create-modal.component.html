@@ -11,7 +11,7 @@
 
     <c-row>
       <!-- First Name -->
-      <c-col [md]="4" sm="12" class="mb-3">
+      <c-col [md]="6" sm="12" class="mb-3">
         <label cLabel class="required me-2" for="firstName">
           {{ 'guests.create.form.firstName-input.label' | translate }}
         </label>
@@ -24,7 +24,7 @@
       </c-col>
 
       <!-- Last Name -->
-      <c-col [md]="4" sm="12" class="mb-3">
+      <c-col [md]="6" sm="12" class="mb-3">
         <label cLabel class="required me-2" for="lastName">
           {{ 'guests.create.form.lastName-input.label' | translate }}
         </label>
@@ -37,7 +37,7 @@
       </c-col>
 
       <!-- Birth Date -->
-      <c-col [md]="4" sm="12" class="mb-3">
+      <c-col [md]="6" sm="12" class="mb-3">
         <label cLabel class="me-2" for="birthDate">
           {{ 'guests.create.form.birthDate-input.label' | translate }}
         </label>
@@ -146,8 +146,8 @@
         </c-col>
 
         <c-col md="12">
-          <c-row >
-            <c-col md="6" class="mb-3" >
+          <c-row>
+            <c-col md="6" class="mb-3">
               <label cLabel for="type">{{ 'guests.create.form.type-input.label' | translate }}</label>
 
               <ng-select id="type" appearance="outline" [searchable]="false" [clearable]="false"
@@ -161,9 +161,9 @@
               </ng-select>
             </c-col>
 
-            <c-col md="6" class="mb-3" >
-              <label cLabel for="documentNumber">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
-              <input id="documentNumber" cFormControl formControlName="documentNumber" type="text" class="form-control"/>
+            <c-col md="6" class="mb-3">
+              <label cLabel for="value">{{ 'guests.create.form.documentNumber-input.label' | translate }}</label>
+              <input id="value" cFormControl formControlName="value" type="text" class="form-control"/>
             </c-col>
           </c-row>
         </c-col>
@@ -171,8 +171,10 @@
         <c-col md="12">
           <c-row class="mb-3">
             <c-col [md]="6">
-              <label cLabel for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
-              <input id="expirationDate" cFormControl formControlName="expirationDate" type="date" class="form-control"/>
+              <label cLabel
+                     for="expirationDate">{{ 'guests.create.form.expirationDate-input.label' | translate }}</label>
+              <input id="expirationDate" cFormControl formControlName="expirationDate" type="date"
+                     class="form-control"/>
             </c-col>
 
             <c-col [md]="6">

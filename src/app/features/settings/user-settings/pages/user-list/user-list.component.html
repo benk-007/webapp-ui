@@ -1,4 +1,13 @@
-
+<c-row class="page-title mb-3">
+  <c-col [md]="6" class="d-flex align-items-center">
+    <h1 class="page-title mb-0">{{ 'settings.user-settings.list-users.title'|translate }}</h1>
+  </c-col>
+  <c-col [md]="6" class="d-flex justify-content-end">
+    <button cButton size="sm" color="secondary"
+            (click)="openUserCuModal()">{{ 'settings.user-settings.list-users.cta.add-btn'|translate }}
+    </button>
+  </c-col>
+</c-row>
 
 <c-row class="mb-3">
   <c-col [md]="2">
@@ -49,8 +58,8 @@
                     <c-avatar [size]="'md'" textColor="white" color="primary">{{ getNameInitials(user.fullName) }}
                     </c-avatar>
                     <div class="d-flex flex-column">
-                      <div><span class="me-1">
-                  {{ user.fullName }}</span>
+                      <div>
+                        <span class="me-1">{{ user.fullName }}</span>
                         @if (!user.enabled) {
                           <i class="bi bi-patch-plus-fill text-danger" [adaptivePosition]="true"
                              [tooltip]="'settings.user-settings.list-users.table.body.disabled-user'|translate"></i>

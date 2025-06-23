@@ -42,7 +42,6 @@
         <tr>
           <th>{{ 'guests.list.table.header.fullname' | translate }}</th>
           <th>{{ 'guests.list.table.header.email' | translate }}</th>
-          <th>{{ 'guests.list.table.header.identity-document' | translate }}</th>
           <th>{{ 'guests.list.table.header.telephone' | translate }}</th>
           <th>{{ 'guests.list.table.header.country' | translate }}</th>
           <th>{{ 'guests.list.table.header.actions' | translate }}</th>
@@ -54,10 +53,19 @@
               <td>
                 <div class="d-flex align-items-center gap-2">
                   <c-avatar [size]="'md'" textColor="white" color="primary">
+                    <span>
                     {{ guest.firstName[0] }}{{ guest.lastName[0] }}
+                    </span>
                   </c-avatar>
                   <div class="d-flex flex-column">
-                    <div><span class="me-1">{{ guest.firstName }} {{ guest.lastName }}</span></div>
+                    <div><span class="me-1">{{ guest.firstName }} {{ guest.lastName }}</span>
+                      @if (!guest.withIdentityDocument) {
+                        <i class="bi bi-patch-plus-fill text-danger" [adaptivePosition]="true"
+                           [tooltip]="'guests.list.table.body.not-provided'|translate"></i>
+                      } @else {
+                        <i class="bi bi-patch-plus-fill text-success" [adaptivePosition]="true"
+                           [tooltip]="'guests.list.table.body.provided'|translate"></i>
+                      }</div>
                     <div class="small text-body-secondary text-nowrap">
                     <span>
                       {{ 'commons.snippets.audit.created-by' | translate }}
@@ -68,12 +76,6 @@
                 </div>
               </td>
               <td><span>{{ guest.contact?.email }}</span></td>
-              <td>
-                <app-badge [color]="guest.withIdentityDocument?'primary': 'danger'">
-                  <i class="bi bi-person-vcard-fill me-2"></i>
-                  {{ (guest.withIdentityDocument ? 'guests.list.table.body.provided' : 'guests.list.table.body.not-provided') | translate }}
-                </app-badge>
-              </td>
               <td>{{ guest.contact?.mobile ? guest.contact.mobile : ' - ' }}</td>
               <td>{{ guest.address?.country != null ? (('commons.countries.' + guest.address.country) | translate) : ' - ' }}</td>
               <td>

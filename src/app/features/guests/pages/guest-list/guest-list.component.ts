@@ -58,7 +58,8 @@ import {ConfirmModalComponent} from "../../../../shared/components/confirm-modal
     TableDirective,
     EmptyDataComponent,
     BadgeComponent,
-    RouterLink
+    RouterLink,
+    TooltipDirective
   ],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.scss',

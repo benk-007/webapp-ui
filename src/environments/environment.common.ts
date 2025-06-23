@@ -1,6 +1,6 @@
 export const UAA_SERVICE = 'authMgtApi/';
 export const UNIT_SERVICE = 'unitMgtApi/';
-export const GUEST_SERVICE ='guestMgtApi/'
+export const GUEST_SERVICE = 'guestMgtApi/'
 
 export const commonProperties = {
   //authentication
@@ -43,7 +43,8 @@ export const commonProperties = {
   guestById: GUEST_SERVICE + 'guests/:guestId',
 
   //documents
-  idDocuments: GUEST_SERVICE + 'id-documents',
+  identityDocuments: GUEST_SERVICE + 'identity-documents',
+  identityDocumentById: GUEST_SERVICE + 'identity-documents/:identityDocumentId',
 
   // id-document images
   idDocumentImages: GUEST_SERVICE + 'images',

@@ -1028,8 +1028,8 @@
           "actions": "Actions"
         },
         "body": {
-          "provided": "Provided",
-          "not-provided": "Not provided"
+          "provided": "ID Document provided",
+          "not-provided": "ID Document missing"
         }
       },
       "empty-data": "Time to bring some life to your <span class=\"text-primary xstay\">xStay</span> account. Add your first guest now!"
@@ -1203,7 +1203,7 @@
   },
   "documents": {
     "list": {
-      "empty-data": "No documents found.",
+      "empty-data": "No identity documents available. Please kindly ask the guest to provide one to complete their profile.",
       "cta": {
         "add-btn": "+ Add document"
       },
@@ -1228,7 +1228,7 @@
           "type": "Type",
           "documentNumber": "Document Number",
           "expirationDate": "Expiration Date",
-          "hasImage": "Has Image",
+          "hasImage": "File provided",
           "created-on": "Created On",
           "actions": "Actions"
         }

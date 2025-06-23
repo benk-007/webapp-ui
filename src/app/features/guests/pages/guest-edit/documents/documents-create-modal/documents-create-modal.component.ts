@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { DocumentTypeEnum } from '../../../../models/document-type.enum';
-import { DocumentService } from '../../../../services/document.service';
+import { IdentityDocumentService } from '../../../../services/identity-document.service';
 import {
   RowComponent, ColComponent, FormControlDirective, FormDirective, FormFeedbackComponent,
   FormLabelDirective, ButtonDirective
@@ -48,7 +48,7 @@ export class DocumentCreateModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly documentService: DocumentService,
+    private readonly documentService: IdentityDocumentService,
     private readonly toastr: ToastrService,
     private readonly translate: TranslateService,
     public bsModalRef: BsModalRef

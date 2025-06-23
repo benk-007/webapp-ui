@@ -25,10 +25,10 @@ import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 import { ToastrService } from 'ngx-toastr';
 import { EmptyDataComponent } from '../../../../../../shared/components/empty-data/empty-data.component';
 import { ListContentComponent } from '../../../../../../shared/components/list-content/list-content.component';
-import { DocumentItemGetModel } from '../../../../models/document-item-get.model';
+import { IdentityDocumentItemGetModel } from '../../../../models/identity-document-item-get.model';
 
 import { DatePipe } from '@angular/common';
-import {DocumentService} from "../../../../services/document.service";
+import {IdentityDocumentService} from "../../../../services/identity-document.service";
 import {TableControlComponent} from "../../../../../../shared/components/table-control/table-control.component";
 import {AuditNamePipe} from "../../../../../../shared/pipes/audit-name.pipe";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
@@ -74,12 +74,12 @@ export class DocumentsComponent extends ListContentComponent {
   };
   guestId!: string;
 
-  override listContent: DocumentItemGetModel[] = [];
+  override listContent: IdentityDocumentItemGetModel[] = [];
 
   constructor(
       public override router: Router,
       public override route: ActivatedRoute,
-      public readonly documentService: DocumentService,
+      public readonly documentService: IdentityDocumentService,
       private readonly toastr: ToastrService,
       private readonly DocumentImageService: DocumentImageService,
       private readonly modalService: BsModalService,
@@ -110,7 +110,7 @@ export class DocumentsComponent extends ListContentComponent {
   override retrieveListContent(params: any) {
     super.retrieveListContent(params);
     this.subscriptions.push(
-        this.documentService.getDocumentsByGuestId(this.guestId, this.page, this.size).subscribe({
+        this.documentService.getIdentityDocuments(this.guestId, this.page, this.size).subscribe({
           next: (data) => {
             super.handleSuccessData(data);
 
@@ -136,7 +136,7 @@ export class DocumentsComponent extends ListContentComponent {
 
 
 
-  deleteDocument(document: DocumentItemGetModel): void {
+  deleteDocument(document: IdentityDocumentItemGetModel): void {
     const initialState = {
       title: this.translateService.instant('documents.list.delete-modal.title'),
       message: this.translateService.instant('documents.list.delete-modal.message', { documentNumber: document.documentNumber })

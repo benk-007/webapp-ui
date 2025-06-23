@@ -1,4 +1,4 @@
-export interface DocumentModel {
+export interface IdentityDocumentPostModel {
   type: string;
   value: string;
   expirationDate?: string;

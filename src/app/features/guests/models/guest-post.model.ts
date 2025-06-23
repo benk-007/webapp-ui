@@ -1,7 +1,6 @@
-import { AddressModel } from '../../../shared/models/address.model';
-import { ContactModel } from '../../../shared/models/contact.model';
-import { DocumentModel } from '../../../shared/models/document.model';
-import {AuditGetModel} from "../../../shared/models/audit-get.model";
+import {AddressModel} from '../../../shared/models/address.model';
+import {ContactModel} from '../../../shared/models/contact.model';
+import {IdentityDocumentPostModel} from "./identity-document-post.model";
 
 export interface GuestItemPostModel {
   firstName: string;
@@ -9,5 +8,5 @@ export interface GuestItemPostModel {
   birthDate: string;
   address?: AddressModel;
   contact?: ContactModel;
-  identityDocument?: DocumentModel;
+  identityDocument?: IdentityDocumentPostModel;
 }

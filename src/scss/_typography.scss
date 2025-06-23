@@ -24,3 +24,12 @@ body{
     }
   }
 }
+
+.bg-primary-light{
+  background-color: vars.$primary01 !important;
+  color: vars.$primary !important;
+}
+
+.br-1{
+ border-radius: 5px !important;
+}

@@ -1,13 +1,5 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {BsModalRef} from 'ngx-bootstrap/modal';
 import {ToastrService} from 'ngx-toastr';
@@ -85,11 +77,11 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
       street2: [null],
       identityDocument: this.fb.group({
         type: [null],
-        documentNumber: [null],
+        value: [null],
         expirationDate: [null],
         documentImage: [null]
       }),
-    }, {validators: documentConsistencyValidator()});
+    });
   }
 
   get idDocumentGroup(): FormGroup {
@@ -145,10 +137,10 @@ export class GuestCreateModalComponent implements OnInit, OnDestroy {
         street2: formValue.street2
       }
     };
-    if (formValue.identityDocument.documentNumber) {
+    if (formValue.identityDocument.value) {
       payload.identityDocument = {
         type: formValue.identityDocument.type,
-        documentNumber: formValue.identityDocument.documentNumber,
+        value: formValue.identityDocument.value,
         expirationDate: formValue.identityDocument.expirationDate
       }
     }
