@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {PageModel} from "../../../shared/models/pageable/page.model";
 import {environment} from "../../../../environments/environment";
 import {Observable, of} from "rxjs";
-import {RatesGetModel} from "../models/rates-get.model";
+import {RatesModel} from "../models/rates.model";
 
 
 @Injectable({
@@ -15,7 +15,7 @@ export class RateApiService {
   }
 
   getUnitRatesById(unitId: string) {
-    return this.httpClient.get<RatesGetModel>(
+    return this.httpClient.get<RatesModel>(
       environment.apiBaseUrl.concat(environment.unitBaseRateById).replace(':unitId', unitId)
     );
   }
@@ -33,4 +33,11 @@ export class RateApiService {
     };
     return of(mockResponse);
   }*/
+
+  patchUnitRatesById(unitId: string, payload: RatesModel) {
+    return this.httpClient.patch<RatesModel>(
+      environment.apiBaseUrl.concat(environment.unitBaseRateById).replace(':unitId', unitId),
+      payload
+    );
+  }
 }

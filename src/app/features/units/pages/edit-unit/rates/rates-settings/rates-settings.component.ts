@@ -7,7 +7,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 import {ToastrService} from "ngx-toastr";
 import {RateApiService} from "../../../../services/rate-api.service";
-import {RatesGetModel} from "../../../../models/rates-get.model";
+import {RatesModel} from "../../../../models/rates.model";
 
 @Component({
   selector: 'app-rates-settings',
@@ -55,7 +55,7 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.RateApiService.getUnitRatesById(this.unitId).subscribe({
-        next: (rates: RatesGetModel) => {
+        next: (rates: RatesModel) => {
           console.log('Rates loaded:', rates);
           this.ratesForm.patchValue(rates);
         },
@@ -72,10 +72,23 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const payload: RatesGetModel = this.ratesForm.value;
+    const payload: RatesModel = this.ratesForm.value;
+    console.log(payload)
 
-    console.log("Submitting rates:", payload);
+    this.subscriptions.push(
+      this.RateApiService.patchUnitRatesById(this.unitId, payload).subscribe({
+        next: (res: RatesModel) => {
+          console.log('Rates updated:', res);
+          this.toastrService.success(this.translateService.instant('rates.settings.update-success'), 'Success');
+        },
+        error: (err) => {
+          console.error('Error updating rates:', err);
+          this.toastrService.error(this.translateService.instant('rates.settings.update-error'), 'Error');
+        }
+      })
+    );
   }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());

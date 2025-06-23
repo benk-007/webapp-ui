@@ -1,4 +1,4 @@
-export interface RatesGetModel {
+export interface RatesModel {
   nightly: number;
   weekendNight: number;
   weekly: number;
