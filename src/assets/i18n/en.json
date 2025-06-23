@@ -936,7 +936,7 @@
             "minStay": "Minimum Stay (nights)",
             "maxStay": "Maximum Stay (nights)",
             "feePPPN": "Additional Guest Fee (per person per night)",
-            "guestCount": "Additional Guest Count"
+            "guestCount": "Guest Count"
           },
           "ratesTable": {
             "title": "Rates table"
