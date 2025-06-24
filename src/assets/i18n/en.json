@@ -8,7 +8,7 @@
       "required": "This field is required",
       "email": "Enter a valid email address",
       "no-numbers": "Numbers are not allowed",
-      "positive": "Value cannot be negative",
+      "strictly-positive": "The value must be strictly positive.",
       "min-max-stay": "Maximum stay must be greater than or equal to minimum stay."
     },
     "form": {
