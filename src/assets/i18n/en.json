@@ -952,6 +952,11 @@
                 "title": "Loading error",
                 "message": "An error occurred when loading base rates."
               }
+            },
+            "errors": {
+              "weeklyLowerThanNightly": "Weekly price must be higher than nightly price.",
+              "monthlyLowerThanNightly": "Monthly price must be higher than nightly price.",
+              "monthlyLowerThanWeekly": "Monthly price must be higher than weekly price."
             }
           },
           "ratesTable": {
