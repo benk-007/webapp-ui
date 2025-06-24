@@ -8,6 +8,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {ToastrService} from "ngx-toastr";
 import {RateApiService} from "../../../../services/rate-api.service";
 import {RatesModel} from "../../../../models/rates.model";
+import {minMaxStayValidator} from "../../../../validators/min-max-stay.validator";
 
 @Component({
   selector: 'app-rates-settings',
@@ -39,15 +40,15 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
               private readonly toastrService: ToastrService) {
 
     this.ratesForm = this.fb.group({
-      nightly: [null, [Validators.required]],
-      weekendNight: [null],
-      weekly: [null],
-      monthly: [null],
-      minStay: [null],
-      maxStay: [null],
-      feePPPN: [null],
-      guestCount: [null],
-    });
+      nightly: [null, [Validators.required, Validators.min(0)]],
+      weekendNight: [null, [Validators.min(0)]],
+      weekly: [null, [Validators.min(0)]],
+      monthly: [null, [Validators.min(0)]],
+      minStay: [null, [Validators.min(0)]],
+      maxStay: [null, [Validators.min(0)]],
+      feePPPN: [null, [Validators.min(0)]],
+      guestCount: [null, [Validators.min(0)]],
+    },{ validators: minMaxStayValidator('minStay', 'maxStay') });
   }
 
   ngOnInit(): void {
@@ -60,7 +61,9 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
           this.ratesForm.patchValue(rates);
         },
         error: () => {
-          this.toastrService.error(this.translateService.instant('rates.settings.load-error'), 'Error');
+          this.toastrService.warning(
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.load-error.message'),
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.load-error.title'));
         }
       })
     );
@@ -79,11 +82,15 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
       this.RateApiService.patchUnitRatesById(this.unitId, payload).subscribe({
         next: (res: RatesModel) => {
           console.log('Rates updated:', res);
-          this.toastrService.success(this.translateService.instant('rates.settings.update-success'), 'Success');
+          this.toastrService.info(
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.success.message'),
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.success.title'));
         },
         error: (err) => {
           console.error('Error updating rates:', err);
-          this.toastrService.error(this.translateService.instant('rates.settings.update-error'), 'Error');
+          this.toastrService.error(
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.error.message'),
+            this.translateService.instant('units.edit-unit.tabs.rates.settings.notifications.error.title'));
         }
       })
     );

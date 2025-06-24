@@ -7,7 +7,9 @@
     "errors": {
       "required": "This field is required",
       "email": "Enter a valid email address",
-      "no-numbers": "Numbers are not allowed"
+      "no-numbers": "Numbers are not allowed",
+      "positive": "Value cannot be negative",
+      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay."
     },
     "form": {
       "description-input": {
@@ -936,7 +938,21 @@
             "minStay": "Minimum Stay (nights)",
             "maxStay": "Maximum Stay (nights)",
             "feePPPN": "Additional Guest Fee (per person per night)",
-            "guestCount": "Guest Count"
+            "guestCount": "Guest Count",
+            "notifications": {
+              "success": {
+                "title": "Rates updated",
+                "message": "Rates updated successfully."
+              },
+              "error": {
+                "title": "Rates update error",
+                "message": "Failed to update rates. Please try again."
+              },
+              "load-error": {
+                "title": "Loading error",
+                "message": "An error occurred when loading base rates."
+              }
+            }
           },
           "ratesTable": {
             "title": "Rates table"

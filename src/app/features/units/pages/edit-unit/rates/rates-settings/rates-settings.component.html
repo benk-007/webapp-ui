@@ -12,10 +12,13 @@
         <label cLabel class="required me-2" for="nightly">
           {{ 'units.edit-unit.tabs.rates.settings.nightly' | translate }}
         </label>
-        <input cFormControl formControlName="nightly" id="nightly" name="nightly" type="number"/>
+        <input cFormControl formControlName="nightly" id="nightly" name="nightly" type="number" step="50" min="0"/>
         @if ((ratesForm.get('nightly')?.touched || ratesForm.get('nightly')?.dirty)) {
           @if (ratesForm.get('nightly')?.hasError('required')) {
             <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+          }
+          @if (ratesForm.get('nightly')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
           }
         }
       </c-col>
@@ -25,7 +28,12 @@
         <label cLabel class="me-2" for="weekendNight">
           {{ 'units.edit-unit.tabs.rates.settings.weekendNight' | translate }}
         </label>
-        <input cFormControl formControlName="weekendNight" id="weekendNight" name="weekendNight" type="number"/>
+        <input cFormControl formControlName="weekendNight" id="weekendNight" name="weekendNight" type="number" step="50" min="0"/>
+        @if ((ratesForm.get('weekendNight')?.touched || ratesForm.get('weekendNight')?.dirty)) {
+          @if (ratesForm.get('weekendNight')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
     </c-row>
 
@@ -35,33 +43,62 @@
         <label cLabel class="me-2" for="weekly">
           {{ 'units.edit-unit.tabs.rates.settings.weekly' | translate }}
         </label>
-        <input cFormControl formControlName="weekly" id="weekly" name="weekly" type="number"/>
+        <input cFormControl formControlName="weekly" id="weekly" name="weekly" type="number" step="100" min="0"/>
+        @if ((ratesForm.get('weekly')?.touched || ratesForm.get('weekly')?.dirty)) {
+          @if (ratesForm.get('weekly')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
 
       <c-col [md]="6" class="mb-3">
         <label cLabel class="me-2" for="monthly">
           {{ 'units.edit-unit.tabs.rates.settings.monthly' | translate }}
         </label>
-        <input cFormControl formControlName="monthly" id="monthly" name="monthly" type="number"/>
+        <input cFormControl formControlName="monthly" id="monthly" name="monthly" type="number" step="500" min="0"/>
+        @if ((ratesForm.get('monthly')?.touched || ratesForm.get('monthly')?.dirty)) {
+          @if (ratesForm.get('monthly')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
     </c-row>
 
     <!-- MinStay & MaxStay -->
-    <c-row>
-      <c-col [md]="6" class="mb-3">
+    <c-row class="mb-3">
+      <c-col [md]="6">
         <label cLabel class="me-2" for="minStay">
           {{ 'units.edit-unit.tabs.rates.settings.minStay' | translate }}
         </label>
-        <input cFormControl formControlName="minStay" id="minStay" name="minStay" type="number"/>
+        <input cFormControl formControlName="minStay" id="minStay" name="minStay" type="number" min="0"/>
+        @if ((ratesForm.get('minStay')?.touched || ratesForm.get('minStay')?.dirty)) {
+          @if (ratesForm.get('minStay')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
 
-      <c-col [md]="6" class="mb-3">
+      <c-col [md]="6">
         <label cLabel class="me-2" for="maxStay">
           {{ 'units.edit-unit.tabs.rates.settings.maxStay' | translate }}
         </label>
-        <input cFormControl formControlName="maxStay" id="maxStay" name="maxStay" type="number"/>
+        <input cFormControl formControlName="maxStay" id="maxStay" name="maxStay" type="number" min="0"/>
+        @if ((ratesForm.get('maxStay')?.touched || ratesForm.get('maxStay')?.dirty)) {
+          @if (ratesForm.get('maxStay')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
+      @if (ratesForm.errors?.['maxLowerThanMin']) {
+          <c-col [md]="12">
+            <c-form-feedback [valid]="false">
+              {{ 'commons.errors.min-max-stay' | translate }}
+            </c-form-feedback>
+          </c-col>
+      }
     </c-row>
+
+
 
     <h6 class="section-title underline mb-3 mt-2">
       {{ 'units.edit-unit.tabs.rates.settings.GuestFee' | translate }}
@@ -72,14 +109,24 @@
         <label cLabel class="me-2" for="feePPPN">
           {{ 'units.edit-unit.tabs.rates.settings.feePPPN' | translate }}
         </label>
-        <input cFormControl formControlName="feePPPN" id="feePPPN" name="feePPPN" type="number"/>
+        <input cFormControl formControlName="feePPPN" id="feePPPN" name="feePPPN" type="number" step="20" min="0"/>
+        @if ((ratesForm.get('feePPPN')?.touched || ratesForm.get('feePPPN')?.dirty)) {
+          @if (ratesForm.get('feePPPN')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
 
       <c-col [md]="6" class="mb-3">
         <label cLabel class="me-2" for="guestCount">
           {{ 'units.edit-unit.tabs.rates.settings.guestCount' | translate }}
         </label>
-        <input cFormControl formControlName="guestCount" id="guestCount" name="guestCount" type="number"/>
+        <input cFormControl formControlName="guestCount" id="guestCount" name="guestCount" type="number" min="0"/>
+        @if ((ratesForm.get('guestCount')?.touched || ratesForm.get('guestCount')?.dirty)) {
+          @if (ratesForm.get('guestCount')?.hasError('min')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.positive' | translate }}</c-form-feedback>
+          }
+        }
       </c-col>
     </c-row>
 
