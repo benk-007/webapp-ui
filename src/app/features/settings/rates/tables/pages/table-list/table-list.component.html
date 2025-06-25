@@ -68,6 +68,10 @@
                 <button cButton size="sm" color="primary" class="btn-light" (click)="openRateCuModal(table)">
                   <svg [cIcon]="icons.cilPen" size="sm"></svg>
                 </button>
+                <!-- Delete button -->
+                <button cButton size="sm" color="danger" class="btn-light" (click)="deleteRate(table)">
+                  <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                </button>
               </td>
             </tr>
           }

@@ -1452,7 +1452,23 @@
       "cta": {
         "add-btn": "+ Add Standard Rate"
       },
-      "empty-data": "No standard rates found."
+      "empty-data": "No standard rates found.",
+      "delete": {
+        "title": "Delete Rate",
+        "message": "Are you sure you want to delete the rate?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Rate Deleted",
+            "message": "The rate has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion Failed",
+            "message": "An error occurred while deleting the rate."
+          }
+        }
+      }
     },
     "edit": {
       "form": {

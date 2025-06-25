@@ -37,4 +37,10 @@ export class TableService {
       payload
     );
   }
+
+  deleteTableById(id: string): Observable<void> {
+    return this.httpClient.delete<void>(
+      environment.apiBaseUrl.concat(environment.rateById).replace(':rateId', id)
+    );
+  }
 }

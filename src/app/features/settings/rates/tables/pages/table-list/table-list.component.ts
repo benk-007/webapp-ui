@@ -29,6 +29,7 @@ import {TableControlComponent} from "../../../../../../shared/components/table-c
 import {SelectableTableDirective} from "../../../../../../shared/directives/selectable-table.directive";
 import {IconDirective} from "@coreui/icons-angular";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
+import {ConfirmModalComponent} from "../../../../../../shared/components/confirm-modal/confirm-modal.component";
 
 @Component({
   selector: 'app-table-list',
@@ -118,6 +119,35 @@ export class TableListComponent extends ListContentComponent {
     this.subscriptions.push(
       (modalRef.content as TableCuModalComponent).actionConfirmed.subscribe(() => {
         this.refreshListContent();
+      })
+    );
+  }
+
+  deleteRate(table: TableItemGetModel): void {
+    const initialState = {
+      title: this.translateService.instant('tables.list.delete.title'),
+      message: this.translateService.instant('tables.list.delete.message', { name: `${table.rateName}` })
+    };
+
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.tableService.deleteTableById(table.id).subscribe({
+          next: () => {
+            this.refreshListContent();
+            this.toastr.success(
+              this.translateService.instant('tables.list.notifications.delete.success.message'),
+              this.translateService.instant('tables.list.notifications.delete.success.title')
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant('tables.list.notifications.delete.error.message'),
+              this.translateService.instant('tables.list.notifications.delete.error.title')
+            );
+          }
+        });
       })
     );
   }
