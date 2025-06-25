@@ -15,6 +15,10 @@ export const routes: Routes = [
       {
         path: 'user-settings',
         loadChildren: () => import('./user-settings/routes').then((m) => m.routes)
+      },
+      {
+        path: 'rates/tables',
+        loadChildren: () => import('./rates/tables/routes').then((m) => m.routes)
       }
     ]
   }

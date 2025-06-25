@@ -1360,5 +1360,88 @@
       },
       "load-error": "An error occurred while loading document data."
     }
+  },
+  "tables": {
+    "create": {
+      "title": "Add Standard Rate",
+      "form": {
+        "details": {
+          "section-title": "Rental Rate Details",
+          "rateName": {
+            "label": "Rate Name"
+          },
+          "fromDate": {
+            "label": "From Date"
+          },
+          "untilDate": {
+            "label": "Until Date"
+          }
+        },
+        "rates": {
+          "section-title": "Enter Fees Below",
+          "nightly": {
+            "label": "Nightly"
+          },
+          "weekendNight": {
+            "label": "Weekend Night"
+          },
+          "weekly": {
+            "label": "Weekly"
+          },
+          "monthly": {
+            "label": "Monthly"
+          },
+          "minStay": {
+            "label": "Minimum Stay (nights)"
+          },
+          "maxStay": {
+            "label": "Maximum Stay (nights)"
+          }
+        },
+        "additionalGuestFee": {
+          "section-title": "Additional Guest Fee",
+          "fee": {
+            "label": "Fee (PP/PN)"
+          },
+          "guestCount": {
+            "label": "Guest Count"
+          }
+        },
+        "daySpecific": {
+          "section-title": "Day Specific Pricing",
+          "placeholder": "Set rates for specific days. They will override above rates.",
+          "ApplyToDays": {
+            "label": "Apply To Days"
+          },
+          "days": {
+            "MONDAY": "Monday",
+            "TUESDAY": "Tuesday",
+            "WEDNESDAY": "Wednesday",
+            "THURSDAY": "Thursday",
+            "FRIDAY": "Friday",
+            "SATURDAY": "Saturday",
+            "SUNDAY": "Sunday"
+          }
+        },
+        "notifications": {
+          "success": {
+            "title": "Standard Rate Created",
+            "message": "The standard rate has been successfully created."
+          },
+          "error": {
+            "title": "Creation Failed",
+            "message": "An error occurred while creating the standard rate."
+          }
+        }
+
+      }
+    },
+    "list": {
+      "title": "Standard Rates",
+      "cta": {
+        "add-btn": "+ Add Standard Rate"
+      }
+    }
   }
 }
+

@@ -52,4 +52,7 @@ export const commonProperties = {
   idDocumentImages: GUEST_SERVICE + 'images',
   idDocumentImageById: GUEST_SERVICE + 'images/:imageId',
 
+  // rate table
+  tableList: UNIT_SERVICE +'settings/rates/tables'
+
 }

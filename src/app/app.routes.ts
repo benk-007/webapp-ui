@@ -23,6 +23,10 @@ export const routes: Routes = [
         loadChildren:()=>import('./features/units/routes').then((m)=>m.routes)
       },
       {
+        path: 'tables',
+        loadChildren: () => import('./features/settings/rates/tables/routes').then((m) => m.routes)
+      },
+      {
         path: 'guests',
         loadChildren:()=>import('./features/guests/routes').then((m)=>m.routes)
       },

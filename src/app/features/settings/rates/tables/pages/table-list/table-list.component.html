@@ -1,0 +1,10 @@
+<c-row class="page-title mb-3">
+  <c-col [md]="6" class="d-flex align-items-center">
+    <h1 class="page-title mb-0">{{ 'tables.list.title' | translate }}</h1>
+  </c-col>
+  <c-col [md]="6" class="d-flex justify-content-end">
+    <button cButton size="sm" color="secondary" (click)="openTableCreateModal()">
+      {{ 'tables.list.cta.add-btn' | translate }}
+    </button>
+  </c-col>
+</c-row>
