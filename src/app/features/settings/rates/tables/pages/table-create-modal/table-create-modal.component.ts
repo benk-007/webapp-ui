@@ -157,7 +157,7 @@ export class TableCreateModalComponent implements OnInit, OnDestroy {
         this.closeModal();
         const msg = this.translateService.instant('tables.create.form.notifications.success.message');
         const title = this.translateService.instant('tables.create.form.notifications.success.title');
-        this.toastrService.info(msg, title);
+        this.toastrService.success(msg, title);
       },
       error: (err) => {
         console.error('Error while creating table:', err);
