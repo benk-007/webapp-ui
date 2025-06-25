@@ -1438,9 +1438,21 @@
     },
     "list": {
       "title": "Standard Rates",
+      "table": {
+        "header": {
+          "name": "Name",
+          "period": "Rate Period",
+          "nightly": "Nightly",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "minStay": "Minimum Stay",
+          "actions": "Actions"
+        }
+      },
       "cta": {
         "add-btn": "+ Add Standard Rate"
-      }
+      },
+      "empty-data": "No standard rates found."
     }
   }
 }

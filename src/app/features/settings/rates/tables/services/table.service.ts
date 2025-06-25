@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-
-import { Observable } from "rxjs";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {Observable, of} from "rxjs";
 import { TablePostModel } from "../models/table-post.model";
 import {environment} from "../../../../../../environments/environment";
+import {PageModel} from "../../../../../shared/models/pageable/page.model";
+import {TableItemGetModel} from "../models/table-get.model";
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,16 @@ export class TableService {
       environment.apiBaseUrl.concat(environment.tableList),
       payload
     );
+  }
+
+  getTablesByPage(page: number, size: number, sort: string, sortDirection: string, search: string): Observable<PageModel<TableItemGetModel>> {
+    let params = new HttpParams();
+    if (search) {
+      params = params.set('search', search);
+    }
+    params = params.set('size', size.toString());
+    params = params.set('page', page.toString());
+
+    return this.httpClient.get<PageModel<TableItemGetModel>>(environment.apiBaseUrl.concat(environment.tableList), { params });
   }
 }
