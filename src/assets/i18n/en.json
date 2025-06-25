@@ -9,7 +9,8 @@
       "email": "Enter a valid email address",
       "no-numbers": "Numbers are not allowed",
       "strictly-positive": "The value must be strictly positive.",
-      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay."
+      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay.",
+      "invalidDateRange": "The 'From Date' must be earlier than the 'Until Date'."
     },
     "form": {
       "description-input": {

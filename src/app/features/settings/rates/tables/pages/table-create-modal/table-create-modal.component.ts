@@ -36,6 +36,7 @@ import {
   cilSwapVertical,
   cilTrash
 } from "@coreui/icons";
+import {dateRangeValidator} from "../../../../../../shared/validators/date-range.validator";
 
 @Component({
   selector: 'app-table-create-modal',
@@ -94,7 +95,8 @@ export class TableCreateModalComponent implements OnInit, OnDestroy {
     }, {
       validators: [
         minMaxStayValidator(),
-        pricingConsistencyValidator()
+        pricingConsistencyValidator(),
+        dateRangeValidator()
       ]
     });
   }
