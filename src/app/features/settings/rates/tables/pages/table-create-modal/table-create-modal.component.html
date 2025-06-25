@@ -30,6 +30,11 @@
       <c-col [md]="4" sm="12" class="mb-3">
         <label cLabel class="required me-2" for="untilDate">{{ 'tables.create.form.details.untilDate.label' | translate }}</label>
         <input cFormControl formControlName="untilDate" id="untilDate" type="date"/>
+        @if (tableForm.errors?.['invalidDateRange']) {
+          <c-form-feedback [valid]="false" class="text-danger">
+            {{ 'commons.errors.invalidDateRange' | translate }}
+          </c-form-feedback>
+        }
       </c-col>
     </c-row>
 
