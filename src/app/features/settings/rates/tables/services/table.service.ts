@@ -15,7 +15,7 @@ export class TableService {
 
   postTable(payload: TablePostModel): Observable<void> {
     return this.httpClient.post<void>(
-      environment.apiBaseUrl.concat(environment.tableList),
+      environment.apiBaseUrl.concat(environment.rateList),
       payload
     );
   }
@@ -28,6 +28,13 @@ export class TableService {
     params = params.set('size', size.toString());
     params = params.set('page', page.toString());
 
-    return this.httpClient.get<PageModel<TableItemGetModel>>(environment.apiBaseUrl.concat(environment.tableList), { params });
+    return this.httpClient.get<PageModel<TableItemGetModel>>(environment.apiBaseUrl.concat(environment.rateList), { params });
+  }
+
+  patchTableById(payload: TablePostModel, rateId: string): Observable<TableItemGetModel> {
+    return this.httpClient.patch<TableItemGetModel>(
+      environment.apiBaseUrl.concat(environment.rateById).replace(':rateId', rateId),
+      payload
+    );
   }
 }

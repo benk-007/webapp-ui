@@ -3,7 +3,7 @@
     <h1 class="page-title mb-0">{{ 'tables.list.title' | translate }}</h1>
   </c-col>
   <c-col [md]="6" class="d-flex justify-content-end">
-    <button cButton size="sm" color="secondary" (click)="openTableCreateModal()">
+    <button cButton size="sm" color="secondary" (click)="openRateCuModal()">
       {{ 'tables.list.cta.add-btn' | translate }}
     </button>
   </c-col>
@@ -65,7 +65,7 @@
               <td>{{ table.rate.rentalBaseRate.minStay }}</td>
               <td>
                 <!-- Edit button -->
-                <button cButton size="sm" color="primary" class="btn-light me-2" [routerLink]="['/tables/', table.id]">
+                <button cButton size="sm" color="primary" class="btn-light" (click)="openRateCuModal(table)">
                   <svg [cIcon]="icons.cilPen" size="sm"></svg>
                 </button>
               </td>

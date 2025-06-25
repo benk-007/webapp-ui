@@ -1434,7 +1434,6 @@
             "message": "An error occurred while creating the standard rate."
           }
         }
-
       }
     },
     "list": {
@@ -1454,6 +1453,20 @@
         "add-btn": "+ Add Standard Rate"
       },
       "empty-data": "No standard rates found."
+    },
+    "edit": {
+      "form": {
+        "notifications": {
+          "success": {
+            "title": "Standard Rate Updated",
+            "message": "The standard rate has been successfully updated."
+          },
+          "error": {
+            "title": "Update Failed",
+            "message": "An error occurred while updating the standard rate."
+          }
+        }
+      }
     }
   }
 }

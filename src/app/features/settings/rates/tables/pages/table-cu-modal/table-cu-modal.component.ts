@@ -1,16 +1,9 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import {
   ButtonDirective,
   ColComponent,
@@ -20,26 +13,18 @@ import {
   FormLabelDirective,
   RowComponent,
 } from '@coreui/angular';
-
 import { CommonModule } from '@angular/common';
 import { TableService } from '../../services/table.service';
-import {minMaxStayValidator} from "../../../../../../shared/validators/min-max-stay.validator";
-import {pricingConsistencyValidator} from "../../../../../../shared/validators/pricing-consistency.validator";
-import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from "@ng-select/ng-select";
-import {IconDirective} from "@coreui/icons-angular";
-import {
-  cilClock,
-  cilPen,
-  cilSearch,
-  cilSortAscending,
-  cilSortDescending,
-  cilSwapVertical,
-  cilTrash
-} from "@coreui/icons";
-import {dateRangeValidator} from "../../../../../../shared/validators/date-range.validator";
+import { minMaxStayValidator } from '../../../../../../shared/validators/min-max-stay.validator';
+import { pricingConsistencyValidator } from '../../../../../../shared/validators/pricing-consistency.validator';
+import { dateRangeValidator } from '../../../../../../shared/validators/date-range.validator';
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { IconDirective } from '@coreui/icons-angular';
+import { TableItemGetModel } from '../../models/table-get.model';
+import { cilTrash } from "@coreui/icons";
 
 @Component({
-  selector: 'app-table-create-modal',
+  selector: 'app-table-cu-modal',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -57,15 +42,14 @@ import {dateRangeValidator} from "../../../../../../shared/validators/date-range
     NgLabelTemplateDirective,
     NgOptionTemplateDirective,
   ],
-  templateUrl: './table-create-modal.component.html',
-  styleUrl: './table-create-modal.component.scss'
+  templateUrl: './table-cu-modal.component.html',
+  styleUrl: './table-cu-modal.component.scss'
 })
-export class TableCreateModalComponent implements OnInit, OnDestroy {
+export class TableCuModalComponent implements OnInit, OnDestroy {
 
+  tableToEdit?: TableItemGetModel;
   tableForm: FormGroup;
-
   @Output() actionConfirmed = new EventEmitter<void>();
-
   private readonly subscriptions: Subscription[] = [];
 
   constructor(
@@ -93,15 +77,29 @@ export class TableCreateModalComponent implements OnInit, OnDestroy {
       }),
       daySpecificPricings: this.fb.array([])
     }, {
-      validators: [
-        minMaxStayValidator(),
-        pricingConsistencyValidator(),
-        dateRangeValidator()
-      ]
+      validators: [minMaxStayValidator(), pricingConsistencyValidator(), dateRangeValidator()]
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.tableToEdit) {
+      this.tableForm.patchValue({
+        rateName: this.tableToEdit.rateName,
+        fromDate: this.tableToEdit.fromDate,
+        untilDate: this.tableToEdit.untilDate,
+        rentalBaseRate: this.tableToEdit.rate.rentalBaseRate,
+        additionalGuestFee: this.tableToEdit.rate.additionalGuestFee
+      });
+
+      if (this.tableToEdit.daySpecificPricings) {
+        this.tableToEdit.daySpecificPricings.forEach(pricing => {
+          const group = this.buildDaySpecificPricingGroup();
+          group.patchValue(pricing);
+          this.daySpecificPricings.push(group);
+        });
+      }
+    }
+  }
 
   private buildDaySpecificPricingGroup(): FormGroup {
     return this.fb.group({
@@ -133,10 +131,8 @@ export class TableCreateModalComponent implements OnInit, OnDestroy {
     { label: 'Saturday', value: 'SATURDAY' },
     { label: 'Sunday', value: 'SUNDAY' }
   ];
-  icons = {
-    cilTrash
-  };
 
+  icons = { cilTrash };
 
   submit(): void {
     const formValue = this.tableForm.value;
@@ -151,24 +147,49 @@ export class TableCreateModalComponent implements OnInit, OnDestroy {
       },
       daySpecificPricings: formValue.daySpecificPricings
     };
-    console.log('your payload is:', payload);
 
-    this.subscriptions.push(this.tableService.postTable(payload).subscribe({
-      next: () => {
-        this.actionConfirmed.emit();
-        this.closeModal();
-        const msg = this.translateService.instant('tables.create.form.notifications.success.message');
-        const title = this.translateService.instant('tables.create.form.notifications.success.title');
-        this.toastrService.success(msg, title);
-      },
-      error: (err) => {
-        console.error('Error while creating table:', err);
-        this.toastrService.error(
-          this.translateService.instant('tables.create.form.notifications.error.message'),
-          this.translateService.instant('tables.create.form.notifications.error.title')
-        );
-      }
-    }));
+    if (!this.tableToEdit) {
+      // Creation
+      this.subscriptions.push(
+        this.tableService.postTable(payload).subscribe({
+          next: () => {
+            this.actionConfirmed.emit();
+            this.closeModal();
+            const msg = this.translateService.instant('tables.create.form.notifications.success.message');
+            const title = this.translateService.instant('tables.create.form.notifications.success.title');
+            this.toastrService.success(msg, title);
+          },
+          error: (err) => {
+            console.error('Error creating table:', err);
+            this.toastrService.error(
+              this.translateService.instant('tables.create.form.notifications.error.message'),
+              this.translateService.instant('tables.create.form.notifications.error.title')
+            );
+          }
+        })
+      );
+    } else {
+      // Edition
+      const rateId = this.tableToEdit.id;
+      this.subscriptions.push(
+        this.tableService.patchTableById(payload, rateId).subscribe({
+          next: () => {
+            this.actionConfirmed.emit();
+            this.closeModal();
+            const msg = this.translateService.instant('tables.edit.form.notifications.success.message');
+            const title = this.translateService.instant('tables.edit.form.notifications.success.title');
+            this.toastrService.info(msg, title);
+          },
+          error: (err) => {
+            console.error('Error updating table:', err);
+            this.toastrService.error(
+              this.translateService.instant('tables.edit.form.notifications.error.message'),
+              this.translateService.instant('tables.edit.form.notifications.error.title')
+            );
+          }
+        })
+      );
+    }
   }
 
   closeModal(): void {

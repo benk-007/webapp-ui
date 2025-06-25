@@ -11,7 +11,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {ToastrService} from "ngx-toastr";
-import {TableCreateModalComponent} from "../table-create-modal/table-create-modal.component";
+import {TableCuModalComponent} from "../table-cu-modal/table-cu-modal.component";
 import {ListContentComponent} from "../../../../../../shared/components/list-content/list-content.component";
 import {
   cilClock,
@@ -47,7 +47,6 @@ import {BadgeComponent} from "../../../../../../shared/components/badge/badge.co
     SelectableTableDirective,
     TableDirective,
     EmptyDataComponent,
-    RouterLink,
     BadgeComponent,
   ],
   templateUrl: './table-list.component.html',
@@ -86,17 +85,6 @@ export class TableListComponent extends ListContentComponent {
     super(router, route);
   }
 
-  openTableCreateModal() {
-    const initialState = { class: 'modal-lg' };
-    const tableCreateModalRef = this.modalService.show(TableCreateModalComponent, initialState);
-
-    this.subscriptions.push(
-      (tableCreateModalRef.content as TableCreateModalComponent).actionConfirmed.subscribe(() => {
-        this.refreshListContent();
-      })
-    );
-  }
-
   override ngOnInit(): void {
     super.ngOnInit();
     this.sort = 'fromDate';
@@ -116,6 +104,20 @@ export class TableListComponent extends ListContentComponent {
         error: (err: any) => {
           console.warn('Error retrieving standard rates:', err);
         }
+      })
+    );
+  }
+
+  openRateCuModal(table?: TableItemGetModel) {
+    const initialState = table ? { tableToEdit: table } : {};
+    const modalRef = this.modalService.show(TableCuModalComponent, {
+      initialState: initialState,
+      class: 'modal-lg'
+    });
+
+    this.subscriptions.push(
+      (modalRef.content as TableCuModalComponent).actionConfirmed.subscribe(() => {
+        this.refreshListContent();
       })
     );
   }
