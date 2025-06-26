@@ -48,6 +48,7 @@ import { cilTrash } from "@coreui/icons";
 export class TableCuModalComponent implements OnInit, OnDestroy {
 
   tableToEdit?: TableItemGetModel;
+  unitId!: string;
   tableForm: FormGroup;
   @Output() actionConfirmed = new EventEmitter<void>();
   private readonly subscriptions: Subscription[] = [];
@@ -82,6 +83,7 @@ export class TableCuModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('Unit ID received:', this.unitId);
     if (this.tableToEdit) {
       this.tableForm.patchValue({
         rateName: this.tableToEdit.rateName,
@@ -151,7 +153,7 @@ export class TableCuModalComponent implements OnInit, OnDestroy {
     if (!this.tableToEdit) {
       // Creation
       this.subscriptions.push(
-        this.tableService.postTable(payload).subscribe({
+        this.tableService.postTable(payload,this.unitId).subscribe({
           next: () => {
             this.actionConfirmed.emit();
             this.closeModal();

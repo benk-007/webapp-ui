@@ -65,7 +65,7 @@ export class TableListComponent extends ListContentComponent {
     cilSortDescending,
     cilTrash
   };
-
+  unitId!: string
   override listContent: TableItemGetModel[] = [];
 
   override listParamValidator = {
@@ -84,6 +84,13 @@ export class TableListComponent extends ListContentComponent {
     private readonly translateService: TranslateService
   ) {
     super(router, route);
+    if (this.route.parent?.parent) {
+      this.subscriptions.push(this.route.parent?.parent.paramMap.subscribe(value => {
+        console.log("value: ", value)
+        this.unitId = value.get('unitId') as string;
+        console.log("uniId: ", this.unitId)
+      }));
+    }
   }
 
   override ngOnInit(): void {
@@ -98,7 +105,7 @@ export class TableListComponent extends ListContentComponent {
   override retrieveListContent(params: any) {
     super.retrieveListContent(params);
     this.subscriptions.push(
-      this.tableService.getTablesByPage(this.page, this.size, this.sort, this.sortDirection, this.search).subscribe({
+      this.tableService.getTablesByPage(this.page, this.size, this.sort, this.sortDirection, this.search, this.unitId).subscribe({
         next: (data: any) => {
           super.handleSuccessData(data);
         },
@@ -110,16 +117,20 @@ export class TableListComponent extends ListContentComponent {
   }
 
   openRateCuModal(table?: TableItemGetModel) {
-    const initialState = table ? { tableToEdit: table } : {};
+    const initialState = {
+      ...(table ? { tableToEdit: table } : {}),
+      unitId: this.unitId
+    };
+
     const modalRef = this.modalService.show(TableCuModalComponent, {
-      initialState: initialState,
+      initialState,
       class: 'modal-lg'
     });
 
     this.subscriptions.push(
-      (modalRef.content as TableCuModalComponent).actionConfirmed.subscribe(() => {
-        this.refreshListContent();
-      })
+        (modalRef.content as TableCuModalComponent).actionConfirmed.subscribe(() => {
+          this.refreshListContent();
+        })
     );
   }
 

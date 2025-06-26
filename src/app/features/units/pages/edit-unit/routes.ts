@@ -57,7 +57,7 @@ export const routes: Routes = [
           },
           {
             path: 'table',
-            loadComponent: () => import('./rates/rates-table/rates-table.component').then(m => m.RatesTableComponent),
+            loadComponent: () => import('../../../settings/rates/tables/pages/table-list/table-list.component').then(m => m.TableListComponent),
             data: { title: 'Rates Table' }
           },
           {

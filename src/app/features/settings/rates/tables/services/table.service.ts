@@ -13,17 +13,22 @@ export class TableService {
 
   constructor(private readonly httpClient: HttpClient) {}
 
-  postTable(payload: TablePostModel): Observable<void> {
+  postTable(payload: TablePostModel, unitId: string): Observable<void> {
+    const params = new HttpParams().set('unitId', unitId);
+
     return this.httpClient.post<void>(
-      environment.apiBaseUrl.concat(environment.rateList),
-      payload
+        environment.apiBaseUrl.concat(environment.rateList),
+        payload, { params }
     );
   }
 
-  getTablesByPage(page: number, size: number, sort: string, sortDirection: string, search: string): Observable<PageModel<TableItemGetModel>> {
+  getTablesByPage(page: number, size: number, sort: string, sortDirection: string, search: string, unitId: string): Observable<PageModel<TableItemGetModel>> {
     let params = new HttpParams();
     if (search) {
       params = params.set('search', search);
+    }
+    if (unitId) {
+      params = params.set('unitId', unitId);
     }
     params = params.set('size', size.toString());
     params = params.set('page', page.toString());
