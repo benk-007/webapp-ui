@@ -46,7 +46,7 @@
         <!-- Nightly -->
         <c-col [md]="4" sm="12" class="mb-3">
           <label cLabel class="required me-2" for="nightly">{{ 'tables.create.form.rates.nightly.label' | translate }}</label>
-          <input cFormControl formControlName="nightly" id="nightly" type="number" min="50" step="50"/>
+          <input cFormControl formControlName="nightly" id="nightly" type="number" min="0" step="50"/>
           @if (tableForm.get('rentalBaseRate.nightly')?.touched || tableForm.get('rentalBaseRate.nightly')?.dirty) {
             @if (tableForm.get('rentalBaseRate.nightly')?.hasError('required')) {
               <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
@@ -60,7 +60,7 @@
         <!-- Weekend Night -->
         <c-col [md]="4" sm="12" class="mb-3">
           <label cLabel for="weekendNight">{{ 'tables.create.form.rates.weekendNight.label' | translate }}</label>
-          <input cFormControl formControlName="weekendNight" id="weekendNight" type="number" min="50" step="50"/>
+          <input cFormControl formControlName="weekendNight" id="weekendNight" type="number" min="0" step="50"/>
           @if (tableForm.get('rentalBaseRate.weekendNight')?.touched || tableForm.get('rentalBaseRate.weekendNight')?.dirty) {
             @if (tableForm.get('rentalBaseRate.weekendNight')?.hasError('min')) {
               <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
@@ -71,7 +71,7 @@
         <!-- Weekly -->
         <c-col [md]="4" sm="12" class="mb-3">
           <label cLabel for="weekly">{{ 'tables.create.form.rates.weekly.label' | translate }}</label>
-          <input cFormControl formControlName="weekly" id="weekly" type="number" min="100" step="100"/>
+          <input cFormControl formControlName="weekly" id="weekly" type="number" min="0" step="100"/>
           @if (tableForm.get('rentalBaseRate.weekly')?.touched || tableForm.get('rentalBaseRate.weekly')?.dirty) {
             @if (tableForm.get('rentalBaseRate.weekly')?.hasError('min')) {
               <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
@@ -89,7 +89,7 @@
         <!-- Monthly -->
         <c-col [md]="4" sm="12" class="mb-3">
           <label cLabel for="monthly">{{ 'tables.create.form.rates.monthly.label' | translate }}</label>
-          <input cFormControl formControlName="monthly" id="monthly" type="number" min="500" step="500"/>
+          <input cFormControl formControlName="monthly" id="monthly" type="number" min="0" step="500"/>
           @if (tableForm.get('rentalBaseRate.monthly')?.touched || tableForm.get('rentalBaseRate.monthly')?.dirty) {
             @if (tableForm.get('rentalBaseRate.monthly')?.hasError('min')) {
               <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
@@ -146,7 +146,7 @@
       <c-row class="mb-3">
         <c-col [md]="6" sm="12" class="mb-3">
           <label cLabel for="feePPPN">{{ 'tables.create.form.additionalGuestFee.fee.label' | translate }}</label>
-          <input cFormControl formControlName="feePPPN" id="feePPPN" type="number" min="10" step="10"/>
+          <input cFormControl formControlName="feePPPN" id="feePPPN" type="number" min="0" step="10"/>
           @if (tableForm.get('additionalGuestFee.feePPPN')?.touched || tableForm.get('additionalGuestFee.feePPPN')?.dirty) {
             @if (tableForm.get('additionalGuestFee.feePPPN')?.hasError('min')) {
               <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
@@ -217,9 +217,17 @@
               cFormControl
               formControlName="nightly"
               type="number"
-              min="50"
+              min="0"
               step = "50"
               class="form-control form-control-sm"/>
+              @if (pricingGroup.get('nightly')?.touched || pricingGroup.get('nightly')?.dirty) {
+                  @if (pricingGroup.get('nightly')?.hasError('required')) {
+                      <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+                  }
+                  @if (pricingGroup.get('nightly')?.hasError('min')) {
+                      <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+                  }
+              }
           </c-col>
 
           <!-- PP/PN -->
@@ -228,9 +236,14 @@
               cFormControl
               formControlName="ppPn"
               type="number"
-              min="10"
+              min="0"
               step="10"
               class="form-control form-control-sm"/>
+              @if (pricingGroup.get('ppPn')?.touched || pricingGroup.get('ppPn')?.dirty) {
+                  @if (pricingGroup.get('ppPn')?.hasError('min')) {
+                      <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+                  }
+              }
           </c-col>
 
           <!-- Guest Count -->
@@ -241,6 +254,11 @@
               type="number"
               min="1"
               class="form-control form-control-sm"/>
+              @if (pricingGroup.get('guestCount')?.touched || pricingGroup.get('guestCount')?.dirty) {
+                  @if (pricingGroup.get('guestCount')?.hasError('min')) {
+                      <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+                  }
+              }
           </c-col>
 
           <!-- Days of Week -->
@@ -261,6 +279,11 @@
               </ng-template>
 
             </ng-select>
+              @if (pricingGroup.get('daysOfWeek')?.touched || pricingGroup.get('daysOfWeek')?.dirty) {
+                  @if (pricingGroup.get('daysOfWeek')?.hasError('required')) {
+                      <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+                  }
+              }
           </c-col>
         </c-row>
       </div>
