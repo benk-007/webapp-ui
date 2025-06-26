@@ -42,16 +42,16 @@ export class RatesSettingsComponent implements OnInit, OnDestroy {
 
     this.ratesForm = this.fb.group({
       rentalBaseRate: this.fb.group({
-        nightly: [null, [Validators.required, Validators.min(0)]],
-        weekendNight: [null, [Validators.min(0)]],
-        weekly: [null, [Validators.min(0)]],
-        monthly: [null, [Validators.min(0)]],
-        minStay: [null, [Validators.required, Validators.min(0)]],
-        maxStay: [null, [Validators.min(0)]],
+        nightly: [null, [Validators.required, Validators.min(1)]],
+        weekendNight: [null, [Validators.min(1)]],
+        weekly: [null, [Validators.min(1)]],
+        monthly: [null, [Validators.min(1)]],
+        minStay: [null, [Validators.required, Validators.min(1)]],
+        maxStay: [null, [Validators.min(1)]],
       }),
       additionalGuestFee: this.fb.group({
-        feePPPN: [null, [Validators.min(0)]],
-        guestCount: [null, [Validators.min(0)]],
+        feePPPN: [null, [Validators.min(1)]],
+        guestCount: [null, [Validators.min(1)]],
       }),
     }, {
       validators: [
