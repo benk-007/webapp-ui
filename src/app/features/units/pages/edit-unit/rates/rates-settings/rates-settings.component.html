@@ -1,0 +1,163 @@
+<!-- Modal body -->
+<div class="modal-body">
+  <form (submit)="submit()" [formGroup]="ratesForm" cForm>
+
+    <!-- Base Rate Section -->
+    <div formGroupName="rentalBaseRate">
+      <h6 class="section-title underline mb-3 mt-3">
+        {{ 'units.edit-unit.tabs.rates.settings.BaseRate' | translate }}
+      </h6>
+
+      <!-- Nightly & Weekend Night -->
+      <c-row>
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="required me-2" for="nightly">
+            {{ 'units.edit-unit.tabs.rates.settings.nightly' | translate }}
+          </label>
+          <input cFormControl formControlName="nightly" id="nightly" type="number" step="50" min="0"/>
+          @if ((ratesForm.get('rentalBaseRate.nightly')?.touched || ratesForm.get('rentalBaseRate.nightly')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.nightly')?.hasError('required')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+            }
+            @if (ratesForm.get('rentalBaseRate.nightly')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+        </c-col>
+
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="weekendNight">
+            {{ 'units.edit-unit.tabs.rates.settings.weekendNight' | translate }}
+          </label>
+          <input cFormControl formControlName="weekendNight" id="weekendNight" type="number" step="50" min="0"/>
+          @if ((ratesForm.get('rentalBaseRate.weekendNight')?.touched || ratesForm.get('rentalBaseRate.weekendNight')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.weekendNight')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+        </c-col>
+      </c-row>
+
+      <!-- Weekly & Monthly -->
+      <c-row>
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="weekly">
+            {{ 'units.edit-unit.tabs.rates.settings.weekly' | translate }}
+          </label>
+          <input cFormControl formControlName="weekly" id="weekly" type="number" step="100" min="0"/>
+          @if ((ratesForm.get('rentalBaseRate.weekly')?.touched || ratesForm.get('rentalBaseRate.weekly')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.weekly')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+          @if (ratesForm.errors?.['weeklyLowerThanNightly']) {
+            <c-form-feedback [valid]="false">
+              {{ 'units.edit-unit.tabs.rates.settings.errors.weeklyLowerThanNightly' | translate }}
+            </c-form-feedback>
+          }
+        </c-col>
+
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="monthly">
+            {{ 'units.edit-unit.tabs.rates.settings.monthly' | translate }}
+          </label>
+          <input cFormControl formControlName="monthly" id="monthly" type="number" step="500" min="0"/>
+          @if ((ratesForm.get('rentalBaseRate.monthly')?.touched || ratesForm.get('rentalBaseRate.monthly')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.monthly')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+          @if (ratesForm.errors?.['monthlyLowerThanNightly']) {
+            <c-form-feedback [valid]="false">
+              {{ 'units.edit-unit.tabs.rates.settings.errors.monthlyLowerThanNightly' | translate }}
+            </c-form-feedback>
+          }
+          @if (ratesForm.errors?.['monthlyLowerThanWeekly']) {
+            <c-form-feedback [valid]="false">
+              {{ 'units.edit-unit.tabs.rates.settings.errors.monthlyLowerThanWeekly' | translate }}
+            </c-form-feedback>
+          }
+        </c-col>
+      </c-row>
+
+      <!-- MinStay & MaxStay -->
+      <c-row>
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2 required" for="minStay">
+            {{ 'units.edit-unit.tabs.rates.settings.minStay' | translate }}
+          </label>
+          <input cFormControl formControlName="minStay" id="minStay" type="number" min="0" placeholder="1"/>
+          @if ((ratesForm.get('rentalBaseRate.minStay')?.touched || ratesForm.get('rentalBaseRate.minStay')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.minStay')?.hasError('required')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+            }
+            @if (ratesForm.get('rentalBaseRate.minStay')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+        </c-col>
+
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="maxStay">
+            {{ 'units.edit-unit.tabs.rates.settings.maxStay' | translate }}
+          </label>
+          <input cFormControl formControlName="maxStay" id="maxStay" type="number" min="0" placeholder="5"/>
+          @if ((ratesForm.get('rentalBaseRate.maxStay')?.touched || ratesForm.get('rentalBaseRate.maxStay')?.dirty)) {
+            @if (ratesForm.get('rentalBaseRate.maxStay')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+          @if (ratesForm.errors?.['maxLowerThanMin']) {
+            <c-col [md]="12">
+              <c-form-feedback [valid]="false">
+                {{ 'commons.errors.min-max-stay' | translate }}
+              </c-form-feedback>
+            </c-col>
+          }
+        </c-col>
+      </c-row>
+    </div>
+
+    <!-- Guest Fee Section -->
+    <div formGroupName="additionalGuestFee">
+      <h6 class="section-title underline mb-3 mt-4">
+        {{ 'units.edit-unit.tabs.rates.settings.GuestFee' | translate }}
+      </h6>
+      <c-row>
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="feePPPN">
+            {{ 'units.edit-unit.tabs.rates.settings.feePPPN' | translate }}
+          </label>
+          <input cFormControl formControlName="feePPPN" id="feePPPN" type="number" step="10" min="0"/>
+          @if ((ratesForm.get('additionalGuestFee.feePPPN')?.touched || ratesForm.get('additionalGuestFee.feePPPN')?.dirty)) {
+            @if (ratesForm.get('additionalGuestFee.feePPPN')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+        </c-col>
+
+        <c-col [md]="6" class="mb-3">
+          <label cLabel class="me-2" for="guestCount">
+            {{ 'units.edit-unit.tabs.rates.settings.guestCount' | translate }}
+          </label>
+          <input cFormControl formControlName="guestCount" id="guestCount" type="number" min="0"/>
+          @if ((ratesForm.get('additionalGuestFee.guestCount')?.touched || ratesForm.get('additionalGuestFee.guestCount')?.dirty)) {
+            @if (ratesForm.get('additionalGuestFee.guestCount')?.hasError('min')) {
+              <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+            }
+          }
+        </c-col>
+      </c-row>
+    </div>
+
+    <!-- Modal footer -->
+    <c-row class="mt-4 mb-3">
+      <c-col class="d-flex justify-content-end">
+        <button cButton class="ms-1" color="primary" size="sm" type="submit" [disabled]="!ratesForm.valid">
+          {{ 'commons.form.save-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>

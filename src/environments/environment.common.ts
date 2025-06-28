@@ -34,6 +34,9 @@ export const commonProperties = {
   unitRoomsById: UNIT_SERVICE + 'units/:unitId/rooms',
   unitRoomById: UNIT_SERVICE + 'units/:unitId/rooms/:roomId',
 
+  //rate
+  unitBaseRateById: UNIT_SERVICE + 'units/:unitId/rates/default',
+
   //unit images
   unitImages: UNIT_SERVICE + 'images',
   unitImageById: UNIT_SERVICE + 'images/:imageId',

@@ -12,7 +12,24 @@ ul.nav.nav-underline {
       }
     }
 
+    &.dropdown {
+      .dropdown-menu {
+        .dropdown-item {
+          color: vars.$gray !important;
+          font-size: 14px;
 
+          &:hover, &:focus {
+            color: vars.$info !important;
+            background-color: rgba(vars.$info, 0.1);
+          }
+
+          &.active {
+            color: vars.$info !important;
+            font-weight: bold;
+          }
+        }
+      }
+    }
   }
 }
 

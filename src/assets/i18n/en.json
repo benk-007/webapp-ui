@@ -7,7 +7,9 @@
     "errors": {
       "required": "This field is required",
       "email": "Enter a valid email address",
-      "no-numbers": "Numbers are not allowed"
+      "no-numbers": "Numbers are not allowed",
+      "strictly-positive": "The value must be strictly positive.",
+      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay."
     },
     "form": {
       "description-input": {
@@ -920,6 +922,45 @@
                 "message": "An error occurred while updating the room: :room. Please try again or contact the support team."
               }
             }
+          }
+        },
+        "rates": {
+          "title": "Rates",
+          "hint": "Configure the pricing periods and rules for this unit to control its availability and rates.",
+          "settings": {
+            "title": "Settings",
+            "BaseRate": "Rental Base Rate Details",
+            "GuestFee": "Additional Guest Fee",
+            "nightly": "Nightly" ,
+            "weekendNight": "Weekend Night",
+            "weekly": "Weekly",
+            "monthly": "Monthly",
+            "minStay": "Minimum Stay (nights)",
+            "maxStay": "Maximum Stay (nights)",
+            "feePPPN": "Additional Guest Fee (per person per night)",
+            "guestCount": "Guest Count",
+            "notifications": {
+              "success": {
+                "title": "Rates updated",
+                "message": "Rates updated successfully."
+              },
+              "error": {
+                "title": "Rates update error",
+                "message": "Failed to update rates. Please try again."
+              },
+              "load-error": {
+                "title": "Loading error",
+                "message": "An error occurred when loading base rates."
+              }
+            },
+            "errors": {
+              "weeklyLowerThanNightly": "Weekly price must be higher than nightly price.",
+              "monthlyLowerThanNightly": "Monthly price must be higher than nightly price.",
+              "monthlyLowerThanWeekly": "Monthly price must be higher than weekly price."
+            }
+          },
+          "ratesTable": {
+            "title": "Rates table"
           }
         }
       }
