@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
+  AvatarComponent,
   ButtonDirective,
   ColComponent,
   FormControlDirective,
-  InputGroupComponent, InputGroupTextDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
   RowComponent,
   SpinnerComponent,
   TableDirective
 } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+import {IconDirective} from '@coreui/icons-angular';
 import {
   cilClock,
   cilPen,
@@ -19,22 +21,19 @@ import {
   cilTrash
 } from '@coreui/icons';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { TooltipDirective } from 'ngx-bootstrap/tooltip';
-import { ToastrService } from 'ngx-toastr';
-import { EmptyDataComponent } from '../../../../../../shared/components/empty-data/empty-data.component';
-import { ListContentComponent } from '../../../../../../shared/components/list-content/list-content.component';
-import { IdentityDocumentItemGetModel } from '../../../../models/identity-document-item-get.model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {ToastrService} from 'ngx-toastr';
+import {EmptyDataComponent} from '../../../../../../shared/components/empty-data/empty-data.component';
+import {ListContentComponent} from '../../../../../../shared/components/list-content/list-content.component';
+import {IdentityDocumentItemGetModel} from '../../../../models/identity-document-item-get.model';
 
-import { DatePipe } from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {IdentityDocumentService} from "../../../../services/identity-document.service";
 import {TableControlComponent} from "../../../../../../shared/components/table-control/table-control.component";
 import {AuditNamePipe} from "../../../../../../shared/pipes/audit-name.pipe";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
-import {DocumentImageService} from "../../../../services/document-image.service";
-import {DocumentCreateModalComponent} from "../documents-create-modal/documents-create-modal.component";
-import {ConfirmModalComponent} from "../../../../../../shared/components/confirm-modal/confirm-modal.component";
+import {DocumentCuModalComponent} from "../document-cu-modal/document-cu-modal.component";
 
 
 @Component({
@@ -56,7 +55,8 @@ import {ConfirmModalComponent} from "../../../../../../shared/components/confirm
     FormControlDirective,
     AuditNamePipe,
     BadgeComponent,
-    RouterLink
+    AvatarComponent,
+    NgClass
   ],
   templateUrl: './documents.component.html',
   styleUrl: './documents.component.scss',
@@ -73,108 +73,58 @@ export class DocumentsComponent extends ListContentComponent {
     cilTrash
   };
   guestId!: string;
-
   override listContent: IdentityDocumentItemGetModel[] = [];
 
-  constructor(
-      public override router: Router,
-      public override route: ActivatedRoute,
-      public readonly documentService: IdentityDocumentService,
-      private readonly toastr: ToastrService,
-      private readonly DocumentImageService: DocumentImageService,
-      private readonly modalService: BsModalService,
-      private translateService: TranslateService,
-  ) {
+  constructor(public override router: Router,
+              public override route: ActivatedRoute,
+              public readonly identityDocumentService: IdentityDocumentService,
+              private readonly toastr: ToastrService,
+              private readonly modalService: BsModalService,
+              private readonly translateService: TranslateService) {
     super(router, route);
   }
 
-  override ngOnInit(): void {
+  override ngOnInit() {
     super.ngOnInit();
     this.size = 10;
     this.subscriptions.push(
       this.route.parent!.paramMap.subscribe(paramMap => {
-        console.log('your paramMap', paramMap);
         const id = paramMap.get('id');
         if (id) {
           this.guestId = id;
+          this.subscribeToQueryParam();
         }
       })
     );
-
-    this.subscribeToQueryParam();
-
-
-
   }
 
   override retrieveListContent(params: any) {
     super.retrieveListContent(params);
     this.subscriptions.push(
-        this.documentService.getIdentityDocuments(this.guestId, this.page, this.size).subscribe({
-          next: (data) => {
-            super.handleSuccessData(data);
-
-            this.listContent.forEach((doc) => {
-              this.DocumentImageService.getImagesByDocumentId(doc.id).subscribe({
-                next: (imageData) => {
-                  doc.hasImage = imageData.totalElements > 0;
-                },
-                error: () => {
-                  doc.hasImage = false;
-                }
-              });
-            });
-
-          },
-          error: (err) => {
-            console.warn('Error retrieving documents:', err);
-            if (!this.firstCallDone) this.firstCallDone = true;
-          }
-        })
-    );
-  }
-
-
-
-  deleteDocument(document: IdentityDocumentItemGetModel): void {
-    const initialState = {
-      title: this.translateService.instant('documents.list.delete-modal.title'),
-      message: this.translateService.instant('documents.list.delete-modal.message', { documentNumber: document.documentNumber })
-    };
-
-    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
-
-    this.subscriptions.push(
-      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
-        this.documentService.deleteDocumentById(document.id, this.guestId).subscribe({
-          next: () => {
-            this.refreshListContent();
-            this.toastr.success(
-              this.translateService.instant('documents.list.notifications.delete.success.message', { documentNumber: document.documentNumber }),
-              this.translateService.instant('documents.list.notifications.delete.success.title')
-            );
-          },
-          error: () => {
-            this.toastr.error(
-              this.translateService.instant('documents.list.notifications.delete.error.message'),
-              this.translateService.instant('documents.list.notifications.delete.error.title')
-            );
-          }
-        });
+      this.identityDocumentService.getIdentityDocuments(this.guestId, this.page, this.size).subscribe({
+        next: (data) => {
+          console.log('Identity documents retrieved successfully. API response is:', data);
+          super.handleSuccessData(data);
+        },
+        error: (err) => {
+          console.warn('An error occurred when retrieving identity documents. API error is:', err);
+        }
       })
     );
   }
 
+  confirmDeletion(identityDocument: IdentityDocumentItemGetModel) {
 
-  openDocumentCreateModal(): void {
-    const initialState = { class: 'modal-lg' };
-    const modalRef = this.modalService.show(DocumentCreateModalComponent, initialState);
-    (modalRef.content as DocumentCreateModalComponent).init(this.guestId);
+  }
+
+  openIdentityDocumentCuModal(identityDocument?: IdentityDocumentItemGetModel) {
+    let initialState = {documentToEdit: identityDocument, guestId: this.guestId}
+
+    let identityDocumentCuModal = this.modalService.show(DocumentCuModalComponent, {initialState});
     this.subscriptions.push(
-      (modalRef.content as DocumentCreateModalComponent).actionConfirmed.subscribe(() => {
+      (identityDocumentCuModal.content as DocumentCuModalComponent).actionConfirmed.subscribe(() => {
         this.refreshListContent();
       })
     );
   }
-
 }

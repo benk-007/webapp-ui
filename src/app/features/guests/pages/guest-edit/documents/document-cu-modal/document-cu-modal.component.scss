@@ -1,4 +1,4 @@
-@use "../../../../../../../../scss/variables" as vars;
+@use "../../../../../../../scss/variables" as vars;
 
 label.upload-placeholder-first {
   div {
@@ -9,7 +9,6 @@ label.upload-placeholder-first {
     background-color: vars.$light;
     border: 2px dashed vars.$border-color;
     border-radius: 0.25rem;
-
     img {
       width: 100px;
     }
@@ -51,6 +50,7 @@ label.upload-placeholder-first {
     gap: 0.5rem;
     transition: all 0.3s ease-in-out;
     z-index: 10;
+    border-radius: 0.25rem;
   }
 }
 
@@ -63,6 +63,3 @@ label.add-image{
     border-radius: 0.25rem;
   }
 }
-
-
-

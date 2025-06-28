@@ -1037,6 +1037,13 @@
     "create": {
       "title": "Add guest",
       "form": {
+        "fullname-input": {
+          "label": "Full Name",
+          "placeholder": {
+            "firstname": "Firstname",
+            "lastname": "Lastname"
+          }
+        },
         "firstName-input": {
           "label": "First name"
         },
@@ -1202,6 +1209,29 @@
     }
   },
   "documents": {
+    "commons": {
+      "form": {
+        "document-input": {
+          "label": "Document"
+        },
+        "type-input": {
+          "label": "Type",
+          "values": {
+            "PASSPORT": "Passport",
+            "IDENTITY_CARD": "ID Card",
+            "DRIVER_LICENCE": "Driver Licence",
+            "OTHER": "Other"
+          }
+        },
+        "expiration-input": {
+          "label": "Expiration date"
+        },
+        "file-input": {
+          "label": "Document File",
+          "placeholder": "Kindly upload the guest’s ID document to complete their profile"
+        }
+      }
+    },
     "list": {
       "empty-data": "No identity documents available. Please kindly ask the guest to provide one to complete their profile.",
       "cta": {
@@ -1231,6 +1261,34 @@
           "hasImage": "File provided",
           "created-on": "Created On",
           "actions": "Actions"
+        }
+      }
+    },
+    "cu-modal": {
+      "title": {
+        "create": "New Identity Document",
+        "edit": "Edit Identity Document"
+      },
+      "notifications": {
+        "success": {
+          "title": {
+            "create": "Identity Document Created",
+            "edit": "Identity Document Updated"
+          },
+          "message": {
+            "create": "The guest's ID document has been successfully created.",
+            "edit": "The guest's ID document has been successfully updated."
+          }
+        },
+        "error": {
+          "title": {
+            "create": "Identity Document Creation Failed",
+            "edit": "Identity Document Update failed"
+          },
+          "message": {
+            "create": "An error occurred when creating the guest's ID document.",
+            "edit": "An error occurred when updating the guest's ID document."
+          }
         }
       }
     },

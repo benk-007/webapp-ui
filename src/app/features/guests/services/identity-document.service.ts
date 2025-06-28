@@ -24,20 +24,23 @@ export class IdentityDocumentService {
     );
   }
 
-  deleteDocumentById(documentId: string, guestId: string): Observable<void> {
-    const params = new HttpParams().set('guestId', guestId);
-    return this.httpClient.delete<void>(
-      environment.apiBaseUrl.concat(environment.identityDocuments + `/${documentId}`),
-      {params}
-    );
+  getIdentityDocumentById(identityDocumentId: string): Observable<IdentityDocumentItemGetModel> {
+    return this.httpClient.get<IdentityDocumentItemGetModel>(
+      environment.apiBaseUrl.concat(environment.identityDocumentById.replace(':identityDocumentId', identityDocumentId)));
   }
 
-  getDocumentById(documentId: string, guestId: string): Observable<IdentityDocumentItemGetModel> {
-    const params = new HttpParams().set('guestId', guestId);
-    return this.httpClient.get<IdentityDocumentItemGetModel>(
-      environment.apiBaseUrl.concat(environment.identityDocuments + `/${documentId}`),
-      {params}
-    );
+  getIdentityDocumentImageById(identityDocumentId: string): Observable<Blob> {
+    let params = new HttpParams();
+    params = params.set('file', true);
+    return this.httpClient.get(environment.identityDocumentImageById.replace(':identityDocumentId', identityDocumentId), {
+      params: params,
+      responseType: "blob"
+    });
+  }
+
+  createDocument(payload: FormData): Observable<IdentityDocumentItemGetModel> {
+    return this.httpClient.post<IdentityDocumentItemGetModel>(
+      environment.apiBaseUrl.concat(environment.identityDocuments), payload);
   }
 
   patchDocumentById(documentId: string, guestId: string, payload: Partial<IdentityDocumentItemGetModel>): Observable<IdentityDocumentItemGetModel> {
@@ -49,11 +52,13 @@ export class IdentityDocumentService {
     );
   }
 
-  createDocument(guestId: string, documentData: any): Observable<IdentityDocumentItemGetModel> {
-    return this.httpClient.post<IdentityDocumentItemGetModel>(
-      environment.apiBaseUrl.concat(environment.identityDocuments).concat(`?guestId=${guestId}`),
-      documentData
+  deleteDocumentById(documentId: string, guestId: string): Observable<void> {
+    const params = new HttpParams().set('guestId', guestId);
+    return this.httpClient.delete<void>(
+      environment.apiBaseUrl.concat(environment.identityDocuments + `/${documentId}`),
+      {params}
     );
   }
+
 
 }

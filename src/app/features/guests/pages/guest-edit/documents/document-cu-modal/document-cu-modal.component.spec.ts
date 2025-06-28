@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DocumentGalleryComponent } from './document-gallery.component';
+import { DocumentCuModalComponent } from './document-cu-modal.component';
 
-describe('DocumentGalleryComponent', () => {
-  let component: DocumentGalleryComponent;
-  let fixture: ComponentFixture<DocumentGalleryComponent>;
+describe('DocumentCuModalComponent', () => {
+  let component: DocumentCuModalComponent;
+  let fixture: ComponentFixture<DocumentCuModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DocumentGalleryComponent]
+      imports: [DocumentCuModalComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DocumentGalleryComponent);
+    fixture = TestBed.createComponent(DocumentCuModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

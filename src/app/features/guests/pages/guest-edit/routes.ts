@@ -25,8 +25,8 @@ export const routes: Routes = [
       {
         path: 'identity-documents',
         loadComponent: () =>
-          import('./identity-document-list/identity-document-list.component').then(
-            (m) => m.IdentityDocumentListComponent
+          import('./documents/documents-list/documents.component').then(
+            (m) => m.DocumentsComponent
           ),
         data: {
           title: 'Documents',

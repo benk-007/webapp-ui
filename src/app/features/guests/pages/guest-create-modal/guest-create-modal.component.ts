@@ -20,7 +20,6 @@ import {CountrySelectComponent} from '../../../../shared/components/country-sele
 import {CommonModule} from '@angular/common';
 import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from "@ng-select/ng-select";
 import {DocumentTypeEnum} from "../../models/document-type.enum";
-import {documentConsistencyValidator} from "../../validators/document-consistency.validator";
 
 @Component({
   selector: 'app-guest-create-modal',

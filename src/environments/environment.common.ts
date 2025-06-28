@@ -45,6 +45,7 @@ export const commonProperties = {
   //documents
   identityDocuments: GUEST_SERVICE + 'identity-documents',
   identityDocumentById: GUEST_SERVICE + 'identity-documents/:identityDocumentId',
+  identityDocumentImageById: GUEST_SERVICE + 'identity-documents/:identityDocumentId/image',
 
   // id-document images
   idDocumentImages: GUEST_SERVICE + 'images',

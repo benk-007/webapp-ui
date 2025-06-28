@@ -34,6 +34,7 @@
 @use 'intl-tel-input/build/css/intlTelInput.css';
 @use 'ngx-toastr/toastr';
 @use "leaflet/dist/leaflet.css";
+@use 'ngx-bootstrap/datepicker/bs-datepicker.css';
 
 // Custom styles for this theme
 @use "theme";
