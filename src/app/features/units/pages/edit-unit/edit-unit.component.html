@@ -23,13 +23,15 @@
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: false }">
 
-    <a class="nav-link dropdown-toggle" role="button">
+    <a routerLink="rates" class="nav-link dropdown-toggle" role="button" routerLinkActive="active">
       {{ 'units.edit-unit.tabs.rates.title'|translate }}
     </a>
 
     <ul class="dropdown-menu show" *ngIf="openDropdown">
-      <li><a class="dropdown-item" [routerLink]="['rates/table']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
-      <li><a class="dropdown-item" [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
+      <li><a class="dropdown-item"
+             [routerLink]="['rates/table']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
+      <li><a class="dropdown-item"
+             [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
     </ul>
   </li>
 
