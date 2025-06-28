@@ -9,7 +9,8 @@
       "email": "Enter a valid email address",
       "no-numbers": "Numbers are not allowed",
       "strictly-positive": "The value must be strictly positive.",
-      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay."
+      "min-max-stay": "Maximum stay must be greater than or equal to minimum stay.",
+      "invalidDateRange": "The 'From Date' must be earlier than the 'Until Date'."
     },
     "form": {
       "description-input": {
@@ -1418,5 +1419,129 @@
       },
       "load-error": "An error occurred while loading document data."
     }
+  },
+  "tables": {
+    "create": {
+      "title": "Add Standard Rate",
+      "form": {
+        "details": {
+          "section-title": "Rental Rate Details",
+          "rateName": {
+            "label": "Rate Name"
+          },
+          "fromDate": {
+            "label": "From Date"
+          },
+          "untilDate": {
+            "label": "Until Date"
+          }
+        },
+        "rates": {
+          "section-title": "Enter Fees Below",
+          "nightly": {
+            "label": "Nightly"
+          },
+          "weekendNight": {
+            "label": "Weekend Night"
+          },
+          "weekly": {
+            "label": "Weekly"
+          },
+          "monthly": {
+            "label": "Monthly"
+          },
+          "minStay": {
+            "label": "Minimum Stay (nights)"
+          },
+          "maxStay": {
+            "label": "Maximum Stay (nights)"
+          }
+        },
+        "additionalGuestFee": {
+          "section-title": "Additional Guest Fee",
+          "fee": {
+            "label": "Fee (PP/PN)"
+          },
+          "guestCount": {
+            "label": "Guest Count"
+          }
+        },
+        "daySpecific": {
+          "section-title": "Day Specific Pricing",
+          "placeholder": "Set rates for specific days. They will override above rates.",
+          "ApplyToDays": {
+            "label": "Apply To Days"
+          },
+          "days": {
+            "MONDAY": "Monday",
+            "TUESDAY": "Tuesday",
+            "WEDNESDAY": "Wednesday",
+            "THURSDAY": "Thursday",
+            "FRIDAY": "Friday",
+            "SATURDAY": "Saturday",
+            "SUNDAY": "Sunday"
+          }
+        },
+        "notifications": {
+          "success": {
+            "title": "Standard Rate Created",
+            "message": "The standard rate has been successfully created."
+          },
+          "error": {
+            "title": "Creation Failed",
+            "message": "An error occurred while creating the standard rate."
+          }
+        }
+      }
+    },
+    "list": {
+      "title": "Standard Rates",
+      "table": {
+        "header": {
+          "name": "Name",
+          "period": "Rate Period",
+          "nightly": "Nightly",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "minStay": "Minimum Stay",
+          "actions": "Actions"
+        }
+      },
+      "cta": {
+        "add-btn": "+ Add Standard Rate"
+      },
+      "empty-data": "No standard rates found.",
+      "delete": {
+        "title": "Delete Rate",
+        "message": "Are you sure you want to delete the rate?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Rate Deleted",
+            "message": "The rate has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion Failed",
+            "message": "An error occurred while deleting the rate."
+          }
+        }
+      }
+    },
+    "edit": {
+      "form": {
+        "notifications": {
+          "success": {
+            "title": "Standard Rate Updated",
+            "message": "The standard rate has been successfully updated."
+          },
+          "error": {
+            "title": "Update Failed",
+            "message": "An error occurred while updating the standard rate."
+          }
+        }
+      }
+    }
   }
 }
+
