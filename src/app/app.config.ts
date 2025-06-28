@@ -19,6 +19,7 @@ import {jwtInterceptor} from "./core/interceptors/jwt.interceptor";
 import {provideToastr} from "ngx-toastr";
 import {JwtModule} from "@auth0/angular-jwt";
 import {AuthService} from "./core/services/auth.service";
+import {tokenExpiredInterceptor} from "./core/interceptors/token-expired.interceptor";
 
 export function tokenGetter() {
   return localStorage.getItem(AuthService.TOKEN);
@@ -43,7 +44,7 @@ export const appConfig: ApplicationConfig = {
       withHashLocation()
     ),
     provideHttpClient(
-      withInterceptorsFromDi(), withInterceptors([jwtInterceptor])
+      withInterceptorsFromDi(), withInterceptors([jwtInterceptor, tokenExpiredInterceptor])
     ),
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
