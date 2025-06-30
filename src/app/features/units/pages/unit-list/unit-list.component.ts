@@ -59,8 +59,7 @@ import {UnitSelectComponent} from "../../../../shared/components/unit-select/uni
     TableControlComponent,
     EmptyDataComponent,
     SpinnerComponent,
-    PageTitleComponent,
-    UnitSelectComponent
+    PageTitleComponent
   ],
   templateUrl: './unit-list.component.html',
   styleUrl: './unit-list.component.scss',
@@ -137,7 +136,7 @@ export class UnitListComponent extends ListContentComponent {
 
   openCreateMultiUnitModal() {
     let initialState = {
-      // class: 'modal-lg'
+       class: 'modal-xl'
     }
     let multiUnitCreateModalRef = this.modalService.show(MultiUnitCreateModalComponent, initialState);
 

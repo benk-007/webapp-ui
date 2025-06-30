@@ -1,28 +1,287 @@
 <!--Modal title-->
 <div class="modal-header justify-content-center align-items-center">
   <h6 class="modal-title">
-    {{ 'units.create-unit.title'|translate }}
+    Add Multi-unit Rental
   </h6>
 </div>
 
 <!--Modal body-->
 <div class="modal-body">
-
   <form (submit)="submit()" [formGroup]="multiUnitForm" cForm>
 
+    <!-- Step Navigation -->
+    <c-row class="mb-4">
+      <c-col md="12">
+        <div class="d-flex align-items-center">
+          <!-- Step 1 -->
+          <div class="d-flex align-items-center me-4">
+            <div class="step-indicator me-2" [ngClass]="{'active': currentStep === 1, 'completed': currentStep > 1}">
+              <span *ngIf="currentStep === 1">1</span>
+              <i *ngIf="currentStep > 1" class="bi bi-check-circle-fill"></i>
+            </div>
+            <span class="step-title" [ngClass]="{'text-primary': currentStep >= 1}">
+              Multi-Unit Details
+            </span>
+          </div>
 
+          <!-- Step 2 -->
+          <div class="d-flex align-items-center">
+            <div class="step-indicator me-2" [ngClass]="{'active': currentStep === 2}">2</div>
+            <span class="step-title" [ngClass]="{'text-primary': currentStep === 2}">
+              Rental Details
+            </span>
+          </div>
+        </div>
+      </c-col>
+    </c-row>
 
-  <!--Modal footer-->
-  <c-row class="mt-4">
-    <c-col class="d-flex justify-content-end">
-      <button cButton color="light" size="sm" variant="ghost" (click)="closeModal()">
-        {{ 'commons.form.cancel-btn'|translate }}
-      </button>
-      <button cButton class="ms-3" color="primary" size="sm" type="submit" [disabled]="!multiUnitForm.valid">
-        {{ 'commons.form.save-btn'|translate }}
-      </button>
-    </c-col>
-  </c-row>
+    <!-- Step 1: Multi-Unit Details -->
+    <div *ngIf="currentStep === 1">
+
+      <!-- Main Unit Name -->
+      <c-row class="mb-3">
+        <c-col md="12">
+          <label cLabel class="required me-2" for="mainUnitName">
+            Main Unit Name
+          </label>
+          <input cFormControl formControlName="name" id="mainUnitName" type="text"
+                 placeholder="Main Unit Name"/>
+          @if (multiUnitForm.get('name')?.touched || multiUnitForm.get('name')?.dirty) {
+            @if (multiUnitForm.get('name')?.hasError('required')) {
+              <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+            }
+          }
+        </c-col>
+      </c-row>
+
+      <!-- New Subunits Section -->
+      <c-row class="mb-4">
+        <c-col md="12">
+          <div formArrayName="newSubUnits">
+            @for (subUnit of newSubUnits.controls; track $index) {
+              <div [formGroupName]="$index" class="subunit-row mb-3 p-3 border rounded">
+                <c-row class="align-items-end">
+                  <!-- Subunit Name -->
+                  <c-col md="5">
+                    <label cLabel class="required me-2">
+                      Subunit Name
+                    </label>
+                    <input cFormControl formControlName="name" type="text"
+                           placeholder="Subunit Name"/>
+                    @if (subUnit.get('name')?.touched || subUnit.get('name')?.dirty) {
+                      @if (subUnit.get('name')?.hasError('required')) {
+                        <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+                      }
+                    }
+                  </c-col>
+
+                  <!-- Priority -->
+                  <c-col md="2">
+                    <label cLabel class="required me-2">
+                      Priority
+                    </label>
+                    <input cFormControl formControlName="priority" type="number" min="1" class="form-control"/>
+                  </c-col>
+
+                  <!-- Status Toggle -->
+                  <c-col md="3">
+                    <div class="d-flex align-items-center">
+                      <c-form-check [switch]="true" class="me-2">
+                        <input cFormCheckInput formControlName="readiness" type="checkbox" [id]="'status-' + $index"/>
+                        <label cFormCheckLabel [for]="'status-' + $index">
+                          Status
+                        </label>
+                      </c-form-check>
+                    </div>
+                  </c-col>
+
+                  <!-- Remove Button -->
+                  <c-col md="2" class="text-end">
+                    <button type="button" cButton size="sm" color="danger" variant="ghost"
+                            (click)="removeNewSubUnit($index)" [disabled]="newSubUnits.length === 1">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </c-col>
+                </c-row>
+              </div>
+            }
+          </div>
+
+          <!-- Add New Subunit Button -->
+          <button type="button" cButton variant="outline" color="primary" size="sm"
+                  class="mb-3" (click)="addNewSubUnit()">
+            <i class="bi bi-plus me-1"></i>
+            Add New Subunit
+          </button>
+        </c-col>
+      </c-row>
+
+      <!-- Existing Units Selection -->
+      <c-row class="mb-4">
+        <c-col md="12">
+          <label cLabel for="existingUnits">
+            Add Existing Rental as Subunit
+          </label>
+          <app-unit-select formControlName="existingUnits" id="existingUnits"></app-unit-select>
+        </c-col>
+      </c-row>
+
+    </div>
+
+    <!-- Step 2: Rental Details -->
+    <div *ngIf="currentStep === 2">
+
+      <!-- Rental Information Section -->
+      <c-row class="mb-4">
+        <c-col md="12">
+          <h6 class="section-title underline mb-3">
+            RENTAL INFORMATION
+          </h6>
+
+          <c-row>
+            <!-- Phone -->
+            <c-col md="6" class="mb-3">
+              <label cLabel for="mobile" class="required">
+                Phone
+              </label>
+              <ngx-intl-tel-input
+                [enableAutoCountrySelect]="false"
+                [enablePlaceholder]="true"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                [searchCountryFlag]="true"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="CountryISO.Morocco"
+                cssClass="form-control"
+                formControlName="mobile"
+                id="mobile">
+              </ngx-intl-tel-input>
+              @if (multiUnitForm.get('mobile')?.touched) {
+                @if (multiUnitForm.get('mobile')?.hasError('required')) {
+                  <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+                }
+              }
+            </c-col>
+
+            <!-- Email -->
+            <c-col md="6" class="mb-3">
+              <label cLabel for="email">
+                Email
+              </label>
+              <input cFormControl formControlName="email" id="email" type="email"
+                     placeholder="example@domain.com"/>
+              @if (multiUnitForm.get('email')?.touched || multiUnitForm.get('email')?.dirty) {
+                @if (multiUnitForm.get('email')?.hasError('invalidEmail')) {
+                  <c-form-feedback [valid]="false">Enter a valid email address</c-form-feedback>
+                }
+              }
+            </c-col>
+          </c-row>
+        </c-col>
+      </c-row>
+
+      <!-- Rental Location Section -->
+      <c-row class="mb-4">
+        <c-col md="12">
+          <h6 class="section-title underline mb-3">
+            RENTAL LOCATION
+          </h6>
+
+          <!-- Address -->
+          <c-row>
+            <c-col md="12" class="mb-3">
+              <label cLabel class="required me-2" for="street1">
+                Address
+              </label>
+              <input cFormControl formControlName="street1" id="street1" type="text"
+                     placeholder="Address"/>
+              @if (multiUnitForm.get('street1')?.touched || multiUnitForm.get('street1')?.dirty) {
+                @if (multiUnitForm.get('street1')?.hasError('required')) {
+                  <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+                }
+              }
+            </c-col>
+          </c-row>
+
+          <c-row>
+            <!-- City -->
+            <c-col md="6" class="mb-3">
+              <label cLabel class="required me-2" for="city">
+                City
+              </label>
+              <input cFormControl formControlName="city" id="city" type="text"
+                     placeholder="City"/>
+              @if (multiUnitForm.get('city')?.touched || multiUnitForm.get('city')?.dirty) {
+                @if (multiUnitForm.get('city')?.hasError('required')) {
+                  <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+                }
+                @if (multiUnitForm.get('city')?.hasError('noNumbers')) {
+                  <c-form-feedback [valid]="false">Numbers are not allowed</c-form-feedback>
+                }
+              }
+            </c-col>
+
+            <!-- Postal Code -->
+            <c-col md="6" class="mb-3">
+              <label cLabel for="postcode">
+                Postal Code
+              </label>
+              <input cFormControl formControlName="postcode" id="postcode" type="text"
+                     placeholder="Postal Code"/>
+            </c-col>
+          </c-row>
+
+          <!-- Country -->
+          <c-row>
+            <c-col md="12" class="mb-3">
+              <label cLabel class="required me-2" for="country">
+                Country
+              </label>
+              <app-country-select formControlName="country" id="country"></app-country-select>
+              @if (multiUnitForm.get('country')?.touched || multiUnitForm.get('country')?.dirty) {
+                @if (multiUnitForm.get('country')?.hasError('required')) {
+                  <c-form-feedback [valid]="false">This field is required</c-form-feedback>
+                }
+              }
+            </c-col>
+          </c-row>
+        </c-col>
+      </c-row>
+    </div>
+
+    <!-- Modal Footer with Step Navigation -->
+    <c-row class="mt-4">
+      <c-col class="d-flex justify-content-between">
+        <!-- Left side buttons -->
+        <div>
+          <button *ngIf="currentStep === 2" type="button" cButton color="secondary" size="sm"
+                  variant="outline" (click)="previousStep()">
+            <i class="bi bi-arrow-left me-1"></i>
+            Previous
+          </button>
+        </div>
+
+        <!-- Right side buttons -->
+        <div>
+          <button type="button" cButton color="light" size="sm" variant="ghost"
+                  (click)="closeModal()" class="me-2">
+            Cancel
+          </button>
+
+          <button *ngIf="currentStep === 1" type="button" cButton color="primary" size="sm"
+                  (click)="nextStep()" [disabled]="!isStep1Valid()">
+            Next
+            <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+
+          <button *ngIf="currentStep === 2" type="submit" cButton color="primary" size="sm"
+                  [disabled]="!multiUnitForm.valid">
+            Save
+          </button>
+        </div>
+      </c-col>
+    </c-row>
+
   </form>
-
 </div>

@@ -15,6 +15,7 @@ import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
 import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
 import {PageFilterModel} from 'src/app/shared/models/page-filter.model';
+import {MultiUnitPostModel} from "../models/MultiUnitPostModel";
 
 
 @Injectable({
@@ -90,5 +91,9 @@ export class UnitApiService {
 
   deleteRoom(unitId: string, roomId: string) {
     return this.httpClient.delete<void>(environment.apiBaseUrl.concat(environment.unitRoomById).replace(':unitId', unitId).replace(':roomId', roomId));
+  }
+
+  postMultiUnit(payload: MultiUnitPostModel) {
+    return this.httpClient.post<UnitItemGetModel>(environment.apiBaseUrl.concat(environment.unitList), payload);
   }
 }
