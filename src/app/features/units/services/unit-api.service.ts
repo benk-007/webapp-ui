@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {UnitPostModel} from "../models/unit-post.model";
 import {UnitItemGetModel} from "../models/unit-item-get.model";
 import {PageModel} from "../../../shared/models/pageable/page.model";
@@ -14,6 +14,7 @@ import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model"
 import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
 import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
+import {PageFilterModel} from 'src/app/shared/models/page-filter.model';
 
 
 @Injectable({
@@ -32,8 +33,16 @@ export class UnitApiService {
     return this.httpClient.patch<UnitInfosGetModel>(environment.apiBaseUrl.concat(environment.unitInfosById).replace(':unitId', unitId), payload);
   }
 
-  getUnitsByPage() {
-    return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList));
+  getUnitsByPage(pageFilter: PageFilterModel) {
+    let params = new HttpParams();
+    params = params.set('page', pageFilter.page);
+    params = params.set('size', pageFilter.size);
+    if (pageFilter.search || pageFilter.advancedSearchFormValue?.search) {
+      let searchValue = pageFilter.search ? pageFilter.search : pageFilter.advancedSearchFormValue.advancedSearch;
+      params = params.set('search', searchValue);
+    }
+    //TODO: test if nature is set and add to params
+    return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 
   getUnitById(unitId: string) {

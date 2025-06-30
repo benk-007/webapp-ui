@@ -1,0 +1,28 @@
+<!--Modal title-->
+<div class="modal-header justify-content-center align-items-center">
+  <h6 class="modal-title">
+    {{ 'units.create-unit.title'|translate }}
+  </h6>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+  <form (submit)="submit()" [formGroup]="multiUnitForm" cForm>
+
+
+
+  <!--Modal footer-->
+  <c-row class="mt-4">
+    <c-col class="d-flex justify-content-end">
+      <button cButton color="light" size="sm" variant="ghost" (click)="closeModal()">
+        {{ 'commons.form.cancel-btn'|translate }}
+      </button>
+      <button cButton class="ms-3" color="primary" size="sm" type="submit" [disabled]="!multiUnitForm.valid">
+        {{ 'commons.form.save-btn'|translate }}
+      </button>
+    </c-col>
+  </c-row>
+  </form>
+
+</div>

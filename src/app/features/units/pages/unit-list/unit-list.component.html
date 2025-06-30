@@ -6,11 +6,13 @@
     <c-dropdown variant="btn-group">
       <button cButton color="secondary" cDropdownToggle size="sm"></button>
       <ul cDropdownMenu>
-        <li><a cDropdownItem routerLink>Multi unit</a></li>
+        <li><button cButton cDropdownItem  (click)="openCreateMultiUnitModal()">Multi unit</button></li>
       </ul>
     </c-dropdown>
   </c-button-group>
 </app-page-title>
+
+<app-unit-select></app-unit-select>
 
 <c-row class="mb-3">
   <c-col [md]="2">

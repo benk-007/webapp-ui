@@ -30,6 +30,9 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
 import {TableControlComponent} from "../../../../shared/components/table-control/table-control.component";
 import {EmptyDataComponent} from "../../../../shared/components/empty-data/empty-data.component";
 import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
+import {MultiUnitCreateModalComponent} from "../multi-unit-create-modal/multi-unit-create-modal.component";
+import {PageFilterModel} from "../../../../shared/models/page-filter.model";
+import {UnitSelectComponent} from "../../../../shared/components/unit-select/unit-select.component";
 
 @Component({
   selector: 'app-unit-list',
@@ -56,7 +59,8 @@ import {PageTitleComponent} from "../../../../shared/components/page-title/page-
     TableControlComponent,
     EmptyDataComponent,
     SpinnerComponent,
-    PageTitleComponent
+    PageTitleComponent,
+    UnitSelectComponent
   ],
   templateUrl: './unit-list.component.html',
   styleUrl: './unit-list.component.scss',
@@ -92,10 +96,17 @@ export class UnitListComponent extends ListContentComponent {
 
   override retrieveListContent(params: any) {
     super.retrieveListContent(params);
-    console.log('Retrieving users list ...')
+    console.log('Retrieving unit list ...')
+    let pageFilter: PageFilterModel = {
+      page: this.page,
+      size: this.size,
+      sort: this.sort,
+      sortDirection: this.sortDirection,
+      search: this.search
+    }
     this.subscriptions.push(
       this.unitApiService
-        .getUnitsByPage()
+        .getUnitsByPage(pageFilter)
         .subscribe({
           next: (data: any) => {
             super.handleSuccessData(data);
@@ -124,4 +135,16 @@ export class UnitListComponent extends ListContentComponent {
     ));
   }
 
+  openCreateMultiUnitModal() {
+    let initialState = {
+      // class: 'modal-lg'
+    }
+    let multiUnitCreateModalRef = this.modalService.show(MultiUnitCreateModalComponent, initialState);
+
+    this.subscriptions.push((multiUnitCreateModalRef.content as MultiUnitCreateModalComponent).actionConfirmed.subscribe(
+      () => {
+        this.refreshListContent();
+      }
+    ));
+  }
 }
