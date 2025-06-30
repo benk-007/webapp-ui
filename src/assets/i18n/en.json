@@ -933,7 +933,7 @@
             "title": "Settings",
             "BaseRate": "Rental Base Rate Details",
             "GuestFee": "Additional Guest Fee",
-            "nightly": "Nightly" ,
+            "nightly": "Nightly",
             "weekendNight": "Weekend Night",
             "weekly": "Weekly",
             "monthly": "Monthly",
@@ -1282,13 +1282,13 @@
       },
       "delete-modal": {
         "title": "Delete Document",
-        "message": "Are you sure you want to delete document {{documentNumber}}?"
+        "message": "Are you sure you want to delete this identity document?"
       },
       "notifications": {
         "delete": {
           "success": {
             "title": "Document deleted",
-            "message": "Document {{documentNumber}} deleted successfully."
+            "message": "Identity document deleted successfully."
           },
           "error": {
             "title": "Delete failed",

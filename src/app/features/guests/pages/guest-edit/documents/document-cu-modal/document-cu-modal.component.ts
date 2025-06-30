@@ -47,6 +47,7 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 })
 export class DocumentCuModalComponent implements OnInit, OnDestroy {
   imageUrl: SafeUrl | null = null;
+  isNewFile: boolean = false;
   file: any;
   documentForm: FormGroup;
   documentTypes: DocumentTypeEnum[] = Object.values(DocumentTypeEnum);
@@ -83,7 +84,9 @@ export class DocumentCuModalComponent implements OnInit, OnDestroy {
         console.info('Identity Document Image retrieved by Id:', this.documentToEdit?.id, 'API response is:', res);
         const objectUrl = URL.createObjectURL(res);
         this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
-        this.documentForm.patchValue({file: this.imageUrl})
+        this.documentForm.patchValue({
+          file: res
+        })
       },
       error: (err) => {
         console.error('An error occurred when retrieving identity document file. API error response is:', err);
@@ -93,20 +96,37 @@ export class DocumentCuModalComponent implements OnInit, OnDestroy {
 
 
   submit() {
+    let payload: any = {
+      type: this.documentForm.value.type,
+      value: this.documentForm.value.value,
+      expirationDate: this.documentForm.value.expirationDate,
+    }
+    const formData = new FormData();
+    if (this.file && this.isNewFile) {
+      formData.append('file', this.file);
+    }
     if (this.documentToEdit) {
       //updating existing document
-
+      formData.append('payload', new Blob([JSON.stringify(payload)], {type: 'application/json'}));
+      console.log('your form data is:', formData);
+      this.subscriptions.push(this.documentService.updateDocument(this.documentToEdit.id, formData).subscribe({
+        next: (res) => {
+          console.info('Document updated successfully. API response is:', res);
+          this.toastrService.info(this.translateService.instant('documents.cu-modal.notifications.success.message.edit'), this.translateService.instant('documents.cu-modal.notifications.success.title.edit'));
+          this.closeModal();
+          this.actionConfirmed.emit();
+        },
+        error: (err) => {
+          console.error('An error occurred during identity document update. API response error:', err);
+          this.toastrService.warning(this.translateService.instant('documents.cu-modal.notifications.error.message.edit'), this.translateService.instant('documents.cu-modal.notifications.error.title.edit'));
+          this.closeModal();
+        }
+      }))
     } else {
       //create a new document
-      let payload = {
-        type: this.documentForm.value.type,
-        value: this.documentForm.value.value,
-        expirationDate: this.documentForm.value.expirationDate,
-        guestId: this.guestId
-      }
-      const formData = new FormData();
+      payload.guestId = this.guestId;
       formData.append('payload', new Blob([JSON.stringify(payload)], {type: 'application/json'}));
-      formData.append('file', this.file);
+      console.log('your form data is:', formData);
       this.subscriptions.push(this.documentService.createDocument(formData).subscribe({
         next: (res) => {
           console.info('Document created successfully. API response is:', res);
@@ -116,7 +136,7 @@ export class DocumentCuModalComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error('An error occurred during identity document creation. API response error:', err);
-          this.toastrService.success(this.translateService.instant('documents.cu-modal.notifications.error.message.create'), this.translateService.instant('documents.cu-modal.notifications.error.title.create'));
+          this.toastrService.warning(this.translateService.instant('documents.cu-modal.notifications.error.message.create'), this.translateService.instant('documents.cu-modal.notifications.error.title.create'));
           this.closeModal();
         }
       }))
@@ -140,6 +160,7 @@ export class DocumentCuModalComponent implements OnInit, OnDestroy {
       const objectUrl = URL.createObjectURL(file);
       this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
       this.file = file;
+      this.isNewFile = true;
       this.documentForm.patchValue({
         file: file
       })

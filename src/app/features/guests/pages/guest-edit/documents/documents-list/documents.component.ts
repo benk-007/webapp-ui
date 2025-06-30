@@ -34,6 +34,7 @@ import {TableControlComponent} from "../../../../../../shared/components/table-c
 import {AuditNamePipe} from "../../../../../../shared/pipes/audit-name.pipe";
 import {BadgeComponent} from "../../../../../../shared/components/badge/badge.component";
 import {DocumentCuModalComponent} from "../document-cu-modal/document-cu-modal.component";
+import {ConfirmModalComponent} from "../../../../../../shared/components/confirm-modal/confirm-modal.component";
 
 
 @Component({
@@ -114,7 +115,28 @@ export class DocumentsComponent extends ListContentComponent {
   }
 
   confirmDeletion(identityDocument: IdentityDocumentItemGetModel) {
+    let initialState = {
+      title: this.translateService.instant('documents.list.delete-modal.title'),
+      message: this.translateService.instant('documents.list.delete-modal.message')
+    }
+    let confirmModalRef = this.modalService.show(ConfirmModalComponent, {initialState});
+    this.subscriptions.push((confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(
+      () => {
+        this.deleteDocument(identityDocument.id);
+      }
+    ))
+  }
 
+  private deleteDocument(identityDocumentId: string) {
+    this.subscriptions.push(this.identityDocumentService.deleteDocumentById(identityDocumentId).subscribe({
+      next:(res)=>{
+        console.log('Identity document with Id:', identityDocumentId, 'removed successfully. API response is:', res);
+        this.refreshListContent();
+      },
+      error:(err)=>{
+        console.log('An error occurred during identity document deletion. Error API response is:', err);
+      }
+    }))
   }
 
   openIdentityDocumentCuModal(identityDocument?: IdentityDocumentItemGetModel) {
@@ -127,4 +149,6 @@ export class DocumentsComponent extends ListContentComponent {
       })
     );
   }
+
+
 }

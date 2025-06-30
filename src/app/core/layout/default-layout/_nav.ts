@@ -92,17 +92,15 @@ export const navItems: INavData[] = [
   {
     name: 'Rates',
     url: '/settings/rates',
-    iconComponent: {name: 'cil-group'},
-    children : [
+    iconComponent: {name: 'cil-dollar'},
+    children: [
       {
         name: 'Tables',
         url: '/settings/rates/tables',
-        iconComponent: {name: 'cil-group'}
       },
       {
         name: 'Dynamic Tables',
         url: '/settings/rates/dynamic-tables',
-        iconComponent: {name: 'cil-group'}
       }
     ]
   },

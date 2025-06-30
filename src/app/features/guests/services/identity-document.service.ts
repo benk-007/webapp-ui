@@ -31,8 +31,7 @@ export class IdentityDocumentService {
 
   getIdentityDocumentImageById(identityDocumentId: string): Observable<Blob> {
     let params = new HttpParams();
-    params = params.set('file', true);
-    return this.httpClient.get(environment.identityDocumentImageById.replace(':identityDocumentId', identityDocumentId), {
+    return this.httpClient.get(environment.apiBaseUrl.concat(environment.identityDocumentImageById.replace(':identityDocumentId', identityDocumentId)), {
       params: params,
       responseType: "blob"
     });
@@ -43,21 +42,12 @@ export class IdentityDocumentService {
       environment.apiBaseUrl.concat(environment.identityDocuments), payload);
   }
 
-  patchDocumentById(documentId: string, guestId: string, payload: Partial<IdentityDocumentItemGetModel>): Observable<IdentityDocumentItemGetModel> {
-    const params = new HttpParams().set('guestId', guestId);
-    return this.httpClient.patch<IdentityDocumentItemGetModel>(
-      environment.apiBaseUrl.concat(environment.identityDocuments + `/${documentId}`),
-      payload,
-      {params}
-    );
+  updateDocument(identityDocumentId: string, formData: FormData) {
+    return this.httpClient.patch<IdentityDocumentItemGetModel>(environment.apiBaseUrl.concat(environment.identityDocumentById.replace(':identityDocumentId', identityDocumentId)), formData)
   }
 
-  deleteDocumentById(documentId: string, guestId: string): Observable<void> {
-    const params = new HttpParams().set('guestId', guestId);
-    return this.httpClient.delete<void>(
-      environment.apiBaseUrl.concat(environment.identityDocuments + `/${documentId}`),
-      {params}
-    );
+  deleteDocumentById(identityDocumentId: string): Observable<void> {
+    return this.httpClient.delete<void>(environment.apiBaseUrl.concat(environment.identityDocumentById.replace(':identityDocumentId', identityDocumentId)));
   }
 
 
