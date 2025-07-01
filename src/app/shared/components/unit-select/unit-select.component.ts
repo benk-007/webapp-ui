@@ -27,6 +27,7 @@ import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} 
 export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() disable = false;
+  @Input() allowMultiUnit = false;  // Nouveau paramètre pour permettre les MULTI_UNIT si nécessaire
   @Output() updatedUnits = new EventEmitter<UnitItemGetModel[] | null>();
 
   unitSearchList: UnitItemGetModel[] = [];
@@ -60,24 +61,29 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
 
   private retrieveUnitSearchList() {
     const searchValue = this.$unitSearch.getValue()?.trim();
+
+    // Configuration du filtre selon le contexte
     const pageFilter: PageFilterModel = {
       page: this.unitSearchPage,
       size: 20,
       sort: 'name',
       sortDirection: 'asc',
       search: searchValue,
-      advancedSearchFormValue:{
-        nature: 'MULTI_UNIT'
-      }
+      advancedSearchFormValue: this.buildFilterCriteria()
     }
+
     this.subscriptions.push(
       this.unitApiService.getUnitsByPage(pageFilter).subscribe({
         next: (res) => {
           console.log('Units retrieved successfully. API response is:', res);
+
+          // Filtrage côté client pour exclure les sous-unités
+          const filteredUnits = this.filterAvailableUnits(res.content);
+
           if (this.unitSearchPage === 0) {
-            this.unitSearchList = res.content;
+            this.unitSearchList = filteredUnits;
           } else {
-            this.unitSearchList = this.unitSearchList.concat(res.content);
+            this.unitSearchList = this.unitSearchList.concat(filteredUnits);
           }
           this.isLastPage = res.last;
         },
@@ -86,6 +92,34 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
         }
       })
     )
+  }
+
+  private buildFilterCriteria() {
+    // Par défaut, on exclut les MULTI_UNIT pour la sélection de sous-unités
+    if (!this.allowMultiUnit) {
+      return {
+        nature: 'SINGLE_UNIT'  // Seules les unités simples peuvent devenir des sous-unités
+      };
+    }
+
+    // Si on permet les MULTI_UNIT, pas de filtre sur nature
+    return {};
+  }
+
+  private filterAvailableUnits(units: UnitItemGetModel[]): UnitItemGetModel[] {
+    return units.filter(unit => {
+      // Exclure les unités qui sont déjà des sous-unités
+      if (unit.parentUnit) {  // Changé de parentId à parentUnit
+        return false;
+      }
+
+      // Si allowMultiUnit est false, exclure aussi les MULTI_UNIT
+      if (!this.allowMultiUnit && unit.nature === 'MULTI_UNIT') {
+        return false;
+      }
+
+      return true;
+    });
   }
 
   // Called when user types in search box
@@ -149,6 +183,4 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
-
-
 }

@@ -43,6 +43,30 @@ export class UnitApiService {
       params = params.set('search', searchValue);
     }
     //TODO: test if nature is set and add to params
+    // Ajout du filtrage par nature si spécifié
+    if (pageFilter.advancedSearchFormValue?.nature) {
+      params = params.set('nature', pageFilter.advancedSearchFormValue.nature);
+    }
+
+    // Ajout du filtrage pour exclure les sous-unités si nécessaire
+    if (pageFilter.advancedSearchFormValue?.excludeSubUnits !== undefined) {
+      params = params.set('excludeSubUnits', pageFilter.advancedSearchFormValue.excludeSubUnits);
+    }
+    return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
+  }
+
+  // Nouvelle méthode spécialisée pour la sélection d'unités disponibles
+  getAvailableUnitsForSubUnits(pageFilter: PageFilterModel) {
+    let params = new HttpParams();
+    params = params.set('page', pageFilter.page);
+    params = params.set('size', pageFilter.size);
+    params = params.set('nature', 'SINGLE_UNIT');  // Seules les unités simples
+    params = params.set('excludeSubUnits', 'true'); // Exclure les sous-unités existantes
+
+    if (pageFilter.search) {
+      params = params.set('search', pageFilter.search);
+    }
+
     return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 

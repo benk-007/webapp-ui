@@ -9,9 +9,12 @@ export interface UnitItemGetModel {
   bathrooms: number;
   audit: AuditGetModel;
   readiness: boolean;
+  nature: 'SINGLE_UNIT' | 'MULTI_UNIT';
   contact: {
     mobile: string;
     email: string;
   },
   address: AddressModel;
+  // Champs pour identifier les sous-unités
+  parentUnit?: string;
 }

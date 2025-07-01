@@ -22,7 +22,9 @@
         "create": "Create",
         "confirm": "Confirm",
         "cancel": "Cancel",
-        "delete": "Delete"
+        "delete": "Delete",
+        "previous-btn": "Previous",
+        "next-btn": "Next"
       },
       "search-input": {
         "placeholder": "Search ..."
@@ -1052,13 +1054,6 @@
           }
         }
       }
-    }
-  },
-  "commons": {
-    "form": {
-      "previous-btn": "Previous",
-      "next-btn": "Next",
-      "validation-errors": "Please fix the validation errors before proceeding"
     }
   },
   "settings": {

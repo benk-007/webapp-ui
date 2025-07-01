@@ -136,7 +136,7 @@ export class UnitListComponent extends ListContentComponent {
 
   openCreateMultiUnitModal() {
     let initialState = {
-       class: 'modal-xl'
+       class: 'modal-lg'
     }
     let multiUnitCreateModalRef = this.modalService.show(MultiUnitCreateModalComponent, initialState);
 
