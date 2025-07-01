@@ -38,20 +38,25 @@ export class UnitApiService {
     let params = new HttpParams();
     params = params.set('page', pageFilter.page);
     params = params.set('size', pageFilter.size);
+
     if (pageFilter.search || pageFilter.advancedSearchFormValue?.search) {
       let searchValue = pageFilter.search ? pageFilter.search : pageFilter.advancedSearchFormValue.advancedSearch;
       params = params.set('search', searchValue);
     }
-    //TODO: test if nature is set and add to params
+
     // Ajout du filtrage par nature si spécifié
     if (pageFilter.advancedSearchFormValue?.nature) {
       params = params.set('nature', pageFilter.advancedSearchFormValue.nature);
+      console.log('API Filter - nature:', pageFilter.advancedSearchFormValue.nature);
     }
 
     // Ajout du filtrage pour exclure les sous-unités si nécessaire
-    if (pageFilter.advancedSearchFormValue?.excludeSubUnits !== undefined) {
+    if (pageFilter.advancedSearchFormValue?.excludeSubUnits) {
       params = params.set('excludeSubUnits', pageFilter.advancedSearchFormValue.excludeSubUnits);
+      console.log('API Filter - excludeSubUnits:', pageFilter.advancedSearchFormValue.excludeSubUnits);
     }
+
+    console.log('Final API params:', params.toString());
     return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 

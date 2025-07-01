@@ -62,7 +62,6 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   private retrieveUnitSearchList() {
     const searchValue = this.$unitSearch.getValue()?.trim();
 
-    // Configuration du filtre selon le contexte
     const pageFilter: PageFilterModel = {
       page: this.unitSearchPage,
       size: 20,
@@ -77,7 +76,7 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
         next: (res) => {
           console.log('Units retrieved successfully. API response is:', res);
 
-          // Filtrage côté client pour exclure les sous-unités
+          // Filtrage côté client supplémentaire pour plus de sécurité
           const filteredUnits = this.filterAvailableUnits(res.content);
 
           if (this.unitSearchPage === 0) {
@@ -95,26 +94,31 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   }
 
   private buildFilterCriteria() {
-    // Par défaut, on exclut les MULTI_UNIT pour la sélection de sous-unités
+    // Configuration du filtre selon le contexte
+    const criteria: any = {};
+
+    // Si allowMultiUnit est false, on veut seulement les SINGLE_UNIT
     if (!this.allowMultiUnit) {
-      return {
-        nature: 'SINGLE_UNIT'  // Seules les unités simples peuvent devenir des sous-unités
-      };
+      criteria.nature = 'SINGLE_UNIT';
     }
+    // Toujours exclure les sous-unités (unités qui ont un parent)
+    criteria.excludeSubUnits = true;
 
     // Si on permet les MULTI_UNIT, pas de filtre sur nature
-    return {};
+    return criteria;
   }
 
   private filterAvailableUnits(units: UnitItemGetModel[]): UnitItemGetModel[] {
     return units.filter(unit => {
-      // Exclure les unités qui sont déjà des sous-unités
-      if (unit.parentUnit) {  // Changé de parentId à parentUnit
+      // Exclure les unités qui sont déjà des sous-unités (ont un parent)
+      if (unit.parentUnit) {
+        console.log(`Excluding unit ${unit.name} - has parent: ${unit.parentUnit}`);
         return false;
       }
 
       // Si allowMultiUnit est false, exclure aussi les MULTI_UNIT
       if (!this.allowMultiUnit && unit.nature === 'MULTI_UNIT') {
+        console.log(`Excluding unit ${unit.name} - is MULTI_UNIT`);
         return false;
       }
 
