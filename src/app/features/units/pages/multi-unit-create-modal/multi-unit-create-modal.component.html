@@ -102,7 +102,7 @@
                 </c-col>
 
                 <!-- Priority -->
-                <c-col md="3" class="mb-3">
+                <c-col md="4" class="mb-3">
                   <label cLabel class="required me-2">
                     {{ 'units.create-multi-unit.form.priority.label'|translate }}
                   </label>
@@ -113,7 +113,7 @@
                 </c-col>
 
                 <!-- Status Toggle -->
-                <c-col md="3" class="mb-3">
+                <c-col md="2" class="mb-3 d-flex flex-column justify-content-center">
                   <label cLabel class="me-2">{{ 'units.create-multi-unit.form.status.label'|translate }}</label>
                   <c-form-check [switch]="true">
                     <input cFormCheckInput formControlName="readiness" type="checkbox" [id]="'status-' + i"/>
@@ -124,10 +124,10 @@
                 </c-col>
 
                 <!-- Remove Button -->
-                <c-col md="1" class="mb-3 d-flex align-items-end">
-                  <button type="button" cButton size="sm" color="danger" variant="ghost"
+                <c-col md="1" class="mb-3 d-flex align-items-end justify-content-center">
+                  <button cButton size="sm" color="danger" class="btn-light"
                           (click)="removeNewSubUnit(i)">
-                    <i class="bi bi-trash"></i>
+                    <svg [cIcon]="icons.cilTrash" size="sm"></svg>
                   </button>
                 </c-col>
               </c-row>

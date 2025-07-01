@@ -68,7 +68,10 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
       sort: 'name',
       sortDirection: 'asc',
       search: searchValue,
-      advancedSearchFormValue: this.buildFilterCriteria()
+      advancedSearchFormValue: {
+        nature: 'SINGLE',
+        withParent: false,
+      }
     }
 
     this.subscriptions.push(
@@ -76,13 +79,11 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
         next: (res) => {
           console.log('Units retrieved successfully. API response is:', res);
 
-          // Filtrage côté client supplémentaire pour plus de sécurité
-          const filteredUnits = this.filterAvailableUnits(res.content);
 
           if (this.unitSearchPage === 0) {
-            this.unitSearchList = filteredUnits;
+            this.unitSearchList = res.content;
           } else {
-            this.unitSearchList = this.unitSearchList.concat(filteredUnits);
+            this.unitSearchList = this.unitSearchList.concat(res.content);
           }
           this.isLastPage = res.last;
         },
@@ -91,39 +92,6 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
         }
       })
     )
-  }
-
-  private buildFilterCriteria() {
-    // Configuration du filtre selon le contexte
-    const criteria: any = {};
-
-    // Si allowMultiUnit est false, on veut seulement les SINGLE_UNIT
-    if (!this.allowMultiUnit) {
-      criteria.nature = 'SINGLE_UNIT';
-    }
-    // Toujours exclure les sous-unités (unités qui ont un parent)
-    criteria.excludeSubUnits = true;
-
-    // Si on permet les MULTI_UNIT, pas de filtre sur nature
-    return criteria;
-  }
-
-  private filterAvailableUnits(units: UnitItemGetModel[]): UnitItemGetModel[] {
-    return units.filter(unit => {
-      // Exclure les unités qui sont déjà des sous-unités (ont un parent)
-      if (unit.parentUnit) {
-        console.log(`Excluding unit ${unit.name} - has parent: ${unit.parentUnit}`);
-        return false;
-      }
-
-      // Si allowMultiUnit est false, exclure aussi les MULTI_UNIT
-      if (!this.allowMultiUnit && unit.nature === 'MULTI_UNIT') {
-        console.log(`Excluding unit ${unit.name} - is MULTI_UNIT`);
-        return false;
-      }
-
-      return true;
-    });
   }
 
   // Called when user types in search box

@@ -51,27 +51,12 @@ export class UnitApiService {
     }
 
     // Ajout du filtrage pour exclure les sous-unités si nécessaire
-    if (pageFilter.advancedSearchFormValue?.excludeSubUnits) {
-      params = params.set('excludeSubUnits', pageFilter.advancedSearchFormValue.excludeSubUnits);
-      console.log('API Filter - excludeSubUnits:', pageFilter.advancedSearchFormValue.excludeSubUnits);
+    if (pageFilter.advancedSearchFormValue?.withParent!==null) {
+      params = params.set('withParent', pageFilter.advancedSearchFormValue.withParent);
+      console.log('API Filter - withParent:', pageFilter.advancedSearchFormValue.withParent);
     }
 
     console.log('Final API params:', params.toString());
-    return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
-  }
-
-  // Nouvelle méthode spécialisée pour la sélection d'unités disponibles
-  getAvailableUnitsForSubUnits(pageFilter: PageFilterModel) {
-    let params = new HttpParams();
-    params = params.set('page', pageFilter.page);
-    params = params.set('size', pageFilter.size);
-    params = params.set('nature', 'SINGLE_UNIT');  // Seules les unités simples
-    params = params.set('excludeSubUnits', 'true'); // Exclure les sous-unités existantes
-
-    if (pageFilter.search) {
-      params = params.set('search', pageFilter.search);
-    }
-
     return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 

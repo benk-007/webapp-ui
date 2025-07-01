@@ -9,7 +9,7 @@ export interface UnitItemGetModel {
   bathrooms: number;
   audit: AuditGetModel;
   readiness: boolean;
-  nature: 'SINGLE_UNIT' | 'MULTI_UNIT';
+  nature: 'SINGLE' | 'MULTI_UNIT';
   contact: {
     mobile: string;
     email: string;

@@ -61,3 +61,10 @@ input#name {
     font-size: 0.75rem;
   }
 }
+
+// Ajustement du positionnement du toggle Status
+.mb-3.d-flex.flex-column.justify-content-center {
+  .form-check {
+    margin-top: 0.5rem; // Descendre un peu plus le toggle
+  }
+}

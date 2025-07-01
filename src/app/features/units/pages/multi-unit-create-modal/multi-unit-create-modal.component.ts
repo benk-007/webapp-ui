@@ -24,6 +24,16 @@ import {UnitApiService} from "../../services/unit-api.service";
 import {UnitSelectComponent} from "../../../../shared/components/unit-select/unit-select.component";
 import {CommonModule} from "@angular/common";
 import {MultiUnitPostModel, SubUnitModel} from "../../models/MultiUnitPostModel";
+import {IconDirective} from "@coreui/icons-angular";
+import {
+  cilClock,
+  cilPen,
+  cilSearch,
+  cilSortAscending,
+  cilSortDescending,
+  cilSwapVertical,
+  cilTrash
+} from "@coreui/icons";
 
 @Component({
   selector: 'app-multi-unit-create-modal',
@@ -46,12 +56,17 @@ import {MultiUnitPostModel, SubUnitModel} from "../../models/MultiUnitPostModel"
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    TranslatePipe
+    TranslatePipe,
+    IconDirective
   ],
   templateUrl: './multi-unit-create-modal.component.html',
   styleUrl: './multi-unit-create-modal.component.scss'
 })
 export class MultiUnitCreateModalComponent implements OnInit, OnDestroy {
+
+  icons = {
+    cilTrash
+  };
 
   multiUnitForm: FormGroup;
   currentStep: 1 | 2 = 1;
