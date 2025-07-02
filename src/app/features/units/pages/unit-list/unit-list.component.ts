@@ -220,12 +220,6 @@ export class UnitListComponent extends ListContentComponent {
    */
   canExpand(unit: UnitItemGetModel): boolean {
     const result = unit.nature === 'MULTI_UNIT' && unit.subUnits != null && unit.subUnits.length > 0;
-    console.log(`canExpand for unit ${unit.name}:`, {
-      nature: unit.nature,
-      hasSubUnits: unit.subUnits != null,
-      subUnitsLength: unit.subUnits?.length,
-      result: result
-    });
     return result;
   }
 
