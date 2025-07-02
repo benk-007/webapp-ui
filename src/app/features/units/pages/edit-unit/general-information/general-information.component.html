@@ -116,7 +116,7 @@
           </c-row>
         </c-col>
         <!--Leaflet map section-->
-        <c-col md="6">
+        <c-col md="6" *ngIf="!isSubUnit">
           <div class="map-container">
             <div style="height: 100%;width: 100%;"
                  leaflet

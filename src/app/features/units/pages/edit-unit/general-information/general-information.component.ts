@@ -123,18 +123,23 @@ export class GeneralInformationComponent implements OnDestroy {
   }
 
   submit() {
-    let payload = {
-      ...this.infoForm.value,
-      contact: {
-        mobile: this.infoForm.value.contact.mobile.e164Number
-      }
-    };
-    // Pour les subUnits, on envoie seulement name, subtitle et calendarColor
+    let payload;
+
+    // Ajouter cette condition complète au début :
     if (this.isSubUnit) {
+      // Pour les subUnits, on envoie seulement name, subtitle et calendarColor
       payload = {
         name: this.infoForm.value.name,
         subtitle: this.infoForm.value.subtitle,
         calendarColor: this.infoForm.value.calendarColor
+      };
+    } else {
+      // Pour les unités normales, on garde la logique existante
+      payload = {
+        ...this.infoForm.value,
+        contact: {
+          mobile: this.infoForm.value.contact.mobile.e164Number
+        }
       };
     }
 
@@ -211,6 +216,9 @@ export class GeneralInformationComponent implements OnDestroy {
       // Désactiver les champs address et contact pour les subUnits
       this.infoForm.get('address')?.disable();
       this.infoForm.get('contact')?.disable();
+      // Désactiver spécifiquement country et location
+      this.infoForm.get('address.country')?.disable();
+      this.infoForm.get('address.location')?.disable();
     }
   }
 
