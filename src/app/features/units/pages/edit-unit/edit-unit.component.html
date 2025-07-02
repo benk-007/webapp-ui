@@ -15,7 +15,7 @@
        routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
   </li>
   <!-- RATES DROPDOWN  -->
-  <li class="nav-item dropdown"
+  <li class="nav-item dropdown" *ngIf="!isSubUnit"
       [tooltip]="'units.edit-unit.tabs.rates.hint'|translate"
       placement="top"
       (mouseenter)="openDropdown = true"

@@ -11,4 +11,6 @@ export interface UnitInfosGetModel {
   };
   calendarColor: string;
   readiness: boolean;
+
+  parentUnit?: string
 }

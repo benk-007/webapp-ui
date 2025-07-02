@@ -76,7 +76,6 @@ export class UnitApiService {
     return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
   }
 
-  // Nouvelles méthodes pour les instructions
   getUnitInstructionsById(unitId: string) {
     return this.httpClient.get<UnitInstructionsGetModel>(
       environment.apiBaseUrl.concat(environment.unitInstructionsById).replace(':unitId', unitId)

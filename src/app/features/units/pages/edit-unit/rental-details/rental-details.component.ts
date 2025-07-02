@@ -79,6 +79,9 @@ export class RentalDetailsComponent implements OnDestroy {
   basicSearch: string = '';
   private readonly $basicSearchSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private subscriptions: Subscription[] = [];
+  //
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
 
   constructor(private readonly fb: FormBuilder, private readonly unitMapperService: UnitMapperService, private readonly unitApiService: UnitApiService,
               private readonly activatedRoute: ActivatedRoute, private readonly toastrService: ToastrService,
@@ -100,7 +103,11 @@ export class RentalDetailsComponent implements OnDestroy {
           .find(id => id !== null);
         if (unitId) {
           this.unitId = unitId;
-          this.retrieveUnitDetails();
+
+          // appel API pour détecter si c'est une subUnit :
+          this.checkIfSubUnit();
+
+          //this.retrieveUnitDetails(); sera appelé dans checkIfSubUnit()
         }
       })
     );
@@ -129,6 +136,9 @@ export class RentalDetailsComponent implements OnDestroy {
   }
 
   submit() {
+    //
+    const targetId = this.isSubUnit && this.parentUnitId ? this.parentUnitId : this.unitId;
+
     let payload = this.unitMapperService.formToDetailsPatchModel(this.rentalDetailsForm.value, this.rentalDetailsForm.get('amenities')!.value);
     this.subscriptions.push(this.unitApiService.updateUnitDetailsById(this.unitId, payload).subscribe({
       next: (data) => {
@@ -204,7 +214,10 @@ export class RentalDetailsComponent implements OnDestroy {
   }
 
   private retrieveUnitDetails() {
-    this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.unitId).subscribe({
+    //
+    const targetId = this.isSubUnit && this.parentUnitId ? this.parentUnitId : this.unitId;
+
+    this.subscriptions.push(this.unitApiService.getUnitDetailsById(targetId).subscribe({
       next: (data) => {
         console.log('Unit details call response is:', data);
         this.handleUnitDetailsSuccessResponse(data);
@@ -213,6 +226,24 @@ export class RentalDetailsComponent implements OnDestroy {
         console.error('An error occurred during unit call to retrieve its details. More info:', err);
       }
     }))
+  }
+
+  //
+  private checkIfSubUnit() {
+    this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
+      next: (data) => {
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
+        this.retrieveUnitDetails();
+        // Désactiver le champ Type pour les subUnits
+        if (this.isSubUnit) {
+          this.rentalDetailsForm.get('type')?.disable();
+        }
+      },
+      error: (err) => {
+        console.error('Error checking unit type:', err);
+      }
+    }));
   }
 
   private handleUnitDetailsSuccessResponse(data: UnitDetailsGetModel) {

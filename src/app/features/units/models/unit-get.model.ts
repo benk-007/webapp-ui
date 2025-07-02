@@ -12,4 +12,6 @@ export interface UnitGetModel {
     email: string;
   },
   address: AddressModel;
+
+  parentUnit?: string;
 }

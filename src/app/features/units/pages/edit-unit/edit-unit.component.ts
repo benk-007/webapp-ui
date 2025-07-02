@@ -28,6 +28,9 @@ export class EditUnitComponent implements OnDestroy {
   private unitId!: string;
   private subscriptions: Subscription[] = [];
   openDropdown = false;
+//
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
 
   constructor(private activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService,
@@ -46,6 +49,9 @@ export class EditUnitComponent implements OnDestroy {
     this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
       next: (data) => {
         console.log('Your unit data is: ', data);
+        //on détermine si c'est une subUnit et on stocke l'ID du parent si nécessaire
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
       },
       error: (err) => {
         console.error('An error occurred when retrieving the unit', err);

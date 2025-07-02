@@ -76,6 +76,10 @@ export class GeneralInformationComponent implements OnDestroy {
 
   layers!: any;
 
+  //
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
+
   private subscriptions: Subscription[] = [];
 
   constructor(private readonly fb: FormBuilder, private readonly unitApiService: UnitApiService,
@@ -125,6 +129,15 @@ export class GeneralInformationComponent implements OnDestroy {
         mobile: this.infoForm.value.contact.mobile.e164Number
       }
     };
+    // Pour les subUnits, on envoie seulement name, subtitle et calendarColor
+    if (this.isSubUnit) {
+      payload = {
+        name: this.infoForm.value.name,
+        subtitle: this.infoForm.value.subtitle,
+        calendarColor: this.infoForm.value.calendarColor
+      };
+    }
+
     this.subscriptions.push(this.unitApiService.updateUnitInfosById(this.unitId, payload).subscribe({
       next: (data) => {
         console.log('Unit infos updated successfully. Api response is:', data);
@@ -163,6 +176,11 @@ export class GeneralInformationComponent implements OnDestroy {
       next: (data) => {
         console.log('Unit infos call general information response is:', data);
         this.unit = data;
+
+        //
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
+
         this.infoForm.patchValue(this.unit);
         if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
           this.layers = [
@@ -176,12 +194,24 @@ export class GeneralInformationComponent implements OnDestroy {
             })
           ];
         }
+
+        //fonction pour désactiver les champs
+        this.handleSubUnitFields();
+
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
         //TODO: launch toast notification and redirect to unit list page
       }
     }))
+  }
+
+  private handleSubUnitFields() {
+    if (this.isSubUnit) {
+      // Désactiver les champs address et contact pour les subUnits
+      this.infoForm.get('address')?.disable();
+      this.infoForm.get('contact')?.disable();
+    }
   }
 
   setMarker(event: any) {
