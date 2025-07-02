@@ -4,6 +4,7 @@ import {ContactModel} from "../../../shared/models/contact.model";
 export interface MultiUnitPostModel {
   name: string;
   nature: string,
+  calendarColor?: string;
   address: AddressModel;
   contact: ContactModel;
   subUnits: SubUnitModel[];

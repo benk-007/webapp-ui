@@ -15,7 +15,7 @@ import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
 import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
 import {PageFilterModel} from 'src/app/shared/models/page-filter.model';
-import {MultiUnitPostModel} from "../models/MultiUnitPostModel";
+import {MultiUnitPostModel} from "../models/multi-unit-post.model";
 
 
 @Injectable({
@@ -51,7 +51,7 @@ export class UnitApiService {
     }
 
     // Ajout du filtrage pour exclure les sous-unités si nécessaire
-    if (pageFilter.advancedSearchFormValue?.withParent!==null) {
+    if (pageFilter.advancedSearchFormValue?.withParent !== undefined && pageFilter.advancedSearchFormValue?.withParent !== null) {
       params = params.set('withParent', pageFilter.advancedSearchFormValue.withParent);
       console.log('API Filter - withParent:', pageFilter.advancedSearchFormValue.withParent);
     }

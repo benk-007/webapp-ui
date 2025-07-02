@@ -12,8 +12,6 @@
   </c-button-group>
 </app-page-title>
 
-<!-- app-unit-select></app-unit-select-->
-
 <c-row class="mb-3">
   <c-col [md]="2">
     <c-input-group sizing="sm" class="search-input">
@@ -40,10 +38,11 @@
 } @else {
 
   @if (!isListEmpty) {
-    <div class="table-responsive ">
+    <div class="table-responsive">
       <table cTable hover appSelectableTable [responsive]="true">
         <thead>
         <tr>
+          <th style="width: 50px;"></th> <!-- Colonne pour les badges -->
           <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
@@ -55,18 +54,60 @@
         </thead>
 
         <tbody>
-          @for (unit of listContent; track unit.id) {
-            <tr>
+          @for (unit of displayedUnits; track unit.id) {
+            <tr [ngClass]="{'sub-unit-row': isSubUnit(unit)}" class="position-relative">
+              <!-- Badge vertical à gauche -->
+              @if (unit.nature === 'MULTI_UNIT' && !isSubUnit(unit)) {
+                <td class="badge-cell">
+                  <span class="vertical-badge bg-primary-transparent">MULTI</span>
+                </td>
+              } @else if (isSubUnit(unit)) {
+                <td class="badge-cell">
+                  <span class="vertical-badge bg-secondary-transparent">SUB</span>
+                </td>
+              } @else {
+                <td class="badge-cell"></td>
+              }
+
               <td>
                 <div class="d-flex align-items-center gap-2">
+                  <!-- Indicateur d'expansion pour les multi-units -->
+                  @if (canExpand(unit) && !isSubUnit(unit)) {
+                    <button
+                      type="button"
+                      class="expand-btn"
+                      (click)="toggleUnitExpansion(unit.id)">
+                      <svg
+                        [cIcon]="isUnitExpanded(unit.id) ? icons.cilArrowBottom : icons.cilChevronRight"
+                        size="sm">
+                      </svg>
+                    </button>
+                  } @else if (!canExpand(unit) && !isSubUnit(unit)) {
+                    <!-- Espacement pour aligner les unités sans sous-unités -->
+                    <div class="expand-btn-placeholder"></div>
+                  }
+
+                  <!-- Indentation pour les sous-unités -->
+                  @if (isSubUnit(unit)) {
+                    <div class="sub-unit-indent"></div>
+                  }
+
                   <c-avatar [size]="'md'" shape="rounded" textColor="white"
-                            color="primary">{{ getNameInitials(unit.name) }}
+                            [color]="isSubUnit(unit) ? 'secondary' : 'primary'">
+                    {{ getNameInitials(unit.name) }}
                   </c-avatar>
+
                   <div class="d-flex flex-column" [adaptivePosition]="true"
                        [tooltip]="unit.subtitle">
-                    <div>
-                      <span class="me-1">{{ unit.name }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="unit-name">{{ unit.name }}</span>
+
+                      <!-- Compteur de sous-unités pour les multi-units -->
+                      @if (unit.nature === 'MULTI_UNIT' && unit.subUnits && unit.subUnits.length > 0 && !isSubUnit(unit)) {
+                        <span class="text-muted small">({{ unit.subUnits.length }} {{ unit.subUnits.length === 1 ? 'unit' : 'units' }})</span>
+                      }
                     </div>
+
                     <div class="small text-body-secondary text-nowrap">
                       <span>{{ 'commons.snippets.audit.created-by'|translate }} {{ unit.audit.createdBy | auditName }}</span>
                     </div>
@@ -75,17 +116,29 @@
               </td>
 
               <td>
-            <span [adaptivePosition]="true"
-                  [tooltip]="'units.unit-list.table.body.beds'|translate">
-              <span class="me-1 fs-6">{{ unit.beds }}</span>
-              <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
-            </span>
+                <span [adaptivePosition]="true"
+                      [tooltip]="'units.unit-list.table.body.beds'|translate">
+                  <span class="me-1 fs-6">{{ unit.beds }}</span>
+                  <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
+                </span>
                 <span [adaptivePosition]="true"
                       [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
-              <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
-              <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
-            </span>
+                  <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
+                  <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
+                </span>
+              </td>
 
+              <td>
+                <span [adaptivePosition]="true"
+                      [tooltip]="'units.unit-list.table.body.beds'|translate">
+                  <span class="me-1 fs-6">{{ unit.beds }}</span>
+                  <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
+                </span>
+                <span [adaptivePosition]="true"
+                      [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
+                  <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
+                  <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
+                </span>
               </td>
 
               <td>
@@ -102,22 +155,18 @@
               </td>
 
               <td>
-                {{ unit.address.city }}
-              </td>
-
-              <td>
                 {{ 'commons.countries.' + unit.address.country|translate }}
               </td>
 
               <td>
                 @if (unit.readiness) {
                   <span class="text-success">
-              <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
-              </span>
+                    <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
+                  </span>
                 } @else {
                   <span class="text-danger">
-              <i class="bi bi-x-square-fill"></i> {{ 'units.unit-list.table.body.not-ready'|translate }}
-              </span>
+                    <i class="bi bi-x-square-fill"></i> {{ 'units.unit-list.table.body.not-ready'|translate }}
+                  </span>
                 }
               </td>
 

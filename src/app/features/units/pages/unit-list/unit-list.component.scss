@@ -1,3 +1,144 @@
+@use "../../../../../scss/variables" as vars;
+
 button[cDropdownItem] {
   color: black !important;
+}
+
+// Styles pour l'expansion et l'affichage hiérarchique des multi-units
+.expand-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: vars.$gray;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: vars.$primary;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+}
+
+.expand-btn-placeholder {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+// Styles pour les sous-unités
+.sub-unit-row {
+  background-color: #fafbfc;
+
+  &:hover {
+    background-color: #f5f6f7;
+  }
+}
+
+.sub-unit-indent {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+// Styles pour la cellule des badges
+.badge-cell {
+  width: 50px;
+  padding: 0 !important;
+  position: relative;
+  vertical-align: middle;
+}
+
+// Styles pour les badges verticaux
+.vertical-badge {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-size: 0.5rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 2px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+
+  &.bg-primary-transparent {
+    background-color: vars.$primary01 !important;
+    color: vars.$primary !important;
+  }
+
+  &.bg-secondary-transparent {
+    background-color: vars.$secondary01 !important;
+    color: vars.$secondary !important;
+  }
+}
+
+// Animation pour l'expansion
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Styles pour l'avatar dans les sous-unités
+.sub-unit-row {
+  .avatar {
+    &.bg-primary {
+      background-color: vars.$secondary01 !important;
+      color: vars.$secondary !important;
+    }
+  }
+}
+
+// Responsive : ajustement pour mobile
+@media (max-width: 768px) {
+  .sub-unit-indent {
+    width: 16px;
+  }
+
+  .expand-btn {
+    width: 18px;
+    height: 18px;
+  }
+
+  .expand-btn-placeholder {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Style pour le compteur de sous-unités
+.text-muted.small {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+// Amélioration du focus pour l'accessibilité
+.expand-btn:focus {
+  outline: 2px solid vars.$primary;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+// Style pour le nom des unités
+.unit-name {
+  font-weight: 500;
+  color: vars.$body-color;
 }

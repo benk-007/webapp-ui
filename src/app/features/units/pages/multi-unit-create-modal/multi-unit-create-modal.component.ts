@@ -23,7 +23,7 @@ import {noNumbersValidator} from "../../../../shared/validators/no-number.valida
 import {UnitApiService} from "../../services/unit-api.service";
 import {UnitSelectComponent} from "../../../../shared/components/unit-select/unit-select.component";
 import {CommonModule} from "@angular/common";
-import {MultiUnitPostModel, SubUnitModel} from "../../models/MultiUnitPostModel";
+import {MultiUnitPostModel, SubUnitModel} from "../../models/multi-unit-post.model";
 import {IconDirective} from "@coreui/icons-angular";
 import {
   cilClock,
