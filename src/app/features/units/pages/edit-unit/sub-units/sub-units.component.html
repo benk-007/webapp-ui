@@ -1,0 +1,75 @@
+<c-row class="mb-3">
+  <c-col [md]="6" class="d-flex align-items-center">
+    <h6 class="section-title underline mb-0">SubUnits Management</h6>
+  </c-col>
+  <c-col [md]="6" class="d-flex justify-content-end">
+    <div class="dropdown">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        <svg [cIcon]="icons.cilPlus" size="sm" class="me-1"></svg>
+        Add SubUnit
+      </button>
+      <ul class="dropdown-menu">
+        <li><button class="dropdown-item" (click)="onAddNewSubUnit()">Create New SubUnit</button></li>
+        <li><button class="dropdown-item" (click)="onAddExistingUnit()">Add Existing Unit</button></li>
+      </ul>
+    </div>
+  </c-col>
+</c-row>
+
+<div *ngIf="isLoading" class="text-center mt-5">
+  <c-spinner color="secondary"></c-spinner>
+  <p class="mt-2">Loading SubUnits...</p>
+</div>
+
+<div *ngIf="!isLoading && subUnits.length === 0">
+  <app-empty-data
+    imageSrc="assets/images/animations/units.gif"
+    message="No SubUnits found. Click 'Add SubUnit' to get started.">
+  </app-empty-data>
+</div>
+
+<div *ngIf="!isLoading && subUnits.length > 0" class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>SubUnit</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Type</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let subUnit of subUnits; trackBy: trackBySubUnit">
+      <td>
+        <div class="d-flex align-items-center">
+          <c-avatar [size]="'md'" shape="rounded" textColor="white" color="secondary">
+            {{ getNameInitials(subUnit.name) }}
+          </c-avatar>
+          <div class="ms-3">
+            <div class="fw-semibold">{{ subUnit.name }}</div>
+            <div class="small text-muted" *ngIf="subUnit.subtitle">{{ subUnit.subtitle }}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <span class="badge bg-info">{{ subUnit.priority || 'N/A' }}</span>
+      </td>
+      <td>
+          <span class="badge" [class]="subUnit.readiness ? 'bg-success' : 'bg-warning'">
+            {{ subUnit.readiness ? 'Ready' : 'Not Ready' }}
+          </span>
+      </td>
+      <td>{{ subUnit.nature || 'Single' }}</td>
+      <td>
+        <button class="btn btn-sm btn-primary me-2" (click)="onEditSubUnit(subUnit)">
+          <svg [cIcon]="icons.cilPen" size="sm"></svg>
+        </button>
+        <button class="btn btn-sm btn-danger" (click)="onRemoveSubUnit(subUnit)">
+          <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

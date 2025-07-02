@@ -28,9 +28,15 @@ export class EditUnitComponent implements OnDestroy {
   private unitId!: string;
   private subscriptions: Subscription[] = [];
   openDropdown = false;
-//
+ //SubUnit
   isSubUnit: boolean = false;
   parentUnitId?: string;
+
+  //MultiUnit
+  isMultiUnit: boolean = false;
+
+  //Title
+  unitName: string = '';
 
   constructor(private activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService,
@@ -52,11 +58,27 @@ export class EditUnitComponent implements OnDestroy {
         //on détermine si c'est une subUnit et on stocke l'ID du parent si nécessaire
         this.isSubUnit = !!data.parentUnit;
         this.parentUnitId = data.parentUnit;
+        //Nature Multiunit
+        this.isMultiUnit = data.nature === 'MULTI_UNIT';
+
+        //Mettre à jour le title
+        this.unitName = data.name;
+        this.updateTitle();
       },
       error: (err) => {
         console.error('An error occurred when retrieving the unit', err);
       }
     }))
+  }
+
+  private updateTitle() {
+    if (this.isSubUnit) {
+      this.title = `Edit SubUnit: ${this.unitName}`;
+    } else if (this.isMultiUnit) {
+      this.title = `Edit MultiUnit: ${this.unitName}`;
+    } else {
+      this.title = this.translateService.instant('units.edit-unit.default-title');
+    }
   }
 
   ngOnDestroy(): void {

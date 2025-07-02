@@ -234,14 +234,41 @@ export class RentalDetailsComponent implements OnDestroy {
       next: (data) => {
         this.isSubUnit = !!data.parentUnit;
         this.parentUnitId = data.parentUnit;
-        this.retrieveUnitDetails();
-        // Désactiver le champ Type pour les subUnits
+
+        //Récupérer d'abord les détails du parent pour le champ Type
         if (this.isSubUnit) {
-          this.rentalDetailsForm.get('type')?.disable();
-        }
+          this.getParentDetailsForType();
+        } else {
+          this.retrieveUnitDetails();        }
       },
       error: (err) => {
         console.error('Error checking unit type:', err);
+      }
+    }));
+  }
+
+  private getParentDetailsForType() {
+    this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.parentUnitId!).subscribe({
+      next: (parentData) => {
+        // Maintenant récupérer les détails de la subUnit
+        this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.unitId).subscribe({
+          next: (subUnitData) => {
+            // Combiner les données : Type du parent, reste de la subUnit
+            const combinedData = {
+              ...subUnitData,
+              type: parentData.type // Type du parent
+            };
+            this.handleUnitDetailsSuccessResponse(combinedData);
+            // Désactiver le champ Type
+            this.rentalDetailsForm.get('type')?.disable();
+          },
+          error: (err) => {
+            console.error('Error getting subUnit details:', err);
+          }
+        }));
+      },
+      error: (err) => {
+        console.error('Error getting parent details:', err);
       }
     }));
   }

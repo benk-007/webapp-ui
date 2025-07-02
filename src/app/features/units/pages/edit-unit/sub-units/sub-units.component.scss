@@ -1,0 +1,15 @@
+.section-title {
+  color: #af6dee;
+  font-weight: 500;
+
+  &.underline:after {
+    content: ' ';
+    display: block;
+    background: #af6dee;
+    opacity: 30%;
+    border-radius: 50px;
+    height: .3rem;
+    margin-top: .1rem;
+    width: 2rem;
+  }
+}

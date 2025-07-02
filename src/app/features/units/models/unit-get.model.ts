@@ -14,4 +14,5 @@ export interface UnitGetModel {
   address: AddressModel;
 
   parentUnit?: string;
+  nature: 'SINGLE' | 'MULTI_UNIT';
 }

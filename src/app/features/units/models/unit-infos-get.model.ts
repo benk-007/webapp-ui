@@ -12,5 +12,6 @@ export interface UnitInfosGetModel {
   calendarColor: string;
   readiness: boolean;
 
-  parentUnit?: string
+  parentUnit?: string;
+  nature?: 'SINGLE' | 'MULTI_UNIT';
 }

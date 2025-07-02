@@ -1052,6 +1052,10 @@
           "ratesTable": {
             "title": "Rates table"
           }
+        },
+        "sub-units": {
+          "title": "SubUnits",
+          "hint": "Manage the subunits of this multi-unit rental"
         }
       }
     }

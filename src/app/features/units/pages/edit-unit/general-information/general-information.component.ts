@@ -216,9 +216,8 @@ export class GeneralInformationComponent implements OnDestroy {
       // Désactiver les champs address et contact pour les subUnits
       this.infoForm.get('address')?.disable();
       this.infoForm.get('contact')?.disable();
-      // Désactiver spécifiquement country et location
+      // Désactiver spécifiquement le champ country
       this.infoForm.get('address.country')?.disable();
-      this.infoForm.get('address.location')?.disable();
     }
   }
 

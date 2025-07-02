@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h5 class="modal-title">Create New SubUnit</h5>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="subUnitForm" (ngSubmit)="onSubmit()" cForm>
+
+    <c-row>
+      <c-col [md]="12" class="mb-3">
+        <label cLabel class="required" for="subUnitName">SubUnit Name</label>
+        <input
+          cFormControl
+          formControlName="name"
+          id="subUnitName"
+          type="text"
+          placeholder="Enter subunit name"
+          [class.is-invalid]="subUnitForm.get('name')?.invalid && subUnitForm.get('name')?.touched">
+        <c-form-feedback
+          *ngIf="subUnitForm.get('name')?.hasError('required') && subUnitForm.get('name')?.touched"
+          [valid]="false">
+          SubUnit name is required
+        </c-form-feedback>
+      </c-col>
+    </c-row>
+
+    <c-row>
+      <c-col [md]="6" class="mb-3">
+        <label cLabel class="required" for="priority">Priority</label>
+        <input
+          cFormControl
+          formControlName="priority"
+          id="priority"
+          type="number"
+          min="1"
+          [class.is-invalid]="subUnitForm.get('priority')?.invalid && subUnitForm.get('priority')?.touched">
+        <c-form-feedback
+          *ngIf="subUnitForm.get('priority')?.hasError('required') && subUnitForm.get('priority')?.touched"
+          [valid]="false">
+          Priority is required
+        </c-form-feedback>
+      </c-col>
+
+      <c-col [md]="6" class="mb-3 d-flex align-items-end">
+        <c-form-check [switch]="true">
+          <input cFormCheckInput formControlName="readiness" type="checkbox" id="readiness">
+          <label cFormCheckLabel for="readiness">Ready for booking</label>
+        </c-form-check>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="subUnitForm.invalid || isSubmitting">
+    <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+    {{ isSubmitting ? 'Creating...' : 'Create SubUnit' }}
+  </button>
+</div>
