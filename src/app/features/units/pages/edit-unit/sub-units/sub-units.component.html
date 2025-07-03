@@ -10,17 +10,9 @@
   </c-col>
 
   <c-col [md]="10" class="d-flex justify-content-end">
-    <c-button-group>
       <button cButton color="secondary" size="sm" (click)="onAddNewSubUnit()">
         {{ 'units.unit-list.cta.add-btn'|translate }} SubUnit
       </button>
-      <c-dropdown variant="btn-group">
-        <button cButton color="secondary" cDropdownToggle size="sm"></button>
-        <ul cDropdownMenu>
-          <li><button cButton cDropdownItem (click)="onAddExistingUnit()">{{ 'units.create-multi-unit.form.existing-units.label'|translate }}</button></li>
-        </ul>
-      </c-dropdown>
-    </c-button-group>
   </c-col>
 </c-row>
 

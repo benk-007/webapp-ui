@@ -1,5 +1,3 @@
-// sub-unit-edit-modal.component.ts
-
 import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';

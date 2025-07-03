@@ -1,4 +1,3 @@
-
 @use "../../../../../../../scss/variables" as vars;
 
 .required::after {
@@ -11,7 +10,24 @@
   font-size: 1.1rem;
 }
 
-// Add subunit link cliquable (copié du multi-unit-create)
+// Section titles
+.section-title {
+  color: vars.$secondary;
+  font-weight: 500;
+
+  &.underline:after {
+    content: ' ';
+    display: block;
+    background: vars.$secondary;
+    opacity: 30%;
+    border-radius: 50px;
+    height: .3rem;
+    margin-top: .1rem;
+    width: 2rem;
+  }
+}
+
+// Add subunit link
 .add-subunit-link {
   color: vars.$primary;
   cursor: pointer;
@@ -27,12 +43,5 @@
 
   i {
     font-size: 0.75rem;
-  }
-}
-
-// Ajustement du positionnement du toggle Status
-.mb-3.d-flex.flex-column.justify-content-center {
-  .form-check {
-    margin-top: 0.5rem; // Descendre un peu plus le toggle
   }
 }

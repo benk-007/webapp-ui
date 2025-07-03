@@ -139,22 +139,6 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     );
   }
 
-  onAddExistingUnit(): void {
-    const initialState = {
-      multiUnitId: this.multiUnitId
-    };
-
-    const modalRef = this.modalService.show(ExistingUnitModalComponent, {
-      initialState,
-      class: 'modal-lg'
-    });
-
-    this.subscriptions.push(
-      (modalRef.content as ExistingUnitModalComponent).unitAssigned.subscribe(() => {
-        this.refreshListContent();
-      })
-    );
-  }
 
   onEditSubUnit(subUnit: UnitItemGetModel): void {
     const initialState = {
