@@ -13,13 +13,14 @@ import {
   InputGroupTextDirective
 } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
-import { cilTrash, cilSearch } from '@coreui/icons';
+import { cilTrash, cilSearch, cilPen } from '@coreui/icons';
 import { EmptyDataComponent } from '../../../../../shared/components/empty-data/empty-data.component';
 import { PageTitleComponent } from '../../../../../shared/components/page-title/page-title.component';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { SubUnitCreateModalComponent } from './sub-unit-create-modal/sub-unit-create-modal.component';
+import { SubUnitEditModalComponent } from './sub-unit-edit-modal/sub-unit-edit-modal.component';
 import { ExistingUnitModalComponent } from './existing-unit-modal/existing-unit-modal.component';
 import { BsModalService } from "ngx-bootstrap/modal";
 import { ListContentComponent } from '../../../../../shared/components/list-content/list-content.component';
@@ -50,7 +51,7 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
   multiUnitId!: string;
   subUnits: UnitItemGetModel[] = [];
   override listContent: UnitItemGetModel[] = [];
-  icons = { cilTrash, cilSearch };
+  icons = { cilTrash, cilSearch, cilPen };
 
   override listParamValidator = {
     page: /^[1-9]\d*$/,
@@ -93,7 +94,7 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     };
 
     this.subscriptions.push(
-      this.unitApiService.getSubUnits(this.multiUnitId).subscribe({
+      this.unitApiService.getSubUnits(this.multiUnitId,pageFilter).subscribe({
         next: (response) => {
           // Simuler la structure de page pour la compatibilité avec ListContentComponent
           const mockPageData = {
@@ -151,6 +152,23 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     this.subscriptions.push(
       (modalRef.content as ExistingUnitModalComponent).unitAssigned.subscribe(() => {
         this.refreshListContent();
+      })
+    );
+  }
+
+  onEditSubUnit(subUnit: UnitItemGetModel): void {
+    const initialState = {
+      subUnit: subUnit
+    };
+
+    const modalRef = this.modalService.show(SubUnitEditModalComponent, {
+      initialState,
+      class: 'modal-lg'
+    });
+
+    this.subscriptions.push(
+      (modalRef.content as SubUnitEditModalComponent).subUnitUpdated.subscribe(() => {
+        this.refreshListContent(); // Recharger la liste
       })
     );
   }

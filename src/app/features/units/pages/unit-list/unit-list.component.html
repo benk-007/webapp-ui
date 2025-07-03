@@ -42,8 +42,8 @@
       <table cTable hover appSelectableTable [responsive]="true">
         <thead>
         <tr>
-          <th style="width: 50px;"></th> <!-- Colonne pour les badges -->
-          <th style="padding-left: 37px;">{{ 'units.unit-list.table.header.name'|translate }}</th>
+          <th style="width: 30px;"></th> <!-- Colonne pour les badges -->
+          <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
@@ -60,16 +60,15 @@
               <!-- Badge vertical à gauche -->
               @if (unit.nature === 'MULTI_UNIT' && !isSubUnit(unit)) {
                 <td class="badge-cell">
-                  <span class="vertical-badge bg-primary-transparent">MULTI</span>
+                  <span class="vertical-badge bg-secondary-transparent">MULTI</span>
                 </td>
               } @else if (isSubUnit(unit)) {
                 <td class="badge-cell">
-                  <span class="vertical-badge bg-secondary-transparent">SUB</span>
+                  <span class="vertical-badge bg-info-transparent">SUB</span>
                 </td>
               } @else {
                 <td class="badge-cell"></td>
               }
-
               <td>
                 <div class="d-flex align-items-center gap-2">
                   <!-- Indicateur d'expansion pour les multi-units -->

@@ -1,5 +1,4 @@
-
-<c-row class="mb-3">
+<c-row class="mb-3 mt-3">
   <c-col [md]="2">
     <c-input-group sizing="sm" class="search-input">
         <span cInputGroupText>
@@ -61,7 +60,7 @@
                     {{ getNameInitials(subUnit.name) }}
                   </c-avatar>
                   <div class="ms-3">
-                    <div class="fw-semibold">{{ subUnit.name }}</div>
+                    <div class="me-1">{{ subUnit.name }}</div>
                     <div class="small text-muted" *ngIf="subUnit.subtitle">{{ subUnit.subtitle }}</div>
                     <div class="small text-body-secondary text-nowrap">
                       <span>{{ 'commons.snippets.audit.created-by'|translate }} {{ subUnit.audit.createdBy | auditName }}</span>
@@ -108,6 +107,9 @@
               </td>
 
               <td>
+                <button cButton size="sm" color="primary" class="btn-light me-2" (click)="onEditSubUnit(subUnit)">
+                  <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                </button>
                 <button cButton size="sm" color="danger" class="btn-light" (click)="onRemoveSubUnit(subUnit)">
                   <svg [cIcon]="icons.cilTrash" size="sm"></svg>
                 </button>

@@ -1,3 +1,6 @@
+
+@use "../../../../../../../scss/variables" as vars;
+
 .required::after {
   content: " *";
   color: #f95050;
@@ -6,4 +9,30 @@
 .modal-header .modal-title {
   font-weight: 500;
   font-size: 1.1rem;
+}
+
+// Add subunit link cliquable (copié du multi-unit-create)
+.add-subunit-link {
+  color: vars.$primary;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: vars.$secondary;
+    text-decoration: underline;
+  }
+
+  i {
+    font-size: 0.75rem;
+  }
+}
+
+// Ajustement du positionnement du toggle Status
+.mb-3.d-flex.flex-column.justify-content-center {
+  .form-check {
+    margin-top: 0.5rem; // Descendre un peu plus le toggle
+  }
 }

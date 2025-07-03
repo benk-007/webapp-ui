@@ -37,12 +37,19 @@ button[cDropdownItem] {
 }
 
 // Styles pour les sous-unités
-tbody tr.sub-unit-row {
-  background-color: #f3e8ff !important; // Mauve très clair
+.sub-unit-row {
+  background-color: #f5f6f7;
 
-  td {
-    background-color: inherit !important;
+  &:hover {
+    background-color: #f5f6f7;
   }
+}
+
+.badge-cell {
+  width: 30px;
+  padding: 0 !important;
+  position: relative;
+  vertical-align: middle;
 }
 
 .sub-unit-indent {
@@ -50,14 +57,6 @@ tbody tr.sub-unit-row {
   height: 20px;
   position: relative;
   flex-shrink: 0;
-}
-
-// Styles pour la cellule des badges
-.badge-cell {
-  width: 50px;
-  padding: 0 !important;
-  position: relative;
-  vertical-align: middle;
 }
 
 // Styles pour les badges verticaux
@@ -82,6 +81,31 @@ tbody tr.sub-unit-row {
   &.bg-secondary-transparent {
     background-color: vars.$secondary01 !important;
     color: vars.$secondary !important;
+  }
+}
+//Badge left
+.vertical-badge-left {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-size: 0.5rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 2px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  z-index: 10;
+
+  &.bg-secondary-transparent {
+    background-color: vars.$secondary01 !important;
+    color: vars.$secondary !important;
+  }
+
+  &.bg-info-transparent {
+    background-color: vars.$info01 !important;
+    color: vars.$info !important;
   }
 }
 
