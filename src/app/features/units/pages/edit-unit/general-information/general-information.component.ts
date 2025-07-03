@@ -182,33 +182,65 @@ export class GeneralInformationComponent implements OnDestroy {
         console.log('Unit infos call general information response is:', data);
         this.unit = data;
 
-        //
+        // Déterminer si c'est une SubUnit
         this.isSubUnit = !!data.parentUnit;
         this.parentUnitId = data.parentUnit;
 
-        this.infoForm.patchValue(this.unit);
-        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
-          this.layers = [
-            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
-              icon: icon({
-                ...Icon.Default.prototype.options,
-                iconUrl: 'assets/marker-icon.png',
-                iconRetinaUrl: 'assets/marker-icon-2x.png',
-                shadowUrl: 'assets/marker-shadow.png'
-              })
-            })
-          ];
+        // Si c'est une SubUnit, récupérer les données du parent pour l'affichage
+        if (this.isSubUnit && this.parentUnitId) {
+          this.retrieveParentUnitForDisplay();
+        } else {
+          // Pour les unités normales, utiliser les données directement
+          this.populateFormWithData(data);
         }
-
-        //fonction pour désactiver les champs
-        this.handleSubUnitFields();
-
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
-        //TODO: launch toast notification and redirect to unit list page
       }
     }))
+  }
+
+  private retrieveParentUnitForDisplay() {
+    this.subscriptions.push(this.unitApiService.getUnitInfosById(this.parentUnitId!).subscribe({
+      next: (parentData) => {
+        console.log('Parent unit data for display:', parentData);
+
+        // Créer un objet combiné : données SubUnit + address/contact du parent
+        const displayData = {
+          ...this.unit, // Données de la SubUnit (name, subtitle, calendarColor, etc.)
+          address: parentData.address, // Address du parent pour l'affichage
+          contact: parentData.contact  // Contact du parent pour l'affichage
+        };
+
+        this.populateFormWithData(displayData);
+      },
+      error: (err) => {
+        console.error('Error retrieving parent unit data:', err);
+        // En cas d'erreur, utiliser les données de la SubUnit
+        this.populateFormWithData(this.unit);
+      }
+    }));
+  }
+
+  private populateFormWithData(data: UnitInfosGetModel) {
+    this.infoForm.patchValue(data);
+
+    // Gérer la carte
+    if (data.address && data.address.location && data.address.location.lat && data.address.location.lng) {
+      this.layers = [
+        marker([data.address.location.lat, data.address.location.lng], {
+          icon: icon({
+            ...Icon.Default.prototype.options,
+            iconUrl: 'assets/marker-icon.png',
+            iconRetinaUrl: 'assets/marker-icon-2x.png',
+            shadowUrl: 'assets/marker-shadow.png'
+          })
+        })
+      ];
+    }
+
+    // Désactiver les champs pour les SubUnits
+    this.handleSubUnitFields();
   }
 
   private handleSubUnitFields() {
