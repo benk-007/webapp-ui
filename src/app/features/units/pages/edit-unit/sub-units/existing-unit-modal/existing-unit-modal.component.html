@@ -1,5 +1,6 @@
+
 <div class="modal-header">
-  <h5 class="modal-title">Add Existing Units as SubUnits</h5>
+  <h5 class="modal-title">{{ 'units.create-multi-unit.form.existing-units.label'|translate }}</h5>
 </div>
 
 <div class="modal-body">
@@ -7,7 +8,7 @@
 
     <c-row>
       <c-col [md]="12" class="mb-3">
-        <label cLabel class="required">Select Units</label>
+        <label cLabel class="required">{{ 'units.unit-list.table.header.name'|translate }}</label>
         <app-unit-select
           formControlName="selectedUnits"
           [allowMultiUnit]="false">
@@ -15,7 +16,7 @@
         <c-form-feedback
           *ngIf="assignForm.get('selectedUnits')?.hasError('required') && assignForm.get('selectedUnits')?.touched"
           [valid]="false">
-          Please select at least one unit
+          {{ 'commons.errors.required'|translate }}
         </c-form-feedback>
       </c-col>
     </c-row>
@@ -25,10 +26,10 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">
-    Cancel
+    {{ 'commons.form.buttons.cancel'|translate }}
   </button>
   <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="assignForm.invalid || isSubmitting">
     <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
-    {{ isSubmitting ? 'Assigning...' : 'Assign Units' }}
+    {{ isSubmitting ? ('commons.snippets.loading'|translate) + '...' : ('commons.form.buttons.create'|translate) }}
   </button>
 </div>

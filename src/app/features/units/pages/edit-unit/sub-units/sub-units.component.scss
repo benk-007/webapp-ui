@@ -1,15 +1,27 @@
-.section-title {
-  color: #af6dee;
-  font-weight: 500;
+@use "../../../../../../scss/variables" as vars;
 
-  &.underline:after {
-    content: ' ';
-    display: block;
-    background: #af6dee;
-    opacity: 30%;
-    border-radius: 50px;
-    height: .3rem;
-    margin-top: .1rem;
-    width: 2rem;
+button[cDropdownItem] {
+  color: black !important;
+}
+
+// Reprendre les styles de unit-list pour la cohérence
+.search-input {
+  border: 1px solid #e2e6f1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0.25rem;
+
+  &:focus-within{
+    border-color: #accdff !important;
+  }
+
+  span.input-group-text {
+    background-color: white;
+    border: none;
+  }
+  input{
+    border: none;
+    outline: none;
   }
 }

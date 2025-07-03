@@ -43,7 +43,7 @@
         <thead>
         <tr>
           <th style="width: 50px;"></th> <!-- Colonne pour les badges -->
-          <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
+          <th style="padding-left: 37px;">{{ 'units.unit-list.table.header.name'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
@@ -93,15 +93,13 @@
                     <div class="sub-unit-indent"></div>
                   }
 
-                  <c-avatar [size]="'md'" shape="rounded" textColor="white"
-                            [color]="isSubUnit(unit) ? 'secondary' : 'primary'">
+                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary">
                     {{ getNameInitials(unit.name) }}
                   </c-avatar>
 
-                  <div class="d-flex flex-column" [adaptivePosition]="true"
-                       [tooltip]="unit.subtitle">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="unit-name">{{ unit.name }}</span>
+                  <div class="d-flex flex-column" [adaptivePosition]="true" [tooltip]="unit.subtitle">
+                    <div>
+                      <span class="me-1">{{ unit.name }}</span>
 
                       <!-- Compteur de sous-unités pour les multi-units -->
                       @if (unit.nature === 'MULTI_UNIT' && unit.subUnits && unit.subUnits.length > 0 && !isSubUnit(unit)) {

@@ -490,7 +490,7 @@
         },
         "subunit-name": {
           "label": "Subunit Name",
-          "placeholder": "Subunit Name"
+          "placeholder": "Enter subunit name"
         },
         "priority": {
           "label": "Priority"

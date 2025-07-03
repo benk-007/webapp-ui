@@ -1,5 +1,6 @@
+
 <div class="modal-header">
-  <h5 class="modal-title">Create New SubUnit</h5>
+  <h5 class="modal-title">{{ 'units.create-multi-unit.form.add-subunit.label'|translate }}</h5>
 </div>
 
 <div class="modal-body">
@@ -7,25 +8,25 @@
 
     <c-row>
       <c-col [md]="12" class="mb-3">
-        <label cLabel class="required" for="subUnitName">SubUnit Name</label>
+        <label cLabel class="required" for="subUnitName">{{ 'units.create-multi-unit.form.subunit-name.label'|translate }}</label>
         <input
           cFormControl
           formControlName="name"
           id="subUnitName"
           type="text"
-          placeholder="Enter subunit name"
+          [placeholder]="'units.create-multi-unit.form.subunit-name.placeholder'|translate"
           [class.is-invalid]="subUnitForm.get('name')?.invalid && subUnitForm.get('name')?.touched">
         <c-form-feedback
           *ngIf="subUnitForm.get('name')?.hasError('required') && subUnitForm.get('name')?.touched"
           [valid]="false">
-          SubUnit name is required
+          {{ 'commons.errors.required'|translate }}
         </c-form-feedback>
       </c-col>
     </c-row>
 
     <c-row>
       <c-col [md]="6" class="mb-3">
-        <label cLabel class="required" for="priority">Priority</label>
+        <label cLabel class="required" for="priority">{{ 'units.create-multi-unit.form.priority.label'|translate }}</label>
         <input
           cFormControl
           formControlName="priority"
@@ -36,14 +37,18 @@
         <c-form-feedback
           *ngIf="subUnitForm.get('priority')?.hasError('required') && subUnitForm.get('priority')?.touched"
           [valid]="false">
-          Priority is required
+          {{ 'commons.errors.required'|translate }}
         </c-form-feedback>
       </c-col>
 
-      <c-col [md]="6" class="mb-3 d-flex align-items-end">
+      <!-- Status Toggle -->
+      <c-col md="6" class="mb-3 d-flex flex-column justify-content-center">
+        <label cLabel class="me-2">{{ 'units.create-multi-unit.form.status.label'|translate }}</label>
         <c-form-check [switch]="true">
           <input cFormCheckInput formControlName="readiness" type="checkbox" id="readiness">
-          <label cFormCheckLabel for="readiness">Ready for booking</label>
+          <label cFormCheckLabel for="readiness">
+            {{ 'units.unit-list.table.body.ready'|translate }}
+          </label>
         </c-form-check>
       </c-col>
     </c-row>
@@ -53,10 +58,10 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">
-    Cancel
+    {{ 'commons.form.buttons.cancel'|translate }}
   </button>
   <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="subUnitForm.invalid || isSubmitting">
     <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
-    {{ isSubmitting ? 'Creating...' : 'Create SubUnit' }}
+    {{ isSubmitting ? ('commons.snippets.loading'|translate) + '...' : ('commons.form.buttons.create'|translate) + ' SubUnit' }}
   </button>
 </div>

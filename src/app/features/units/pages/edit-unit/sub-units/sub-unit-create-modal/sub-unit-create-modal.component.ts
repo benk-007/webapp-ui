@@ -10,6 +10,7 @@ import {
   FormControlDirective, FormLabelDirective, FormFeedbackComponent,
   FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective
 } from '@coreui/angular';
+import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
 
 @Component({
   selector: 'app-sub-unit-create-modal',
@@ -17,7 +18,7 @@ import {
   imports: [
     ReactiveFormsModule, TranslatePipe, ButtonDirective, ColComponent, RowComponent,
     FormDirective, FormControlDirective, FormLabelDirective, FormFeedbackComponent,
-    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective
+    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective // <- Ajouter ces 3
   ],
   templateUrl: './sub-unit-create-modal.component.html',
   styleUrl: './sub-unit-create-modal.component.scss'
