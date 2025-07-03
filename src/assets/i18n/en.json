@@ -639,6 +639,8 @@
     "edit-unit": {
       "default-title": "Edit unit",
       "title": "Unit: :unit",
+      "multi-unit-title": "Edit multi-unit: {{name}}",
+      "sub-unit-title": "Edit sub-unit: {{name}}",
       "tabs": {
         "general-information": {
           "title": "General information",
@@ -1054,8 +1056,9 @@
           }
         },
         "sub-units": {
-          "title": "SubUnits",
-          "hint": "Manage the subunits of this multi-unit rental"
+          "title": "Sub-units",
+          "hint": "Manage the subunits of this multi-unit rental",
+          "add-btn": "Add sub-units"
         }
       }
     }

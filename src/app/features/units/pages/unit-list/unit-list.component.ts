@@ -32,7 +32,6 @@ import {EmptyDataComponent} from "../../../../shared/components/empty-data/empty
 import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
 import {MultiUnitCreateModalComponent} from "../multi-unit-create-modal/multi-unit-create-modal.component";
 import {PageFilterModel} from "../../../../shared/models/page-filter.model";
-import {UnitSelectComponent} from "../../../../shared/components/unit-select/unit-select.component";
 import {NgClass} from "@angular/common";
 
 @Component({
@@ -221,13 +220,6 @@ export class UnitListComponent extends ListContentComponent {
   canExpand(unit: UnitItemGetModel): boolean {
     const result = unit.nature === 'MULTI_UNIT' && unit.subUnits != null && unit.subUnits.length > 0;
     return result;
-  }
-
-  /**
-   * Vérifie si une multi-unit a été auto-expandue à cause de la recherche
-   */
-  isAutoExpanded(unitId: string): boolean {
-    return this.autoExpandedUnits.has(unitId);
   }
 
   openCreateUnitModal() {

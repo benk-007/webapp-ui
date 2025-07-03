@@ -2,32 +2,25 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 import { UnitApiService } from '../../../services/unit-api.service';
 import { UnitItemGetModel } from '../../../models/unit-item-get.model';
 import {
   ButtonDirective, ColComponent, RowComponent, TableDirective,
-  AvatarComponent, SpinnerComponent, ButtonGroupComponent,
-  DropdownComponent, DropdownToggleDirective, DropdownMenuDirective,
-  DropdownItemDirective, FormControlDirective, InputGroupComponent,
+  AvatarComponent, SpinnerComponent, FormControlDirective, InputGroupComponent,
   InputGroupTextDirective
 } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { cilTrash, cilSearch, cilPen } from '@coreui/icons';
 import { EmptyDataComponent } from '../../../../../shared/components/empty-data/empty-data.component';
-import { PageTitleComponent } from '../../../../../shared/components/page-title/page-title.component';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateService } from '@ngx-translate/core';
 import { SubUnitCreateModalComponent } from './sub-unit-create-modal/sub-unit-create-modal.component';
 import { SubUnitEditModalComponent } from './sub-unit-edit-modal/sub-unit-edit-modal.component';
-import { ExistingUnitModalComponent } from './existing-unit-modal/existing-unit-modal.component';
 import { BsModalService } from "ngx-bootstrap/modal";
 import { ListContentComponent } from '../../../../../shared/components/list-content/list-content.component';
 import { Router } from '@angular/router';
 import { PageFilterModel } from '../../../../../shared/models/page-filter.model';
 import { AuditNamePipe } from '../../../../../shared/pipes/audit-name.pipe';
-import { TableControlComponent } from '../../../../../shared/components/table-control/table-control.component';
 import { SelectableTableDirective } from '../../../../../shared/directives/selectable-table.directive';
 
 @Component({
@@ -36,11 +29,8 @@ import { SelectableTableDirective } from '../../../../../shared/directives/selec
   imports: [
     CommonModule, TranslatePipe, ButtonDirective, ColComponent, RowComponent,
     TableDirective, AvatarComponent, SpinnerComponent, IconDirective,
-    EmptyDataComponent, PageTitleComponent, ButtonGroupComponent,
-    DropdownComponent, DropdownToggleDirective, DropdownMenuDirective,
-    DropdownItemDirective, FormControlDirective, InputGroupComponent,
-    InputGroupTextDirective, AuditNamePipe, TableControlComponent,
-    SelectableTableDirective
+    EmptyDataComponent,FormControlDirective, InputGroupComponent,
+    InputGroupTextDirective, AuditNamePipe, SelectableTableDirective
   ],
   providers: [BsModalService],
   templateUrl: './sub-units.component.html',
@@ -66,7 +56,6 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     private unitApiService: UnitApiService,
     private modalService: BsModalService,
     private toastrService: ToastrService,
-    private translateService: TranslateService
   ) {
     super(router, route);
   }
@@ -191,14 +180,6 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
         }
       })
     );
-  }
-
-  override getNameInitials(name: string): string {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  }
-
-  trackBySubUnit(index: number, subUnit: UnitItemGetModel): string {
-    return subUnit.id;
   }
 
   override ngOnDestroy(): void {

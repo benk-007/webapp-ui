@@ -11,7 +11,7 @@
 
   <c-col [md]="10" class="d-flex justify-content-end">
       <button cButton color="secondary" size="sm" (click)="onAddNewSubUnit()">
-        {{ 'units.unit-list.cta.add-btn'|translate }} SubUnit
+        {{ 'units.edit-unit.tabs.sub-units.add-btn'|translate }}
       </button>
   </c-col>
 </c-row>
@@ -48,7 +48,7 @@
             <tr>
               <td>
                 <div class="d-flex align-items-center">
-                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="secondary">
+                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary">
                     {{ getNameInitials(subUnit.name) }}
                   </c-avatar>
                   <div class="ms-3">

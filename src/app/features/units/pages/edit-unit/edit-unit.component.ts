@@ -73,9 +73,9 @@ export class EditUnitComponent implements OnDestroy {
 
   private updateTitle() {
     if (this.isSubUnit) {
-      this.title = `Edit SubUnit: ${this.unitName}`;
+      this.title = this.translateService.instant('units.edit-unit.sub-unit-title', { name: this.unitName });
     } else if (this.isMultiUnit) {
-      this.title = `Edit MultiUnit: ${this.unitName}`;
+      this.title = this.translateService.instant('units.edit-unit.multi-unit-title', { name: this.unitName });
     } else {
       this.title = this.translateService.instant('units.edit-unit.default-title');
     }
