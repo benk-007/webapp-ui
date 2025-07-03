@@ -1,10 +1,11 @@
 @use "../../../../../scss/variables" as vars;
 
+// --- General Dropdown Styling ---
 button[cDropdownItem] {
   color: black !important;
 }
 
-// Styles pour l'expansion et l'affichage hiérarchique des multi-units
+// --- Expand Button Styling ---
 .expand-btn {
   width: 20px;
   height: 20px;
@@ -22,7 +23,9 @@ button[cDropdownItem] {
   }
 
   &:focus {
-    outline: none;
+    outline: 2px solid vars.$primary;
+    outline-offset: 2px;
+    box-shadow: none !important;
   }
 
   svg {
@@ -36,15 +39,38 @@ button[cDropdownItem] {
   flex-shrink: 0;
 }
 
-// Styles pour les sous-unités
+// --- Sub-unit Row Styling ---
+tbody tr.sub-unit-row {
+  background-color: #f5f6f7 !important; // Mauve très clair
+
+  td {
+    background-color: #f5f6f7 !important;
+  }
+}
 .sub-unit-row {
-  background-color: #f5f6f7;
+  background-color: #f5f6f7 !important;
 
   &:hover {
-    background-color: #f5f6f7;
+    background-color: #f5f6f7 !important; // ensure no change on hover
+  }
+
+
+  .avatar {
+    // Override avatar color for sub-units if needed separately
+    &.bg-primary {
+      background-color: vars.$secondary01 !important;
+      color: vars.$secondary !important;
+    }
   }
 }
 
+// --- Avatar override for MULTI units ---
+.multi-unit-avatar {
+  background-color: vars.$secondary !important;
+  color: white !important;
+}
+
+// --- Badge Cell Styling ---
 .badge-cell {
   width: 30px;
   padding: 0 !important;
@@ -52,6 +78,7 @@ button[cDropdownItem] {
   vertical-align: middle;
 }
 
+// --- Sub-unit indentation spacing ---
 .sub-unit-indent {
   width: 20px;
   height: 20px;
@@ -59,7 +86,7 @@ button[cDropdownItem] {
   flex-shrink: 0;
 }
 
-// Styles pour les badges verticaux
+// --- Vertical Badge Styling ---
 .vertical-badge {
   position: absolute;
   left: 0;
@@ -82,26 +109,6 @@ button[cDropdownItem] {
     background-color: vars.$secondary01 !important;
     color: vars.$secondary !important;
   }
-}
-//Badge left
-.vertical-badge-left {
-  position: absolute;
-  left: -15px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center;
-  font-size: 0.5rem;
-  padding: 0.125rem 0.25rem;
-  border-radius: 2px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  z-index: 10;
-
-  &.bg-secondary-transparent {
-    background-color: vars.$secondary01 !important;
-    color: vars.$secondary !important;
-  }
 
   &.bg-info-transparent {
     background-color: vars.$info01 !important;
@@ -109,29 +116,13 @@ button[cDropdownItem] {
   }
 }
 
-// Animation pour l'expansion
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.vertical-badge-left {
+  @extend .vertical-badge;
+  left: -15px;
+  z-index: 10;
 }
 
-// Styles pour l'avatar dans les sous-unités
-.sub-unit-row {
-  .avatar {
-    &.bg-primary {
-      background-color: vars.$secondary01 !important;
-      color: vars.$secondary !important;
-    }
-  }
-}
-
-// Responsive : ajustement pour mobile
+// --- Responsive Adjustments ---
 @media (max-width: 768px) {
   .sub-unit-indent {
     width: 16px;
@@ -148,21 +139,34 @@ button[cDropdownItem] {
   }
 }
 
-// Style pour le compteur de sous-unités
+// --- Sub-unit Counter Styling ---
 .text-muted.small {
   font-size: 0.75rem;
   font-weight: 400;
 }
 
-// Amélioration du focus pour l'accessibilité
-.expand-btn:focus {
-  outline: 2px solid vars.$primary;
-  outline-offset: 2px;
-  box-shadow: none !important;
-}
-
-// Style pour le nom des unités
+// --- Unit Name (optional tweak) ---
 .unit-name {
   font-weight: 500;
   color: vars.$body-color;
+}
+
+// --- Animation (if still used somewhere) ---
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sub-unit-indent {
+  width: 20px; // Your existing indent width
+}
+
+.sub-unit-badge {
+  margin-left: 20px; // Same as above
 }
