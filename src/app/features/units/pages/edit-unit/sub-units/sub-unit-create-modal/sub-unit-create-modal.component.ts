@@ -58,20 +58,30 @@ export class SubUnitCreateModalComponent implements OnDestroy {
     const payload = {
       name: formValue.name.trim(),
       priority: formValue.priority,
-      readiness: formValue.readiness,
-      parentUnitId: this.multiUnitId
+      readiness: formValue.readiness
     };
 
-    // TODO: Appel API pour créer la subUnit
-    console.log('Creating subUnit:', payload);
-
-    // Simulation pour l'instant
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.subUnitCreated.emit(payload);
-      this.closeModal();
-      this.toastrService.success('SubUnit created successfully', 'Success');
-    }, 1000);
+    this.subscriptions.push(
+      this.unitApiService.postSubUnit(this.multiUnitId, payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.subUnitCreated.emit(response);
+          this.closeModal();
+          this.toastrService.success(
+            `SubUnit "${payload.name}" created successfully`,
+            'SubUnit Created'
+          );
+        },
+        error: (err) => {
+          console.error('Error creating subUnit:', err);
+          this.isSubmitting = false;
+          this.toastrService.error(
+            'Failed to create SubUnit. Please try again.',
+            'Creation Failed'
+          );
+        }
+      })
+    );
   }
 
   closeModal(): void {

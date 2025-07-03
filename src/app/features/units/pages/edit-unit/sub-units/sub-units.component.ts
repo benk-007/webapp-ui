@@ -13,6 +13,14 @@ import { IconDirective } from '@coreui/icons-angular';
 import { cilPen, cilTrash, cilPlus } from '@coreui/icons';
 import { EmptyDataComponent } from '../../../../../shared/components/empty-data/empty-data.component';
 import { PageTitleComponent } from '../../../../../shared/components/page-title/page-title.component';
+import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
+
+
+import { SubUnitCreateModalComponent } from './sub-unit-create-modal/sub-unit-create-modal.component';
+import { ExistingUnitModalComponent } from './existing-unit-modal/existing-unit-modal.component';
+import {BsModalService} from "ngx-bootstrap/modal";
 
 @Component({
   selector: 'app-sub-units',
@@ -22,6 +30,7 @@ import { PageTitleComponent } from '../../../../../shared/components/page-title/
     TableDirective, AvatarComponent, SpinnerComponent, IconDirective,
     EmptyDataComponent, PageTitleComponent
   ],
+  providers: [BsModalService],
   templateUrl: './sub-units.component.html',
   styleUrl: './sub-units.component.scss'
 })
@@ -36,7 +45,11 @@ export class SubUnitsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private unitApiService: UnitApiService
+    private unitApiService: UnitApiService,
+    // Ajouter ces services :
+    private modalService: BsModalService,
+    private toastrService: ToastrService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -45,20 +58,54 @@ export class SubUnitsComponent implements OnInit, OnDestroy {
   }
 
   private loadSubUnits(): void {
-    // TODO: Appel API pour récupérer les subUnits
-    // Pour l'instant, simulation
-    this.isLoading = false;
-    this.subUnits = [];
+    this.subscriptions.push(
+      // Appel API : GET /units/{unitId}/sub-units
+      this.unitApiService.getSubUnits(this.multiUnitId).subscribe({
+        next: (response) => {
+          this.subUnits = response.content || [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading subUnits:', err);
+          this.isLoading = false;
+          this.toastrService.error('Failed to load SubUnits', 'Error');
+        }
+      })
+    );
   }
 
   onAddNewSubUnit(): void {
-    // TODO: Ouvrir modal pour créer nouvelle subUnit
-    console.log('Add new subUnit');
+    const initialState = {
+      multiUnitId: this.multiUnitId
+    };
+
+    const modalRef = this.modalService.show(SubUnitCreateModalComponent, {
+      initialState,
+      class: 'modal-lg'
+    });
+
+    this.subscriptions.push(
+      (modalRef.content as SubUnitCreateModalComponent).subUnitCreated.subscribe(() => {
+        this.loadSubUnits(); // Recharger la liste
+      })
+    );
   }
 
   onAddExistingUnit(): void {
-    // TODO: Ouvrir modal pour assigner unité existante
-    console.log('Add existing unit');
+    const initialState = {
+      multiUnitId: this.multiUnitId
+    };
+
+    const modalRef = this.modalService.show(ExistingUnitModalComponent, {
+      initialState,
+      class: 'modal-lg'
+    });
+
+    this.subscriptions.push(
+      (modalRef.content as ExistingUnitModalComponent).unitAssigned.subscribe(() => {
+        this.loadSubUnits(); // Recharger la liste
+      })
+    );
   }
 
   onEditSubUnit(subUnit: UnitItemGetModel): void {
@@ -67,8 +114,41 @@ export class SubUnitsComponent implements OnInit, OnDestroy {
   }
 
   onRemoveSubUnit(subUnit: UnitItemGetModel): void {
-    // TODO: Confirmer et détacher la subUnit
-    console.log('Remove subUnit', subUnit.id);
+    const initialState = {
+      title: 'Detach SubUnit',
+      message: `Are you sure you want to detach "${subUnit.name}" from this multi-unit? The unit will become independent but won't be deleted.`
+    };
+
+    const confirmModalRef = this.modalService.show(ConfirmModalComponent, { initialState });
+
+    this.subscriptions.push(
+      (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
+        this.detachSubUnit(subUnit);
+      })
+    );
+  }
+
+  private detachSubUnit(subUnit: UnitItemGetModel): void {
+    this.subscriptions.push(
+      this.unitApiService.detachSubUnit(subUnit.id).subscribe({
+        next: () => {
+          // Retirer la subUnit de la liste locale
+          this.subUnits = this.subUnits.filter(su => su.id !== subUnit.id);
+
+          this.toastrService.success(
+            `SubUnit "${subUnit.name}" has been successfully detached.`,
+            'SubUnit Detached'
+          );
+        },
+        error: (err) => {
+          console.error('Error detaching subUnit:', err);
+          this.toastrService.error(
+            `Failed to detach "${subUnit.name}". Please try again.`,
+            'Detachment Failed'
+          );
+        }
+      })
+    );
   }
 
   getNameInitials(name: string): string {

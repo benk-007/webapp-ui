@@ -38,10 +38,10 @@ button[cDropdownItem] {
 
 // Styles pour les sous-unités
 .sub-unit-row {
-  background-color: #fafbfc;
+  background-color: #d8b4fe !important; // Gris très clair
 
   &:hover {
-    background-color: #f5f6f7;
+    background-color: #e9d5ff  !important; // Gris plus foncé au hover
   }
 }
 

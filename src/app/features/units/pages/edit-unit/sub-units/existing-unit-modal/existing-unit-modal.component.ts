@@ -52,16 +52,32 @@ export class ExistingUnitModalComponent implements OnDestroy {
     this.isSubmitting = true;
     const selectedUnits = this.assignForm.value.selectedUnits;
 
-    // TODO: Appel API pour assigner les unités comme subUnits
-    console.log('Assigning units as subUnits:', selectedUnits);
+    // Créer le payload avec les IDs des unités sélectionnées
+    const payload = {
+      unitIds: selectedUnits.map((unit: any) => unit.id)
+    };
 
-    // Simulation pour l'instant
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.unitAssigned.emit(selectedUnits);
-      this.closeModal();
-      this.toastrService.success('Units assigned successfully', 'Success');
-    }, 1000);
+    this.subscriptions.push(
+      this.unitApiService.assignExistingUnits(this.multiUnitId, payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          this.unitAssigned.emit(response);
+          this.closeModal();
+          this.toastrService.success(
+            `${selectedUnits.length} unit(s) assigned successfully`,
+            'Units Assigned'
+          );
+        },
+        error: (err) => {
+          console.error('Error assigning units:', err);
+          this.isSubmitting = false;
+          this.toastrService.error(
+            'Failed to assign units. Please try again.',
+            'Assignment Failed'
+          );
+        }
+      })
+    );
   }
 
   closeModal(): void {

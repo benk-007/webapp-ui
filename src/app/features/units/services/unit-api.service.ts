@@ -109,4 +109,33 @@ export class UnitApiService {
   postMultiUnit(payload: MultiUnitPostModel) {
     return this.httpClient.post<UnitItemGetModel>(environment.apiBaseUrl.concat(environment.unitList), payload);
   }
+
+  getSubUnits(multiUnitId: string) {
+    // GET /units/{unitId}/sub-units
+    return this.httpClient.get<PageModel<UnitItemGetModel>>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId)
+    );
+  }
+
+  postSubUnit(multiUnitId: string, payload: any) {
+    return this.httpClient.post<UnitItemGetModel>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId),
+      payload
+    );
+  }
+
+  assignExistingUnits(multiUnitId: string, payload: any) {
+    return this.httpClient.post<UnitItemGetModel[]>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId) + '/assign',
+      payload
+    );
+  }
+
+  detachSubUnit(subUnitId: string) {
+    // PATCH /units/{subUnitId}/detach
+    return this.httpClient.patch<void>(
+      environment.apiBaseUrl.concat(environment.unitDetach).replace(':unitId', subUnitId),
+      {}
+    );
+  }
 }

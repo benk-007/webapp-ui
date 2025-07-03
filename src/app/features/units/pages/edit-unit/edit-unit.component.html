@@ -36,7 +36,7 @@
   </li>
 
   <!-- SubUnits Tab -->
-  <li class="nav-item" *ngIf="!isMultiUnit" [tooltip]="'units.edit-unit.tabs.sub-units.hint'|translate" placement="auto">
+  <li class="nav-item" *ngIf="isMultiUnit" [tooltip]="'units.edit-unit.tabs.sub-units.hint'|translate" placement="auto">
     <a class="nav-link" routerLink="sub-units"
        routerLinkActive="active">{{ 'units.edit-unit.tabs.sub-units.title'|translate }}</a>
   </li>

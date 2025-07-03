@@ -17,6 +17,7 @@ export interface UnitItemGetModel {
   address: AddressModel;
   // Champs pour identifier les sous-unités
   parentUnit?: string;
+  priority?: number;
 
   subUnits?: UnitItemGetModel[];
 }

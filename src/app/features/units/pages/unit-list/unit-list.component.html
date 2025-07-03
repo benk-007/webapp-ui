@@ -53,6 +53,7 @@
         </tr>
         </thead>
 
+
         <tbody>
           @for (unit of displayedUnits; track unit.id) {
             <tr [ngClass]="{'sub-unit-row': isSubUnit(unit)}" class="position-relative">
@@ -129,19 +130,6 @@
               </td>
 
               <td>
-                <span [adaptivePosition]="true"
-                      [tooltip]="'units.unit-list.table.body.beds'|translate">
-                  <span class="me-1 fs-6">{{ unit.beds }}</span>
-                  <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
-                </span>
-                <span [adaptivePosition]="true"
-                      [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
-                  <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
-                  <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
-                </span>
-              </td>
-
-              <td>
                 <div class="d-flex flex-column">
                   <div>
                     <span class="me-1">{{ unit.contact.mobile }}</span>
@@ -152,6 +140,10 @@
                     </div>
                   }
                 </div>
+              </td>
+
+              <td>
+                {{ unit.address.city }}
               </td>
 
               <td>
