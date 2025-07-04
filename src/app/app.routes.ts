@@ -27,6 +27,10 @@ export const routes: Routes = [
         loadChildren:()=>import('./features/guests/routes').then((m)=>m.routes)
       },
       {
+        path: 'calendars',
+        loadChildren:()=>import('./features/calendar/routes').then((m)=>m.routes)
+      },
+      {
         path: 'settings',
         loadChildren: () => import('./features/settings/routes').then((m) => m.routes)
       },

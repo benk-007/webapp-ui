@@ -1,0 +1,52 @@
+<table class="scheduler" cTable bordered [responsive]="true" small>
+  <thead>
+  <tr>
+    <th class="resource-col">
+      <c-input-group sizing="sm" class="search-input">
+        <span cInputGroupText>
+          <svg [cIcon]="icons.cilSearch"></svg>
+        </span>
+        <input id="searchBar" cFormControl
+               [placeholder]="'commons.form.search-input.placeholder'|translate"/>
+      </c-input-group>
+    </th>
+    <!-- Days Headers -->
+    <ng-container *ngFor="let date of dates; let i = index">
+      <th colspan="2" class="text-center">
+        {{ date.toDate() | date:'EEE' }} <br> {{ date.toDate() | date:'dd/MM' }}
+      </th>
+    </ng-container>
+  </tr>
+  </thead>
+
+  <tbody>
+  <ng-container *ngFor="let room of roomBookings">
+    <tr>
+      <td class="resource-col bg-light fw-bold" rowspan="2">{{ room.name }}</td>
+
+      <ng-container *ngFor="let date of dates">
+        <td class="text-center" colspan="2">
+          {{ getPriceForDate(date) }}
+        </td>
+      </ng-container>
+    </tr>
+
+    <tr>
+
+      <ng-container *ngFor="let cell of roomBookingCells[room.id]">
+        <td [attr.colspan]="cell.colspan" [class.p-0]="cell.type === 'booking'">
+          <div *ngIf="cell.type === 'booking'"
+               class="booking-event"
+               [class]="getBookingColor(cell)">
+            {{ getBookingTitle(cell) }}
+          </div>
+          <div *ngIf="cell.type === 'empty'" class="p-2 empty-cell-booking-row"></div>
+        </td>
+      </ng-container>
+
+    </tr>
+
+  </ng-container>
+  </tbody>
+
+</table>

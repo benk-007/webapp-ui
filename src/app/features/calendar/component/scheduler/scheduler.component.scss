@@ -1,0 +1,17 @@
+table.scheduler {
+  table-layout: fixed;
+  width: 100%;
+
+  th, td {
+    &.resource-col {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      width: 250px;
+      min-width: 200px;
+      max-width: 250px;
+      text-align: left;
+    }
+  }
+
+}
