@@ -1,0 +1,26 @@
+<ng-select (change)="valueChanged($event || null)"
+           (scrollToEnd)="onScrollToEnd()"
+           (search)="searchGuests($event)"
+           [(ngModel)]="selectedGuest"
+           [disabled]="disable"
+           [clearable]="true"
+           (clear)="valueChanged(null)"
+           [items]="guestSearchList"
+           [placeholder]="'Select guest ...'"
+           [typeahead]="$guestSearch"
+           [virtualScroll]="true"
+           class="ng-select ng-select-custom">
+
+  <!-- What appears in the input once selected -->
+  <ng-template let-item="item" ng-label-tmp>
+    <span>{{ item.name }}</span>
+  </ng-template>
+
+  <!-- What appears in the dropdown list -->
+  <ng-template let-item="item" ng-option-tmp>
+    <span class="d-flex flex-column">
+      <span class="fw-bold">{{ item.name }}</span>
+      <small class="text-muted">{{ item.email }} | {{ item.phone }}</small>
+    </span>
+  </ng-template>
+</ng-select>

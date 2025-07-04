@@ -1,0 +1,144 @@
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" cForm>
+  <div class="card p-4">
+
+
+
+
+    <!-- Guest Details -->
+    <h6 class="section-title underline mb-3 mt-3">
+      {{ 'booking.guest-details.title' | translate }}
+    </h6>
+
+    <c-row >
+      <c-col [md]="4" class="mb-3">
+        <app-guest-select formControlName="guest" (guestSelected)="fillGuestFields($event)"></app-guest-select>
+      </c-col>
+    </c-row>
+
+    <c-row>
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="guestName">
+          {{ 'booking.guest-details.name' | translate }}
+        </label>
+        <input id="guestName" cFormControl formControlName="guestName" />
+        @if (bookingForm.get('guestName')?.hasError('required') && bookingForm.get('guestName')?.touched) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="guestEmail">
+          {{ 'booking.guest-details.email' | translate }}
+        </label>
+        <input id="guestEmail" cFormControl formControlName="guestEmail" type="email" />
+        @if (bookingForm.get('guestEmail')?.hasError('required') && bookingForm.get('guestEmail')?.touched) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+        @if (bookingForm.get('guestEmail')?.hasError('email') && bookingForm.get('guestEmail')?.touched) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.invalid-email' | translate }}</c-form-feedback>
+        }
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel for="guestPhone">
+          {{ 'booking.guest-details.phone' | translate }}
+        </label>
+        <input id="guestPhone" cFormControl formControlName="guestPhone" />
+      </c-col>
+    </c-row>
+
+    <c-row>
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="source">
+          {{ 'booking.source' | translate }}
+        </label>
+        <select id="source" class="form-select" formControlName="source">
+          <option *ngFor="let source of bookingSources" [value]="source">{{ source }}</option>
+        </select>
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="adults">
+          {{ 'booking.adults' | translate }}
+        </label>
+        <input id="adults" cFormControl formControlName="adults" type="number" min="1" />
+        @if (bookingForm.get('adults')?.hasError('required') && bookingForm.get('adults')?.touched) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+        @if (bookingForm.get('adults')?.hasError('min')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+        }
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel for="children">
+          {{ 'booking.children' | translate }}
+        </label>
+        <input id="children" cFormControl formControlName="children" type="number" min="0" />
+      </c-col>
+    </c-row>
+
+    <!-- Rental Details -->
+    <h6 class="section-title underline mb-3 mt-3">
+      {{ 'booking.rental-details.title' | translate }}
+    </h6>
+
+    <c-row>
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="unit">
+          {{ 'booking.rental-details.select' | translate }}
+        </label>
+        <app-unit-select formControlName="rental" [allowMultiUnit]="false"></app-unit-select>
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="arrive">
+          {{ 'booking.rental-details.arrive' | translate }}
+        </label>
+        <input id="arrive" cFormControl formControlName="arrive" type="date" />
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="depart">
+          {{ 'booking.rental-details.depart' | translate }}
+        </label>
+        <input id="depart" cFormControl formControlName="depart" type="date" />
+      </c-col>
+    </c-row>
+
+    <c-row>
+      <c-col [md]="4" class="mb-3">
+        <label cLabel class="required" for="baseCharge">
+          {{ 'booking.base-charge' | translate }}
+        </label>
+        <input id="baseCharge" cFormControl formControlName="baseCharge" type="number" min="0" />
+      </c-col>
+
+      <c-col [md]="4" class="mb-3">
+        <label cLabel>{{ 'booking.fee-section.amount' | translate }}</label>
+        <input class="form-control" />
+      </c-col>
+    </c-row>
+
+
+    <!-- Total -->
+    <c-row class="mt-4">
+      <c-col [md]="12" class="text-end">
+        <strong>{{ 'booking.total' | translate }}: {{ total }}</strong>
+      </c-col>
+    </c-row>
+
+    <!-- Buttons -->
+    <c-row class="mt-4 mb-2">
+      <c-col class="d-flex justify-content-end">
+        <button cButton type="button" color="secondary" class="me-2" (click)="bookingForm.reset()">
+          {{ 'commons.form.cancel-btn' | translate }}
+        </button>
+        <button cButton type="submit" color="primary" [disabled]="!bookingForm.valid">
+          {{ 'commons.form.save-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </div>
+</form>
