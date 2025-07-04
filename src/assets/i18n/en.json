@@ -466,7 +466,7 @@
   },
   "units": {
     "create-multi-unit": {
-      "title": "Add Multi-unit Rental",
+      "title": "Add Multi-unit",
       "steps": {
         "details": {
           "title": "Multi-Unit Details"
@@ -1058,7 +1058,27 @@
         "sub-units": {
           "title": "Sub-units",
           "hint": "Manage the subunits of this multi-unit rental",
-          "add-btn": "+ Add sub-units"
+          "add-btn": "+ Add sub-units",
+          "table": {
+            "header": {
+              "priority": "Priority",
+              "status": "Status"
+            }
+          },
+          "empty-data": "No SubUnits found. Click 'Add SubUnit' to get started.",
+          "modals": {
+            "create": {
+              "title": "Add SubUnits",
+              "sections": {
+                "subunits": "SubUnits",
+                "existing-units": "Existing Units"
+              },
+              "add-new-subunit": "Add new SubUnit"
+            },
+            "edit": {
+              "title": "Edit SubUnit"
+            }
+          }
         }
       }
     }

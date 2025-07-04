@@ -117,13 +117,10 @@ export class UnitListComponent extends ListContentComponent {
         .subscribe({
           next: (data: any) => {
             super.handleSuccessData(data);
-            console.log('Raw API response:', data);
-            console.log('listContent after processing:', this.listContent);
-            // Après avoir reçu les données, auto-expand les multi-units qui ont des résultats de recherche
+
             this.handleAutoExpansionFromBackend();
-            // Puis construire la liste d'affichage
+
             this.buildDisplayedUnits();
-            console.log('displayedUnits after build:', this.displayedUnits);
           },
           error: (err: any) => {
             console.warn('An error occurred when retrieving unit list from API:', err)
@@ -136,10 +133,11 @@ export class UnitListComponent extends ListContentComponent {
   }
 
   /**
-   * Auto-expand les multi-units qui sont retournées par le backend avec des sous-unités
+   * Auto-expands multi-units that contain search-matched sub-units
+   * Called after receiving filtered results from backend
    */
   private handleAutoExpansionFromBackend(): void {
-    // Réinitialiser l'auto-expansion
+
     this.autoExpandedUnits.clear();
 
     if (this.search && this.search.trim().length > 0) {
@@ -153,22 +151,23 @@ export class UnitListComponent extends ListContentComponent {
   }
 
   /**
-   * Construit la liste d'affichage en incluant ou excluant les sous-unités selon l'état d'expansion
+   * Builds display list including expanded sub-units based on current expansion state
+   * Sub-units are marked with display flags for template rendering
    */
   private buildDisplayedUnits(): void {
     this.displayedUnits = [];
 
     for (const unit of this.listContent) {
-      // Ajouter l'unité principale (le backend a déjà filtré selon la recherche)
+
       this.displayedUnits.push(unit);
 
-      // Si c'est une multi-unit et qu'elle est expandue, ajouter ses sous-unités
+
       if (unit.nature === 'MULTI_UNIT' &&
         this.expandedUnits.has(unit.id) &&
         unit.subUnits &&
         unit.subUnits.length > 0) {
 
-        // Marquer les sous-unités comme telles pour l'affichage
+
         const subUnitsWithParentFlag = unit.subUnits.map(subUnit => ({
           ...subUnit,
           isSubUnit: true,
@@ -192,7 +191,6 @@ export class UnitListComponent extends ListContentComponent {
       this.expandedUnits.add(unitId);
     }
 
-    // Reconstruire la liste d'affichage
     this.buildDisplayedUnits();
   }
 
@@ -210,7 +208,9 @@ export class UnitListComponent extends ListContentComponent {
     return unit.isSubUnit === true;
   }
 
-  //Status MultiUnit
+  /**
+   * Gérer le statut des multi-units
+   */
   getComputedReadiness(unit: UnitItemGetModel): boolean {
     if (unit.nature !== 'MULTI_UNIT' || !unit.subUnits || unit.subUnits.length === 0) {
       return unit.readiness;
@@ -253,7 +253,7 @@ export class UnitListComponent extends ListContentComponent {
   }
 
   override refreshListContent(): void {
-    // Réinitialiser l'état d'expansion lors du refresh
+
     this.expandedUnits.clear();
     this.autoExpandedUnits.clear();
     super.refreshListContent();

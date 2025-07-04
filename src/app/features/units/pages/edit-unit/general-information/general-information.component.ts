@@ -76,7 +76,6 @@ export class GeneralInformationComponent implements OnDestroy {
 
   layers!: any;
 
-  //
   isSubUnit: boolean = false;
   parentUnitId?: string;
 
@@ -125,18 +124,14 @@ export class GeneralInformationComponent implements OnDestroy {
 
   submit() {
     let payload;
-
     if (this.isSubUnit) {
-      // Pour les subUnits, on envoie seulement name, subtitle et calendarColor
       payload = {
         name: this.infoForm.value.name,
         subtitle: this.infoForm.value.subtitle,
         calendarColor: this.infoForm.value.calendarColor,
         priority: this.infoForm.value.priority,
-
       };
     } else {
-      // Pour les unités normales, on garde la logique existante
       payload = {
         ...this.infoForm.value,
         contact: {
@@ -144,18 +139,13 @@ export class GeneralInformationComponent implements OnDestroy {
         }
       };
     }
-
     this.subscriptions.push(this.unitApiService.updateUnitInfosById(this.unitId, payload).subscribe({
       next: (data) => {
         console.log('Unit infos updated successfully. Api response is:', data);
         this.unit = data;
-
-
-        // Si c'est une SubUnit, récupérer à nouveau les données du parent pour l'affichage
         if (this.isSubUnit && this.parentUnitId) {
           this.retrieveParentUnitForDisplay();
         } else {
-          // Pour les unités normales, utiliser les données directement
           this.infoForm.patchValue(this.unit);
           if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
             this.layers = [
@@ -192,15 +182,15 @@ export class GeneralInformationComponent implements OnDestroy {
         console.log('Unit infos call general information response is:', data);
         this.unit = data;
 
-        // Déterminer si c'est une SubUnit
+
         this.isSubUnit = !!data.parentUnit;
         this.parentUnitId = data.parentUnit;
 
-        // Si c'est une SubUnit, récupérer les données du parent pour l'affichage
+
         if (this.isSubUnit && this.parentUnitId) {
           this.retrieveParentUnitForDisplay();
         } else {
-          // Pour les unités normales, utiliser les données directement
+
           this.populateFormWithData(data);
         }
       },
@@ -215,18 +205,18 @@ export class GeneralInformationComponent implements OnDestroy {
       next: (parentData) => {
         console.log('Parent unit data for display:', parentData);
 
-        // Créer un objet combiné : données SubUnit + address/contact du parent
+
         const displayData = {
-          ...this.unit, // Données de la SubUnit (name, subtitle, calendarColor, etc.)
-          address: parentData.address, // Address du parent pour l'affichage
-          contact: parentData.contact  // Contact du parent pour l'affichage
+          ...this.unit,
+          address: parentData.address,
+          contact: parentData.contact
         };
 
         this.populateFormWithData(displayData);
       },
       error: (err) => {
         console.error('Error retrieving parent unit data:', err);
-        // En cas d'erreur, utiliser les données de la SubUnit
+
         this.populateFormWithData(this.unit);
       }
     }));
@@ -235,7 +225,6 @@ export class GeneralInformationComponent implements OnDestroy {
   private populateFormWithData(data: UnitInfosGetModel) {
     this.infoForm.patchValue(data);
 
-    // Gérer la carte
     if (data.address && data.address.location && data.address.location.lat && data.address.location.lng) {
       this.layers = [
         marker([data.address.location.lat, data.address.location.lng], {
@@ -249,16 +238,15 @@ export class GeneralInformationComponent implements OnDestroy {
       ];
     }
 
-    // Désactiver les champs pour les SubUnits
     this.handleSubUnitFields();
   }
 
   private handleSubUnitFields() {
     if (this.isSubUnit) {
-      // Désactiver les champs address et contact pour les subUnits
+
       this.infoForm.get('address')?.disable();
       this.infoForm.get('contact')?.disable();
-      // Désactiver spécifiquement le champ country
+
       this.infoForm.get('address.country')?.disable();
     }
   }
@@ -283,10 +271,6 @@ export class GeneralInformationComponent implements OnDestroy {
         }
       }
     })
-  }
-
-  private retrieveUnitImages() {
-
   }
 
   selectColor(colorHexCode: string) {

@@ -15,7 +15,7 @@ export interface UnitItemGetModel {
     email: string;
   },
   address: AddressModel;
-  // Champs pour identifier les sous-unités
+
   parentUnit?: string;
   priority?: number;
 

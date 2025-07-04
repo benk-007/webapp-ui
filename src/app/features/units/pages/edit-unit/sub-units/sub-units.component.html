@@ -33,13 +33,13 @@
       <table cTable hover appSelectableTable [responsive]="true">
         <thead>
         <tr>
-          <th>Name</th>
-          <th>Priority</th>
-          <th>Status</th>
-          <th>Contact</th>
-          <th>City</th>
-          <th>Country</th>
-          <th>Actions</th>
+          <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
+          <th>{{ 'units.edit-unit.tabs.sub-units.table.header.priority'|translate }}</th>
+          <th>{{ 'units.edit-unit.tabs.sub-units.table.header.status'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.country'|translate }}</th>
+          <th>{{ 'units.unit-list.table.header.actions'|translate }}</th>
         </tr>
         </thead>
 
@@ -113,8 +113,7 @@
     </div>
   } @else {
     @if (!isSearchActive) {
-      <app-empty-data imageSrc="assets/images/animations/units.gif" message="No SubUnits found. Click 'Add SubUnit' to get started.">
-      </app-empty-data>
+      <app-empty-data imageSrc="assets/images/animations/units.gif" [message]="'units.edit-unit.tabs.sub-units.empty-data'|translate">      </app-empty-data>
     } @else {
       <app-empty-data imageSrc="assets/images/animations/no-result.gif">
       </app-empty-data>

@@ -47,16 +47,13 @@ export class UnitApiService {
     // Ajout du filtrage par nature si spécifié
     if (pageFilter.advancedSearchFormValue?.nature) {
       params = params.set('nature', pageFilter.advancedSearchFormValue.nature);
-      console.log('API Filter - nature:', pageFilter.advancedSearchFormValue.nature);
     }
 
     // Ajout du filtrage pour exclure les sous-unités si nécessaire
     if (pageFilter.advancedSearchFormValue?.withParent !== undefined && pageFilter.advancedSearchFormValue?.withParent !== null) {
       params = params.set('withParent', pageFilter.advancedSearchFormValue.withParent);
-      console.log('API Filter - withParent:', pageFilter.advancedSearchFormValue.withParent);
     }
 
-    console.log('Final API params:', params.toString());
     return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 

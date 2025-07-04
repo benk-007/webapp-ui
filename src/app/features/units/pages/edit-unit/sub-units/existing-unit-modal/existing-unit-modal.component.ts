@@ -1,13 +1,13 @@
 import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { UnitApiService } from '../../../../services/unit-api.service';
 import { UnitSelectComponent } from '../../../../../../shared/components/unit-select/unit-select.component';
 import {
-  ButtonDirective, ColComponent, RowComponent, FormDirective,
+  ColComponent, RowComponent, FormDirective,
   FormLabelDirective, FormFeedbackComponent
 } from '@coreui/angular';
 
@@ -15,7 +15,7 @@ import {
   selector: 'app-existing-unit-modal',
   standalone: true,
   imports: [
-    ReactiveFormsModule, TranslatePipe, ButtonDirective, ColComponent, RowComponent,
+    ReactiveFormsModule, TranslatePipe, ColComponent, RowComponent,
     FormDirective, FormLabelDirective, FormFeedbackComponent, UnitSelectComponent
   ],
   templateUrl: './existing-unit-modal.component.html',
@@ -35,7 +35,6 @@ export class ExistingUnitModalComponent implements OnDestroy {
     private fb: FormBuilder,
     private modalRef: BsModalRef,
     private unitApiService: UnitApiService,
-    private translateService: TranslateService,
     private toastrService: ToastrService
   ) {
     this.assignForm = this.fb.group({
@@ -52,7 +51,6 @@ export class ExistingUnitModalComponent implements OnDestroy {
     this.isSubmitting = true;
     const selectedUnits = this.assignForm.value.selectedUnits;
 
-    // Créer le payload avec les IDs des unités sélectionnées
     const payload = {
       unitIds: selectedUnits.map((unit: any) => unit.id)
     };

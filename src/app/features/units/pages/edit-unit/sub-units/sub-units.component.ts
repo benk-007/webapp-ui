@@ -85,7 +85,7 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     this.subscriptions.push(
       this.unitApiService.getSubUnits(this.multiUnitId,pageFilter).subscribe({
         next: (response) => {
-          // Simuler la structure de page pour la compatibilité avec ListContentComponent
+
           const mockPageData = {
             content: response.content || [],
             totalElements: response.content?.length || 0,
