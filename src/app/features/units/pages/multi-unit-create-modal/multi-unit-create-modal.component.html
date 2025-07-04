@@ -87,10 +87,10 @@
       <c-row *ngIf="newSubUnits.length > 0">
         <c-col md="12">
           <div formArrayName="newSubUnits">
-            <div *ngFor="let subUnit of newSubUnits.controls; let i = index" [formGroupName]="i" class="mb-3">
+            <div *ngFor="let subUnit of newSubUnits.controls; let i = index" [formGroupName]="i" >
               <c-row>
                 <!-- Subunit Name -->
-                <c-col md="5" class="mb-3">
+                <c-col md="6" class="mb-3">
                   <label cLabel class="required me-2">
                     {{ 'units.create-multi-unit.form.subunit-name.label'|translate }}
                   </label>
@@ -102,7 +102,7 @@
                 </c-col>
 
                 <!-- Priority -->
-                <c-col md="4" class="mb-3">
+                <c-col md="3" class="mb-3">
                   <label cLabel class="required me-2">
                     {{ 'units.create-multi-unit.form.priority.label'|translate }}
                   </label>
@@ -113,7 +113,7 @@
                 </c-col>
 
                 <!-- Status Toggle -->
-                <c-col md="2" class="mb-3 d-flex flex-column justify-content-center">
+                <c-col md="1" class="mb-3 d-flex flex-column justify-content-center">
                   <label cLabel class="me-2">{{ 'units.create-multi-unit.form.status.label'|translate }}</label>
                   <c-form-check [switch]="true">
                     <input cFormCheckInput formControlName="readiness" type="checkbox" [id]="'status-' + i"/>
@@ -124,7 +124,7 @@
                 </c-col>
 
                 <!-- Remove Button -->
-                <c-col md="1" class="mb-3 d-flex align-items-end justify-content-center">
+                <c-col md="2" class="mb-3 d-flex align-items-end justify-content-center">
                   <button cButton size="sm" color="danger" class="btn-light"
                           (click)="removeNewSubUnit(i)">
                     <svg [cIcon]="icons.cilTrash" size="sm"></svg>
