@@ -1,0 +1,319 @@
+<!--Modal title -->
+<div class="modal-header justify-content-center align-items-center">
+  <h6 class="modal-title">
+    {{ 'tables.cu-modal.title.'.concat(ratesTableId ? 'edit' : 'create') | translate }}
+  </h6>
+</div>
+
+
+<!-- Modal body -->
+<div class="modal-body">
+  <form (submit)="submit()" [formGroup]="ratesTableForm" cForm>
+
+    <!-- Rental Rate Details -->
+    <h6 class="section-title underline mb-3 mt-4">{{ 'tables.cu-modal.form.details.section-title' | translate }}</h6>
+    <c-row class="mb-3">
+      <c-col [md]="4" sm="12" class="mb-3">
+        <label cLabel class="required me-2"
+               for="name">{{ 'tables.cu-modal.form.details.rateName.label' | translate }}</label>
+        <input cFormControl formControlName="name" id="name" type="text"/>
+        @if (ratesTableForm.get('name')?.touched || ratesTableForm.get('name')?.dirty) {
+          @if (ratesTableForm.get('name')?.hasError('required')) {
+            <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+          }
+        }
+      </c-col>
+
+      <c-col [md]="4" sm="12" class="mb-3">
+        <label cLabel class="required me-2"
+               for="startDate">{{ 'tables.cu-modal.form.details.fromDate.label' | translate }}</label>
+        <input cFormControl formControlName="startDate" id="startDate" type="date"/>
+      </c-col>
+
+      <c-col [md]="4" sm="12" class="mb-3">
+        <label cLabel class="required me-2"
+               for="endDate">{{ 'tables.cu-modal.form.details.untilDate.label' | translate }}</label>
+        <input cFormControl formControlName="endDate" id="endDate" type="date"/>
+        @if (ratesTableForm.errors?.['invalidDateRange']) {
+          <c-form-feedback [valid]="false" class="text-danger">
+            {{ 'commons.errors.invalidDateRange' | translate }}
+          </c-form-feedback>
+        }
+      </c-col>
+    </c-row>
+
+    <div formGroupName="rate">
+      <!-- Base Rates -->
+      <h6 class="section-title underline mb-3 mt-4">{{ 'tables.cu-modal.form.rates.section-title' | translate }}</h6>
+
+      <div formGroupName="basePricing">
+        <c-row class="mb-3">
+          <!-- Nightly -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel class="required me-2"
+                   for="nightly">{{ 'tables.cu-modal.form.rates.nightly.label' | translate }}</label>
+            <input cFormControl formControlName="nightly" id="nightly" type="number" min="0" step="50"/>
+            @if (ratesTableForm.get('rentalBaseRate.nightly')?.touched || ratesTableForm.get('rentalBaseRate.nightly')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.nightly')?.hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+              }
+              @if (ratesTableForm.get('rentalBaseRate.nightly')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- Weekend Night -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel for="weekendNight">{{ 'tables.cu-modal.form.rates.weekendNight.label' | translate }}</label>
+            <input cFormControl formControlName="weekendNight" id="weekendNight" type="number" min="0" step="50"/>
+            @if (ratesTableForm.get('rentalBaseRate.weekendNight')?.touched || ratesTableForm.get('rentalBaseRate.weekendNight')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.weekendNight')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- Weekly -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel for="weekly">{{ 'tables.cu-modal.form.rates.weekly.label' | translate }}</label>
+            <input cFormControl formControlName="weekly" id="weekly" type="number" min="0" step="100"/>
+            @if (ratesTableForm.get('rentalBaseRate.weekly')?.touched || ratesTableForm.get('rentalBaseRate.weekly')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.weekly')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+            @if (ratesTableForm.errors?.['weeklyLowerThanNightly']) {
+              <c-form-feedback [valid]="false">
+                {{ 'units.edit-unit.tabs.rates.settings.errors.weeklyLowerThanNightly' | translate }}
+              </c-form-feedback>
+            }
+          </c-col>
+        </c-row>
+
+        <c-row class="mb-3">
+          <!-- Monthly -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel for="monthly">{{ 'tables.cu-modal.form.rates.monthly.label' | translate }}</label>
+            <input cFormControl formControlName="monthly" id="monthly" type="number" min="0" step="500"/>
+            @if (ratesTableForm.get('rentalBaseRate.monthly')?.touched || ratesTableForm.get('rentalBaseRate.monthly')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.monthly')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+            @if (ratesTableForm.errors?.['monthlyLowerThanNightly']) {
+              <c-form-feedback [valid]="false">
+                {{ 'units.edit-unit.tabs.rates.settings.errors.monthlyLowerThanNightly' | translate }}
+              </c-form-feedback>
+            }
+            @if (ratesTableForm.errors?.['monthlyLowerThanWeekly']) {
+              <c-form-feedback [valid]="false">
+                {{ 'units.edit-unit.tabs.rates.settings.errors.monthlyLowerThanWeekly' | translate }}
+              </c-form-feedback>
+            }
+          </c-col>
+
+          <!-- Min Stay -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel class="required me-2"
+                   for="minStay">{{ 'tables.cu-modal.form.rates.minStay.label' | translate }}</label>
+            <input cFormControl formControlName="minStay" id="minStay" type="number" min="1" placeholder="1"/>
+            @if (ratesTableForm.get('rentalBaseRate.minStay')?.touched || ratesTableForm.get('rentalBaseRate.minStay')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.minStay')?.hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+              }
+              @if (ratesTableForm.get('rentalBaseRate.minStay')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- Max Stay -->
+          <c-col [md]="4" sm="12" class="mb-3">
+            <label cLabel for="maxStay">{{ 'tables.cu-modal.form.rates.maxStay.label' | translate }}</label>
+            <input cFormControl formControlName="maxStay" id="maxStay" type="number" min="1" placeholder="5"/>
+            @if (ratesTableForm.get('rentalBaseRate.maxStay')?.touched || ratesTableForm.get('rentalBaseRate.maxStay')?.dirty) {
+              @if (ratesTableForm.get('rentalBaseRate.maxStay')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+            @if (ratesTableForm.errors?.['maxLowerThanMin']) {
+              <c-form-feedback [valid]="false">
+                {{ 'commons.errors.min-max-stay' | translate }}
+              </c-form-feedback>
+            }
+          </c-col>
+        </c-row>
+      </div>
+
+      <!-- Additional Guest Fee -->
+      <h6
+        class="section-title underline mb-3 mt-4">{{ 'tables.cu-modal.form.additionalGuestFee.section-title' | translate }}</h6>
+
+      <div formGroupName="additionalGuestFee">
+        <c-row class="mb-3">
+          <c-col [md]="6" sm="12" class="mb-3">
+            <label cLabel for="feePpPn">{{ 'tables.cu-modal.form.additionalGuestFee.fee.label' | translate }}</label>
+            <input cFormControl formControlName="feePpPn" id="feePpPn" type="number" min="0" step="10"/>
+            @if (ratesTableForm.get('additionalGuestFee.feePPPN')?.touched || ratesTableForm.get('rate.additionalGuestFee.feePpPn')?.dirty) {
+              @if (ratesTableForm.get('rate.additionalGuestFee.feePpPn')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <c-col [md]="6" sm="12" class="mb-3">
+            <label cLabel
+                   for="guestCount">{{ 'tables.cu-modal.form.additionalGuestFee.guestCount.label' | translate }}</label>
+            <input cFormControl formControlName="guestCount" id="guestCount" type="number" min="1"/>
+            @if (ratesTableForm.get('additionalGuestFee.guestCount')?.touched || ratesTableForm.get('additionalGuestFee.guestCount')?.dirty) {
+              @if (ratesTableForm.get('additionalGuestFee.guestCount')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+        </c-row>
+      </div>
+    </div>
+
+    <!-- Day Specific Pricing -->
+    <h6
+      class="section-title underline mb-3 mt-4">{{ 'tables.cu-modal.form.daySpecific.section-title' | translate }}</h6>
+
+    <div formArrayName="daySpecificPrices">
+      <!-- Header Row -->
+      <c-row class="mb-3 align-items-end">
+        <c-col md="1" class="d-flex justify-content-center">
+          <!-- Add Button -->
+          <button
+            type="button"
+            class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center"
+            style="width: 30px; height: 30px; background-color: #af6dee ; border: none; color: white; font-size: 18px; font-weight: bold;"
+            (click)="addDaySpecificPricing()">
+            +
+          </button>
+        </c-col>
+
+        <c-col md="2">
+          <label cLabel class="required me-2">{{ 'tables.cu-modal.form.rates.nightly.label' | translate }}</label>
+        </c-col>
+
+        <c-col md="3">
+          <label cLabel>{{ 'tables.cu-modal.form.additionalGuestFee.fee.label' | translate }}</label>
+        </c-col>
+
+        <c-col md="3">
+          <label cLabel>{{ 'tables.cu-modal.form.additionalGuestFee.guestCount.label' | translate }}</label>
+        </c-col>
+
+        <c-col md="3">
+          <label cLabel
+                 class="required me-2">{{ 'tables.cu-modal.form.daySpecific.ApplyToDays.label' | translate }}</label>
+        </c-col>
+
+      </c-row>
+
+      <!-- Dynamic Pricing Rows -->
+      <div *ngFor="let pricingGroup of daySpecificPrices.controls; let i = index" [formGroupName]="i">
+        <c-row class="mb-3 align-items-center border-bottom pb-3">
+          <c-col md="1" class="d-flex justify-content-center">
+            <!-- Row indicator or empty space -->
+            <button cButton size="sm" color="danger" class="btn-light" (click)="removeDaySpecificPricing(i)">
+              <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+            </button>
+          </c-col>
+
+          <!-- Nightly -->
+          <c-col md="2">
+            <input
+              cFormControl
+              formControlName="nightly"
+              type="number"
+              min="0"
+              step="50"
+              class="form-control form-control-sm"/>
+            @if (pricingGroup.get('nightly')?.touched || pricingGroup.get('nightly')?.dirty) {
+              @if (pricingGroup.get('nightly')?.hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+              }
+              @if (pricingGroup.get('nightly')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- PP/PN -->
+          <c-col md="3">
+            <input
+              cFormControl
+              formControlName="ppPn"
+              type="number"
+              min="0"
+              step="10"
+              class="form-control form-control-sm"/>
+            @if (pricingGroup.get('ppPn')?.touched || pricingGroup.get('ppPn')?.dirty) {
+              @if (pricingGroup.get('ppPn')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- Guest Count -->
+          <c-col md="3">
+            <input
+              cFormControl
+              formControlName="guestCount"
+              type="number"
+              min="1"
+              class="form-control form-control-sm"/>
+            @if (pricingGroup.get('guestCount')?.touched || pricingGroup.get('guestCount')?.dirty) {
+              @if (pricingGroup.get('guestCount')?.hasError('min')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.strictly-positive' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+
+          <!-- Days of Week -->
+          <c-col md="3">
+            <ng-select
+              formControlName="daysOfWeek"
+              [items]="daysOfWeekOptions"
+              [multiple]="true"
+              bindValue="value"
+              class="ng-select-sm">
+
+              <ng-template ng-label-tmp let-item="item">
+                {{ ('tables.cu-modal.form.daySpecific.days.' + item.value) | translate }}
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item">
+                {{ ('tables.cu-modal.form.daySpecific.days.' + item.value) | translate }}
+              </ng-template>
+
+            </ng-select>
+            @if (pricingGroup.get('daysOfWeek')?.touched || pricingGroup.get('daysOfWeek')?.dirty) {
+              @if (pricingGroup.get('daysOfWeek')?.hasError('required')) {
+                <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+              }
+            }
+          </c-col>
+        </c-row>
+      </div>
+    </div>
+
+
+    <!-- Modal Footer -->
+    <c-row class="mt-3">
+      <c-col class="d-flex justify-content-end">
+        <button cButton class="ms-1" color="light" size="sm" variant="ghost" (click)="closeModal()">
+          {{ 'commons.form.cancel-btn' | translate }}
+        </button>
+        <button cButton class="ms-1" color="primary" size="sm" type="submit" [disabled]="!ratesTableForm.valid">
+          {{ 'commons.form.save-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>
+

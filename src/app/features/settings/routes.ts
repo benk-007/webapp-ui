@@ -3,7 +3,7 @@ import {Routes} from "@angular/router";
 export const routes: Routes = [
   {
     path: '',
-    data:{
+    data: {
       title: 'Settings'
     },
     children: [
@@ -15,10 +15,6 @@ export const routes: Routes = [
       {
         path: 'user-settings',
         loadChildren: () => import('./user-settings/routes').then((m) => m.routes)
-      },
-      {
-        path: 'rates/tables',
-        loadChildren: () => import('./rates/tables/routes').then((m) => m.routes)
       }
     ]
   }

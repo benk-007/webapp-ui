@@ -24,6 +24,7 @@ import {cilChevronLeft, cilChevronRight} from "@coreui/icons";
     IconDirective
   ],
   templateUrl: './table-control.component.html',
+  standalone: true,
   styleUrl: './table-control.component.scss'
 })
 export class TableControlComponent {

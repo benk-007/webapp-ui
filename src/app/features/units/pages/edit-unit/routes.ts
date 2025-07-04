@@ -1,6 +1,4 @@
 import {Routes} from "@angular/router";
-import {RentalInstructionsComponent} from "./rental-instructions/rental-instructions.component";
-import {RatesComponent} from "./rates/rates.component";
 
 export const routes: Routes = [
   {
@@ -52,18 +50,18 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'table',
+            redirectTo: 'settings',
             pathMatch: 'full'
           },
           {
-            path: 'table',
-            loadComponent: () => import('../../../settings/rates/tables/pages/table-list/table-list.component').then(m => m.TableListComponent),
-            data: { title: 'Rates Table' }
+            path: 'tables',
+            loadComponent: () => import('./rates/rates-table/rates-table.component').then(m => m.RatesTableComponent),
+            data: {title: 'Rates Table'}
           },
           {
             path: 'settings',
             loadComponent: () => import('./rates/rates-settings/rates-settings.component').then(m => m.RatesSettingsComponent),
-            data: { title: 'Rates Settings' }
+            data: {title: 'Rates Settings'}
           }
         ]
       }

@@ -9,6 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
     ColComponent
   ],
   templateUrl: './empty-data.component.html',
+  standalone: true,
   styleUrl: './empty-data.component.scss'
 })
 export class EmptyDataComponent {

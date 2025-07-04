@@ -88,22 +88,7 @@ export const navItems: INavData[] = [
     name: 'User settings',
     url: '/settings/user-settings',
     iconComponent: {name: 'cil-group'}
-  },
-  {
-    name: 'Rates',
-    url: '/settings/rates',
-    iconComponent: {name: 'cil-dollar'},
-    children: [
-      {
-        name: 'Tables',
-        url: '/settings/rates/tables',
-      },
-      {
-        name: 'Dynamic Tables',
-        url: '/settings/rates/dynamic-tables',
-      }
-    ]
-  },
+  }
 
   /* {
      title: true,

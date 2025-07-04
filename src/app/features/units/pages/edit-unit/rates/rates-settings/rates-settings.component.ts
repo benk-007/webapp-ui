@@ -7,7 +7,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 import {ToastrService} from "ngx-toastr";
 import {RateApiService} from "../../../../services/rate-api.service";
-import {RatesModel} from "../../../../models/rates.model";
+import {RatesModel} from "../../../../models/rates/rates.model";
 import {minMaxStayValidator} from "../../../../../../shared/validators/min-max-stay.validator";
 import {pricingConsistencyValidator} from "../../../../../../shared/validators/pricing-consistency.validator";
 

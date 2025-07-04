@@ -7,6 +7,7 @@ import {NgClass} from "@angular/common";
     NgClass
   ],
   templateUrl: './badge.component.html',
+  standalone: true,
   styleUrl: './badge.component.scss'
 })
 export class BadgeComponent {

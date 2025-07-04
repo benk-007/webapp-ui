@@ -1,1 +1,88 @@
-<p>rates-table works!</p>
+<c-row class="mb-3 mt-3">
+  <c-col [md]="3">
+    <c-input-group sizing="sm" class="search-input">
+      <span cInputGroupText>
+        <svg [cIcon]="icons.cilSearch"></svg>
+      </span>
+      <input id="searchBar" cFormControl (input)="triggerBasicSearch($event)"
+             [placeholder]="'commons.form.search-input.placeholder' | translate"/>
+    </c-input-group>
+  </c-col>
+
+  <c-col [md]="9" class="d-flex justify-content-end">
+    <button cButton size="sm" color="secondary" (click)="openRatesTableCuModal()">
+      {{ 'tables.list.cta.add-btn' | translate }}
+    </button>
+  </c-col>
+</c-row>
+
+<app-table-control></app-table-control>
+
+@if (!firstCallDone) {
+  <c-row class="d-flex justify-content-center mt-5">
+    <c-spinner color="secondary"/>
+  </c-row>
+  <c-row class="d-flex justify-content-center mt-1">
+    <c-col [md]="4" class="d-flex justify-content-center text-center">
+      {{ 'commons.snippets.loading' | translate }}
+    </c-col>
+  </c-row>
+} @else {
+
+  @if (!isListEmpty) {
+
+    <div class="table-responsive">
+      <table cTable hover appSelectableTable [responsive]="true">
+        <thead>
+        <tr>
+          <th>{{ 'tables.list.table.header.name' | translate }}</th>
+          <th>{{ 'tables.list.table.header.period' | translate }}</th>
+          <th>{{ 'tables.list.table.header.nightly' | translate }}</th>
+          <th>{{ 'tables.list.table.header.weekly' | translate }}</th>
+          <th>{{ 'tables.list.table.header.monthly' | translate }}</th>
+          <th>{{ 'tables.list.table.header.minStay' | translate }}</th>
+          <th>{{ 'tables.list.table.header.actions' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (ratesTable of listContent; track ratesTable.id) {
+            <tr>
+              <td>{{ ratesTable.name }}</td>
+              <td>
+                <app-badge>
+                  <i class="bi bi-clock me-1"></i>
+                  {{ ratesTable.startDate }} - {{ ratesTable.endDate }}
+                </app-badge>
+              </td>
+              <td>{{ ratesTable.basePricing.nightly }}</td>
+              <td>{{ ratesTable.basePricing.weekly || '-' }}</td>
+              <td>{{ ratesTable.basePricing.monthly || '-' }}</td>
+              <td>{{ ratesTable.basePricing.minStay }}</td>
+              <td>
+                <!-- Edit button -->
+                <button cButton size="sm" color="primary" class="btn-light me-2"
+                        (click)="openRatesTableCuModal(ratesTable)">
+                  <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                </button>
+                <!-- Delete button -->
+                <button cButton size="sm" color="danger" class="btn-light"
+                        (click)="confirmDeleteRatesTable(ratesTable)">
+                  <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  } @else {
+    @if (!isSearchActive) {
+      <app-empty-data imageSrc="assets/images/animations/no-rates.gif"
+                      [message]="'tables.list.empty-data'|translate"></app-empty-data>
+    } @else {
+      <app-empty-data imageSrc="assets/images/animations/no-result.gif"></app-empty-data>
+    }
+  }
+
+}

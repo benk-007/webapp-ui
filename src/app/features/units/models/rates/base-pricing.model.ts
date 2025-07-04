@@ -1,4 +1,4 @@
-export interface RentalBaseRateModel {
+export interface BasePricingModel {
   nightly: number;
   weekendNight?: number;
   weekly?: number;

@@ -1422,6 +1422,94 @@
     }
   },
   "tables": {
+    "cu-modal": {
+      "title": {
+        "create": "Add Standard Rate",
+        "edit": "Update Standard Rate"
+      },
+      "form": {
+        "details": {
+          "section-title": "Rental Rate Details",
+          "rateName": {
+            "label": "Rate Name"
+          },
+          "fromDate": {
+            "label": "From Date"
+          },
+          "untilDate": {
+            "label": "Until Date"
+          }
+        },
+        "rates": {
+          "section-title": "Enter Fees Below",
+          "nightly": {
+            "label": "Nightly"
+          },
+          "weekendNight": {
+            "label": "Weekend Night"
+          },
+          "weekly": {
+            "label": "Weekly"
+          },
+          "monthly": {
+            "label": "Monthly"
+          },
+          "minStay": {
+            "label": "Minimum Stay (nights)"
+          },
+          "maxStay": {
+            "label": "Maximum Stay (nights)"
+          }
+        },
+        "additionalGuestFee": {
+          "section-title": "Additional Guest Fee",
+          "fee": {
+            "label": "Fee (PP/PN)"
+          },
+          "guestCount": {
+            "label": "Guest Count"
+          }
+        },
+        "daySpecific": {
+          "section-title": "Day Specific Pricing",
+          "placeholder": "Set rates for specific days. They will override above rates.",
+          "ApplyToDays": {
+            "label": "Apply To Days"
+          },
+          "days": {
+            "MONDAY": "Monday",
+            "TUESDAY": "Tuesday",
+            "WEDNESDAY": "Wednesday",
+            "THURSDAY": "Thursday",
+            "FRIDAY": "Friday",
+            "SATURDAY": "Saturday",
+            "SUNDAY": "Sunday"
+          }
+        }
+      },
+      "notifications": {
+        "create": {
+          "success": {
+            "title": "Rates Table Created",
+            "message": "Rates Table has been successfully created"
+          },
+          "error": {
+            "title": "Rates Table Creation Failed",
+            "message": "An error occurred while creating the rates table"
+          }
+        },
+        "edit": {
+          "success": {
+            "title": "Rates Table Updated",
+            "message": "Rates Table has been successfully updated"
+          },
+          "error": {
+            "title": "Rates Table Update Failed",
+            "message": "An error occurred while updating the rates table"
+          }
+        }
+      }
+    },
     "create": {
       "title": "Add Standard Rate",
       "form": {
@@ -1540,6 +1628,20 @@
             "title": "Update Failed",
             "message": "An error occurred while updating the standard rate."
           }
+        }
+      }
+    },
+    "delete-modal": {
+      "title": "Confirm Rates Table Removal",
+      "message": "Do you want to delete this rates table? Please be aware that this action can't be rolled back.",
+      "notifications": {
+        "success": {
+          "title": "Rates Table removed",
+          "message": "Rates table: :ratesTableName was removed successfully!"
+        },
+        "error": {
+          "title": "Rates Table removal failed",
+          "message": "An error occurred while removing the rates table. Please try again or contact the support team."
         }
       }
     }

@@ -1,4 +1,4 @@
 export interface AdditionalGuestFeeModel {
-  feePPPN?: number;
+  feePpPn?: number;
   guestCount?: number;
 }
