@@ -5,8 +5,9 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {cilSearch} from "@coreui/icons";
 import {RoomBookingsGetModel} from "../../models/room-bookings-get.model";
 import {roomBookings} from "../../models/sample-data";
-import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {BookingGetModel} from "../../models/booking-get.model";
+import moment from "moment";
 
 @Component({
   selector: 'app-scheduler',
@@ -19,7 +20,6 @@ import {BookingGetModel} from "../../models/booking-get.model";
     TranslatePipe,
     NgForOf,
     DatePipe,
-    JsonPipe,
     NgIf
   ],
   templateUrl: './scheduler.component.html',
@@ -28,11 +28,9 @@ import {BookingGetModel} from "../../models/booking-get.model";
 export class SchedulerComponent {
   icons = {cilSearch}
 
-  public dates: Date[] = [];
+  public dates: moment.Moment[] = [];
   public roomBookings: RoomBookingsGetModel[] = roomBookings;
-
   roomBookingCells: { [roomId: string]: GeneratedBookingCell[] } = {};
-
 
   constructor() {
     this.generateDateRange();
@@ -59,34 +57,96 @@ export class SchedulerComponent {
         });
       })
     } else {
-      for (let i = 0; i < room.bookings.length; i++) {
-        let booking = room.bookings[i];
-        console.log('your booking is:', booking);
-        let dateContinue = false;
-        for (let j = 0; j < this.dates.length; j++) {
-          const date = this.dates[j];
-          console.log('your date is:', date);
+      let lastDate = this.dates[0];
+      let dateContinue = false;
+      room.bookings.forEach((booking, bookingIndex) => {
+
+        const bookingStartDate = moment(booking.startDate).startOf('day');
+        const bookingEndDate = moment(booking.endDate).startOf('day');
+        console.log('Booking to render has a start date of', bookingStartDate, 'and a last date of:', bookingEndDate);
+        this.dates.forEach((date, index) => {
+          console.log('Date from columns is:', date);
           if (!dateContinue) {
-            if (booking.startDate < date) {
-              const value = this.daysBetween(date, booking.endDate as Date);
-              console.log('your days between is:', value);
+            if (bookingStartDate.isBefore(date) && index == 0) {
+              const bookingDays = this.daysBetween(lastDate, bookingEndDate);
               cells.push({
                 type: 'booking',
                 booking: booking,
-                colspan: this.daysBetween(date, booking.endDate as Date) * 2 + 1
-              })
+                colspan: bookingDays * 2 + 1
+              });
               dateContinue = true;
+              lastDate = bookingEndDate;
+            } else if (bookingStartDate.isSame(date)) {
+              console.log('last date is:', lastDate, 'booking start date is:', bookingStartDate);
+              const emptyDays = this.daysBetween(lastDate, bookingStartDate);
+              console.log('Empty days between bookings:', emptyDays);
+              if (index == 0 || bookingIndex==0) {
+                cells.push({
+                  type: 'empty',
+                  colspan: 1
+                });
+              }
+              if (emptyDays != 0) {
+                for (let i = 0; i < emptyDays; i++) {
+                  cells.push({
+                    type: 'empty',
+                    colspan: 1
+                  });
+                  cells.push({
+                    type: 'empty',
+                    colspan: 1
+                  });
+                }
+              }
+              if (bookingEndDate.isAfter(this.dates[this.dates.length - 1])) {
+                const bookingDays = this.daysBetween(bookingStartDate, this.dates[this.dates.length - 1]);
+                cells.push({
+                  type: 'booking',
+                  booking: booking,
+                  colspan: bookingDays * 2 + 1
+                });
+              } else {
+                const bookingDays = this.daysBetween(bookingStartDate, bookingEndDate);
+                cells.push({
+                  type: 'booking',
+                  booking: booking,
+                  colspan: bookingDays * 2
+                });
+              }
+              dateContinue = true;
+              lastDate = bookingEndDate;
             }
           } else {
-            continue;
+            if (bookingEndDate.isSame(date)) {
+              dateContinue = false;
+              //Treat last booking
+              if (bookingIndex + 1 === room.bookings.length) {
+                const emptyDays = this.daysBetween(bookingEndDate, this.dates[this.dates.length - 1]);
+                console.log('your empty cells are:', emptyDays);
+                cells.push({
+                  type: 'empty',
+                  colspan: 1
+                });
+                if (emptyDays != 0) {
+                  for (let i = 0; i < emptyDays; i++) {
+                    cells.push({
+                      type: 'empty',
+                      colspan: 1
+                    });
+                    cells.push({
+                      type: 'empty',
+                      colspan: 1
+                    });
+                  }
+                }
+              }
+            }
           }
-        }
-      }
 
-
+        });
+      });
     }
-
-
+    console.log('Generated bookings are:', cells);
     return cells;
   }
 
@@ -100,31 +160,19 @@ export class SchedulerComponent {
   }
 
   // Helper for Row 1 content (price) - remains the same
-  getPriceForDate(date: Date): string {
+  getPriceForDate(date: moment.Moment): string {
     return '120€';
   }
 
-  private daysBetween(date1: Date, date2: Date): number {
-    const msInDay = 1000 * 60 * 60 * 24;
-
-    // Remove time portion by converting to UTC midnight
-    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-
-    return Math.floor((utc2 - utc1) / msInDay);
+  private daysBetween(startDate: moment.Moment, endDate: moment.Moment): number {
+    return endDate.diff(startDate, 'days');
   }
 
   private generateDateRange(): void {
-    const today = new Date();
-    let dayOfWeek = today.getDay();
-    let diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - diff);
-    startOfWeek.setHours(0, 0, 0, 0);
-    for (let i = 0; i < 7; i++) {
-      const dateToAdd = new Date(startOfWeek);
-      dateToAdd.setDate(startOfWeek.getDate() + i);
-      this.dates.push(dateToAdd);
+    const startOfWeek = moment().startOf('week').add(1, 'day'); // Start from Monday
+    this.dates = [];
+    for (let i = 0; i < 14; i++) {
+      this.dates.push(startOfWeek.clone().add(i, 'days').startOf('day'));
     }
     console.log('your dates are', this.dates);
   }
@@ -158,3 +206,34 @@ interface GeneratedBookingCell {
   booking?: BookingGetModel; // Only present if type is 'booking'
   colspan: number;           // The colspan for this <td>
 }
+
+
+/*
+if (!dateContinue) {
+  //column date is before booking startDate
+  if (date.isBefore(bookingStartDate)) {
+    console.log('Cell with two empty cells')
+    cells.push({
+      type: 'empty',
+      colspan: 1
+    });
+    cells.push({
+      type: 'empty',
+      colspan: 1
+    });
+  } else if (date.isSame(bookingStartDate)) {
+    console.log('Cell with one empty cell and a booking')
+    cells.push({
+      type: 'empty',
+      colspan: 1
+    });
+    cells.push({
+      type: 'booking',
+      booking: booking,
+      colspan: this.daysBetween(bookingStartDate, bookingEndDate) * 2
+    });
+    dateContinue = true;
+  }
+
+
+}*/
