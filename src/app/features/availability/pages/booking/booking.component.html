@@ -85,10 +85,10 @@
 
     <c-row>
       <c-col [md]="4" class="mb-3">
-        <label cLabel class="required" for="unit">
+        <label cLabel class="required">
           {{ 'booking.rental-details.select' | translate }}
         </label>
-        <app-unit-select formControlName="rental" [allowMultiUnit]="false"></app-unit-select>
+        <app-unit-select formControlName="rental" [allowMultiUnit]="false" [disableFilter]="true"></app-unit-select>
       </c-col>
 
       <c-col [md]="4" class="mb-3">

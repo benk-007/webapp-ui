@@ -18,6 +18,7 @@ import {
 import {GuestModel} from "../../models/guest-model";
 import {UnitSelectComponent} from "../../../../shared/components/unit-select/unit-select.component";
 
+
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
@@ -46,7 +47,6 @@ export class BookingComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   bookingSources = Object.values(BookingSource);
-
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       guest: [null],
@@ -56,7 +56,6 @@ export class BookingComponent implements OnInit {
       source: ['', Validators.required],
       adults: ['', [Validators.required, Validators.min(1)]],
       children: [''],
-
       unit: ['', Validators.required],
       arrive: ['', Validators.required],
       depart: ['', Validators.required],

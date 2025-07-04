@@ -29,6 +29,8 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   @Input() disable = false;
   @Input() allowMultiUnit = false;  // Nouveau paramètre pour permettre les MULTI_UNIT si nécessaire
   @Output() updatedUnits = new EventEmitter<UnitItemGetModel[] | null>();
+  @Input() disableFilter = false;
+
 
   unitSearchList: UnitItemGetModel[] = [];
   selectedUnits: UnitItemGetModel[] | null = null;
@@ -68,11 +70,15 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
       sort: 'name',
       sortDirection: 'asc',
       search: searchValue,
-      advancedSearchFormValue: {
+    };
+
+    if (!this.disableFilter) {
+      pageFilter.advancedSearchFormValue = {
         nature: 'SINGLE',
-        withParent: false,
-      }
+        withParent: false
+      };
     }
+
 
     this.subscriptions.push(
       this.unitApiService.getUnitsByPage(pageFilter).subscribe({
