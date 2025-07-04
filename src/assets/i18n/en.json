@@ -555,7 +555,7 @@
       "title": "Unit list",
       "cta": {
         "add-btn": "+ Add unit",
-        "add-multi-btn": "Add Multi-unit"
+        "add-multi-btn": "+ Add multi-unit"
       },
       "table": {
         "header": {
@@ -1058,7 +1058,7 @@
         "sub-units": {
           "title": "Sub-units",
           "hint": "Manage the subunits of this multi-unit rental",
-          "add-btn": "Add sub-units"
+          "add-btn": "+ Add sub-units"
         }
       }
     }

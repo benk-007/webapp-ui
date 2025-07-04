@@ -116,8 +116,6 @@ export class MultiUnitCreateModalComponent implements OnInit, OnDestroy {
     return this.multiUnitForm.get('newSubUnits') as FormArray;
   }
 
-  // Custom validator for unique priorities - SUPPRIMÉ
-  // Plus besoin de validation d'unicité des priorités
 
   // Step Navigation Methods
   nextStep(): void {

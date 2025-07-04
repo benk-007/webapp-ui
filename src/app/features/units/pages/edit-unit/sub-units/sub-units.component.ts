@@ -47,7 +47,7 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
     page: /^[1-9]\d*$/,
     size: ['10', '20', '50', '100'],
     sort: /^(name|priority|readiness|createdAt),(asc|desc)$/,
-    search: /.{1,}/,
+    search: /.{3,}/,
   };
 
   constructor(
@@ -62,8 +62,8 @@ export class SubUnitsComponent extends ListContentComponent implements OnInit, O
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.sort = 'createdAt';
-    this.sortDirection = 'desc';
+    this.sort = 'priority';
+    this.sortDirection = 'asc';
     this.size = 10;
     this.multiUnitId = this.route.parent?.snapshot.params['unitId'];
     this.subscribeToQueryParam();

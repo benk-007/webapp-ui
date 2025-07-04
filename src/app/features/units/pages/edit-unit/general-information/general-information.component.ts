@@ -125,7 +125,6 @@ export class GeneralInformationComponent implements OnDestroy {
   submit() {
     let payload;
 
-    // Ajouter cette condition complète au début :
     if (this.isSubUnit) {
       // Pour les subUnits, on envoie seulement name, subtitle et calendarColor
       payload = {
@@ -147,18 +146,26 @@ export class GeneralInformationComponent implements OnDestroy {
       next: (data) => {
         console.log('Unit infos updated successfully. Api response is:', data);
         this.unit = data;
-        this.infoForm.patchValue(this.unit);
-        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
-          this.layers = [
-            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
-              icon: icon({
-                ...Icon.Default.prototype.options,
-                iconUrl: 'assets/marker-icon.png',
-                iconRetinaUrl: 'assets/marker-icon-2x.png',
-                shadowUrl: 'assets/marker-shadow.png'
+
+
+        // Si c'est une SubUnit, récupérer à nouveau les données du parent pour l'affichage
+        if (this.isSubUnit && this.parentUnitId) {
+          this.retrieveParentUnitForDisplay();
+        } else {
+          // Pour les unités normales, utiliser les données directement
+          this.infoForm.patchValue(this.unit);
+          if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
+            this.layers = [
+              marker([this.unit.address.location.lat, this.unit.address.location.lng], {
+                icon: icon({
+                  ...Icon.Default.prototype.options,
+                  iconUrl: 'assets/marker-icon.png',
+                  iconRetinaUrl: 'assets/marker-icon-2x.png',
+                  shadowUrl: 'assets/marker-shadow.png'
+                })
               })
-            })
-          ];
+            ];
+          }
         }
         this.toastrService.info(
           this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.message')

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -11,19 +11,22 @@ import {
   FormControlDirective, FormLabelDirective, FormFeedbackComponent,
   FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective
 } from '@coreui/angular';
+import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-sub-unit-edit-modal',
   standalone: true,
   imports: [
-    ReactiveFormsModule, TranslatePipe, ButtonDirective, ColComponent, RowComponent,
+    CommonModule, ReactiveFormsModule, TranslatePipe, ColComponent, RowComponent,
     FormDirective, FormControlDirective, FormLabelDirective, FormFeedbackComponent,
-    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective
+    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, NgxIntlTelInputModule
   ],
   templateUrl: './sub-unit-edit-modal.component.html',
   styleUrl: './sub-unit-edit-modal.component.scss'
 })
-export class SubUnitEditModalComponent implements OnDestroy {
+export class SubUnitEditModalComponent implements OnInit, OnDestroy {
 
   subUnitForm: FormGroup;
   isSubmitting: boolean = false;
@@ -80,7 +83,7 @@ export class SubUnitEditModalComponent implements OnDestroy {
           this.isSubmitting = false;
           this.subUnitUpdated.emit(response);
           this.closeModal();
-          this.toastrService.success(
+          this.toastrService.info(
             `SubUnit "${payload.name}" updated successfully`,
             'SubUnit Updated'
           );

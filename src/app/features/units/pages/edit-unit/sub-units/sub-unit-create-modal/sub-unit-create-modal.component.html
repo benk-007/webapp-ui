@@ -34,12 +34,14 @@
                 </c-form-feedback>
               </c-col>
 
-              <!-- Status -->
+              <!-- Status Toggle -->
               <c-col md="2" class="mb-3 d-flex flex-column justify-content-center">
-                <label cLabel class="me-2">Status</label>
+                <label cLabel class="me-2">{{ 'units.create-multi-unit.form.status.label'|translate }}</label>
                 <c-form-check [switch]="true">
                   <input cFormCheckInput formControlName="readiness" type="checkbox" [id]="'status-' + i"/>
-                  <label cFormCheckLabel [for]="'status-' + i">Ready</label>
+                  <label cFormCheckLabel [for]="'status-' + i">
+                    {{ 'units.unit-list.table.body.ready'|translate }}
+                  </label>
                 </c-form-check>
               </c-col>
 
@@ -83,6 +85,6 @@
   <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">Cancel</button>
   <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="!hasValidSubUnits() || isSubmitting">
     <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
-    {{ isSubmitting ? 'Adding...' : 'Add SubUnits' }}
+    {{ isSubmitting ? 'Adding...' : 'Save' }}
   </button>
 </div>

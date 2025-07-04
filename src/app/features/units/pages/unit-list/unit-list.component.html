@@ -64,7 +64,7 @@
                 </td>
               } @else if (isSubUnit(unit)) {
                 <td class="badge-cell">
-                  <span class="vertical-badge bg-info-transparent">SUB</span>
+                  <span class="vertical-badge bg-info-transparent sub">SUB</span>
                 </td>
               } @else {
                 <td class="badge-cell"></td>
@@ -91,11 +91,15 @@
                   @if (isSubUnit(unit)) {
                     <div class="sub-unit-indent"></div>
                   }
-
-                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary">
+                  @if (unit.nature === 'MULTI_UNIT') {
+                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary" class ="multi-unit-avatar">
                     {{ getNameInitials(unit.name) }}
                   </c-avatar>
-
+                  }@else {
+                    <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary">
+                      {{ getNameInitials(unit.name) }}
+                    </c-avatar>
+                  }
                   <div class="d-flex flex-column" [adaptivePosition]="true" [tooltip]="unit.subtitle">
                     <div>
                       <span class="me-1">{{ unit.name }}</span>
@@ -148,7 +152,7 @@
               </td>
 
               <td>
-                @if (unit.readiness) {
+                @if (getComputedReadiness(unit)) {
                   <span class="text-success">
                     <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
                   </span>

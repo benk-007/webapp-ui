@@ -137,18 +137,14 @@ export class UnitListComponent extends ListContentComponent {
 
   /**
    * Auto-expand les multi-units qui sont retournées par le backend avec des sous-unités
-   * Le backend gère déjà la logique de recherche, on fait juste l'affichage
    */
   private handleAutoExpansionFromBackend(): void {
     // Réinitialiser l'auto-expansion
     this.autoExpandedUnits.clear();
 
-    // Si on est en mode recherche et qu'une multi-unit a des sous-unités,
-    // cela signifie que le backend a trouvé des résultats pertinents
     if (this.search && this.search.trim().length > 0) {
       for (const unit of this.listContent) {
         if (unit.nature === 'MULTI_UNIT' && unit.subUnits && unit.subUnits.length > 0) {
-          // Auto-expand car le backend a retourné cette multi-unit avec ses sous-unités
           this.autoExpandedUnits.add(unit.id);
           this.expandedUnits.add(unit.id);
         }
@@ -212,6 +208,14 @@ export class UnitListComponent extends ListContentComponent {
    */
   isSubUnit(unit: any): boolean {
     return unit.isSubUnit === true;
+  }
+
+  //Status MultiUnit
+  getComputedReadiness(unit: UnitItemGetModel): boolean {
+    if (unit.nature !== 'MULTI_UNIT' || !unit.subUnits || unit.subUnits.length === 0) {
+      return unit.readiness;
+    }
+    return unit.subUnits.every(sub => sub.readiness);
   }
 
   /**

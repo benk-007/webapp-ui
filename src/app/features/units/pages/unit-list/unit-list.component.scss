@@ -53,21 +53,12 @@ tbody tr.sub-unit-row {
   &:hover {
     background-color: #f5f6f7 !important; // ensure no change on hover
   }
-
-
-  .avatar {
-    // Override avatar color for sub-units if needed separately
-    &.bg-primary {
-      background-color: vars.$secondary01 !important;
-      color: vars.$secondary !important;
-    }
-  }
 }
 
 // --- Avatar override for MULTI units ---
 .multi-unit-avatar {
-  background-color: vars.$secondary !important;
-  color: white !important;
+  background-color: vars.$secondary01 !important;
+  color: vars.$secondary !important;
 }
 
 // --- Badge Cell Styling ---
@@ -85,6 +76,7 @@ tbody tr.sub-unit-row {
   position: relative;
   flex-shrink: 0;
 }
+
 
 // --- Vertical Badge Styling ---
 .vertical-badge {
@@ -113,6 +105,10 @@ tbody tr.sub-unit-row {
   &.bg-info-transparent {
     background-color: vars.$info01 !important;
     color: vars.$info !important;
+  }
+
+  &.sub {
+    left: .5em;
   }
 }
 

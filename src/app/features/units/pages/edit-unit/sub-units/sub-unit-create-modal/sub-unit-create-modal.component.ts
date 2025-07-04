@@ -14,6 +14,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { cilTrash } from '@coreui/icons';
 import { UnitSelectComponent } from '../../../../../../shared/components/unit-select/unit-select.component';
 import {CommonModule} from "@angular/common";
+import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
 
 @Component({
   selector: 'app-sub-unit-create-modal',
@@ -22,7 +23,7 @@ import {CommonModule} from "@angular/common";
     CommonModule, ReactiveFormsModule, TranslatePipe, ButtonDirective, ColComponent, RowComponent,
     FormDirective, FormControlDirective, FormLabelDirective, FormFeedbackComponent,
     FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, IconDirective,
-    UnitSelectComponent
+    UnitSelectComponent, NgxIntlTelInputModule
   ],
   templateUrl: './sub-unit-create-modal.component.html',
   styleUrl: './sub-unit-create-modal.component.scss'
