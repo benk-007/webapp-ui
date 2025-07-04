@@ -64,6 +64,13 @@ export const routes: Routes = [
             data: {title: 'Rates Settings'}
           }
         ]
+      },
+      {
+        path: 'sub-units',
+        loadComponent: () => import('./sub-units/sub-units.component').then(m => m.SubUnitsComponent),
+        data: {
+          title: 'SubUnits'
+        }
       }
 
     ]

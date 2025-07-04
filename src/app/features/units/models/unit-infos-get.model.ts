@@ -11,4 +11,8 @@ export interface UnitInfosGetModel {
   };
   calendarColor: string;
   readiness: boolean;
+
+  parentUnit?: string;
+  nature?: 'SINGLE' | 'MULTI_UNIT';
+  priority?: number;
 }

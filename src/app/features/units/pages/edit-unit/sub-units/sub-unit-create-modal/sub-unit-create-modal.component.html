@@ -1,0 +1,90 @@
+<div class="modal-header">
+  <h5 class="modal-title">Add SubUnits</h5>
+</div>
+
+
+<div class="modal-body">
+  <form [formGroup]="subUnitsForm" (ngSubmit)="onSubmit()" cForm>
+
+    <!-- Section SubUnits  -->
+    <c-row>
+      <c-col md="12">
+        <h6 class="section-title underline mb-3">SubUnits</h6>
+      </c-col>
+    </c-row>
+
+    <!-- New Subunits Form -->
+    <c-row *ngIf="newSubUnits.length > 0">
+      <c-col md="12">
+        <div formArrayName="newSubUnits">
+          <div *ngFor="let subUnit of newSubUnits.controls; let i = index" [formGroupName]="i" class="mb-3">
+            <c-row>
+              <c-col md="5" class="mb-3">
+                <label cLabel class="required me-2">SubUnit Name</label>
+                <input cFormControl formControlName="name" type="text" placeholder="Enter subunit name"/>
+                <c-form-feedback *ngIf="((subUnit.get('name')?.touched || subUnit.get('name')?.dirty) && subUnit.get('name')?.hasError('required'))" [valid]="false">
+                  {{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              </c-col>
+              <c-col md="4" class="mb-3">
+                <label cLabel class="required me-2">Priority</label>
+                <input cFormControl formControlName="priority" type="number" min="1" max="99"/>
+                <c-form-feedback *ngIf="((subUnit.get('priority')?.touched || subUnit.get('priority')?.dirty) && subUnit.get('priority')?.hasError('required'))" [valid]="false">
+                  {{ 'commons.errors.required'|translate }}
+                </c-form-feedback>
+              </c-col>
+
+              <!-- Status Toggle -->
+              <c-col md="2" class="mb-3 d-flex flex-column justify-content-center">
+                <label cLabel class="me-2">{{ 'units.create-multi-unit.form.status.label'|translate }}</label>
+                <c-form-check [switch]="true">
+                  <input cFormCheckInput formControlName="readiness" type="checkbox" [id]="'status-' + i"/>
+                  <label cFormCheckLabel [for]="'status-' + i">
+                    {{ 'units.unit-list.table.body.ready'|translate }}
+                  </label>
+                </c-form-check>
+              </c-col>
+
+              <!-- Delete Button -->
+              <c-col md="1" class="mb-3 d-flex align-items-end justify-content-center">
+                <button cButton size="sm" color="danger" class="btn-light" (click)="removeNewSubUnit(i)" type="button">
+                  <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                </button>
+              </c-col>
+            </c-row>
+          </div>
+        </div>
+      </c-col>
+    </c-row>
+
+
+    <!-- Add New Subunit Link-->
+    <c-row>
+      <c-col md="12">
+        <span class="add-subunit-link" (click)="addNewSubUnit()">
+          <i class="bi bi-plus me-1"></i>
+          Add new SubUnit
+        </span>
+      </c-col>
+    </c-row>
+
+
+    <!-- Existing Units Selection -->
+    <c-row class="mt-4">
+      <c-col md="12">
+        <h6 class="section-title underline mb-3">Existing Units</h6>
+        <label cLabel for="existingUnits">Select Existing Units</label>
+        <app-unit-select formControlName="existingUnits" id="existingUnits" [allowMultiUnit]="false"></app-unit-select>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="!hasValidSubUnits() || isSubmitting">
+    <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+    {{ isSubmitting ? 'Adding...' : 'Save' }}
+  </button>
+</div>

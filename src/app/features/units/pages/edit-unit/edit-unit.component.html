@@ -1,4 +1,4 @@
-<app-page-title [title]="'units.edit-unit.default-title'|translate">
+<app-page-title [title]="title">
 </app-page-title>
 
 <ul class="nav nav-underline">
@@ -10,11 +10,12 @@
     <a class="nav-link" routerLink="detail-infos"
        routerLinkActive="active">{{ 'units.edit-unit.tabs.detail-information.title'|translate }}</a>
   </li>
-  <li class="nav-item" [tooltip]="'units.edit-unit.tabs.rooms-bedding.hint'|translate" placement="auto">
+  <li class="nav-item" *ngIf="!isMultiUnit" [tooltip]="'units.edit-unit.tabs.rooms-bedding.hint'|translate" placement="auto">
     <a class="nav-link" routerLink="bedding-rooms"
        routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
   </li>
-  <li class="nav-item dropdown"
+  <!-- RATES DROPDOWN  -->
+  <li class="nav-item dropdown" *ngIf="!isSubUnit"
       [tooltip]="'units.edit-unit.tabs.rates.hint'|translate"
       placement="top"
       (mouseenter)="openDropdown = true"
@@ -28,10 +29,16 @@
 
     <ul class="dropdown-menu show" *ngIf="openDropdown">
       <li><a class="dropdown-item"
-             [routerLink]="['rates/tables']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
+             [routerLink]="['rates/table']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
       <li><a class="dropdown-item"
              [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
     </ul>
+  </li>
+
+  <!-- SubUnits Tab -->
+  <li class="nav-item" *ngIf="isMultiUnit" [tooltip]="'units.edit-unit.tabs.sub-units.hint'|translate" placement="auto">
+    <a class="nav-link" routerLink="sub-units"
+       routerLinkActive="active">{{ 'units.edit-unit.tabs.sub-units.title'|translate }}</a>
   </li>
 
 </ul>

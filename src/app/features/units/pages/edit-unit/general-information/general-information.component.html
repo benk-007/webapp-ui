@@ -91,7 +91,7 @@
               <label cLabel class="required me-2" for="country">
                 {{ 'units.create-unit.form.address.country-input.label'|translate }}
               </label>
-              <app-country-select formControlName="country" id="country"></app-country-select>
+              <app-country-select formControlName="country" id="country" [disabled]="isSubUnit"></app-country-select>
               @if (((infoForm.get('country')?.touched || infoForm.get('country')?.dirty))) {
                 @if (infoForm.get('country')?.hasError('required')) {
                   <c-form-feedback [valid]="false">{{ 'commons.errors.required'|translate }}</c-form-feedback>
@@ -107,10 +107,12 @@
               </label>
               <c-input-group id="latlng">
                 <input cFormControl formControlName="lat" id="latitude" name="latitude"
-                       [placeholder]="'units.edit-unit.tabs.general-information.form.latitude-input.placeholder'|translate"/>
+                       [placeholder]="'units.edit-unit.tabs.general-information.form.latitude-input.placeholder'|translate"
+                        [disabled]="isSubUnit"/>
                 <span cInputGroupText><svg [cIcon]="icons.cilLocationPin"></svg></span>
                 <input cFormControl formControlName="lng" id="longitude" name="longitude"
-                       [placeholder]="'units.edit-unit.tabs.general-information.form.longitude-input.placeholder'|translate"/>
+                       [placeholder]="'units.edit-unit.tabs.general-information.form.longitude-input.placeholder'|translate"
+                        [disabled]="isSubUnit"/>
               </c-input-group>
             </c-col>
           </c-row>
@@ -120,7 +122,10 @@
           <div class="map-container">
             <div style="height: 100%;width: 100%;"
                  leaflet
-                 [leafletOptions]="options" [leafletLayers]="layers" (leafletClick)="setMarker($event)">
+                 [leafletOptions]="options"
+                 [leafletLayers]="layers"
+                 [class.disabled-map]="isSubUnit"
+                 (leafletClick)="isSubUnit ? null : setMarker($event)">
             </div>
           </div>
         </c-col>

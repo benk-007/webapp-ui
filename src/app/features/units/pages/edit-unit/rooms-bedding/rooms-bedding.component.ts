@@ -22,7 +22,6 @@ import {RoomComponent} from "./room/room.component";
     ReactiveFormsModule,
     IconDirective,
     RoomComponent,
-    JsonPipe
   ],
   templateUrl: './rooms-bedding.component.html',
   standalone: true,
@@ -35,6 +34,10 @@ export class RoomsBeddingComponent implements OnDestroy {
   rooms: RoomGetModel[] = [];
   bathrooms: RoomGetModel[] = [];
   subscriptions: Subscription[] = []
+
+  //
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
 
   constructor(private readonly activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService) {
@@ -64,10 +67,26 @@ export class RoomsBeddingComponent implements OnDestroy {
           .find(id => id !== null);
         if (unitId) {
           this.unitId = unitId;
-          this.retrieveUnitRooms();
+          //appel pour détecter le type d'unité
+          this.checkUnitType();
+
+          //this.retrieveUnitRooms();
         }
       })
     );
+  }
+ //
+  private checkUnitType() {
+    this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
+      next: (data) => {
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
+        this.retrieveUnitRooms();
+      },
+      error: (err) => {
+        console.error('Error checking unit type:', err);
+      }
+    }));
   }
 
   private retrieveUnitRooms() {

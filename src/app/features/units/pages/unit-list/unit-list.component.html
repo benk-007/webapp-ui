@@ -6,7 +6,7 @@
     <c-dropdown variant="btn-group">
       <button cButton color="secondary" cDropdownToggle size="sm"></button>
       <ul cDropdownMenu>
-        <li><a cDropdownItem routerLink>Multi unit</a></li>
+        <li><button cButton cDropdownItem  (click)="openCreateMultiUnitModal()">Multi unit</button></li>
       </ul>
     </c-dropdown>
   </c-button-group>
@@ -38,11 +38,12 @@
 } @else {
 
   @if (!isListEmpty) {
-    <div class="table-responsive ">
+    <div class="table-responsive">
       <table cTable hover appSelectableTable [responsive]="true">
         <thead>
         <tr>
-          <th>{{ 'units.unit-list.table.header.name'|translate }}</th>
+          <th style="width: 30px;"></th> <!-- Colonne pour les badges -->
+          <th style="padding-left: 2.3rem;">{{ 'units.unit-list.table.header.name'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.description'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.contact'|translate }}</th>
           <th>{{ 'units.unit-list.table.header.city'|translate }}</th>
@@ -52,19 +53,63 @@
         </tr>
         </thead>
 
+
         <tbody>
-          @for (unit of listContent; track unit.id) {
-            <tr>
+          @for (unit of displayedUnits; track unit.id) {
+            <tr [ngClass]="{'sub-unit-row': isSubUnit(unit)}" class="position-relative">
+              <!-- Badge vertical à gauche -->
+              @if (unit.nature === 'MULTI_UNIT' && !isSubUnit(unit)) {
+                <td class="badge-cell">
+                  <span class="vertical-badge bg-secondary-transparent">MULTI</span>
+                </td>
+              } @else if (isSubUnit(unit)) {
+                <td class="badge-cell">
+                  <span class="vertical-badge bg-info-transparent sub">SUB</span>
+                </td>
+              } @else {
+                <td class="badge-cell"></td>
+              }
               <td>
                 <div class="d-flex align-items-center gap-2">
-                  <c-avatar [size]="'md'" shape="rounded" textColor="white"
-                            color="primary">{{ getNameInitials(unit.name) }}
+                  <!-- Indicateur d'expansion pour les multi-units -->
+                  @if (canExpand(unit) && !isSubUnit(unit)) {
+                    <button
+                      type="button"
+                      class="expand-btn"
+                      (click)="toggleUnitExpansion(unit.id)">
+                      <svg
+                        [cIcon]="isUnitExpanded(unit.id) ? icons.cilArrowBottom : icons.cilChevronRight"
+                        size="sm">
+                      </svg>
+                    </button>
+                  } @else if (!canExpand(unit) && !isSubUnit(unit)) {
+                    <!-- Espacement pour aligner les unités sans sous-unités -->
+                    <div class="expand-btn-placeholder"></div>
+                  }
+
+                  <!-- Indentation pour les sous-unités -->
+                  @if (isSubUnit(unit)) {
+                    <div class="sub-unit-indent"></div>
+                  }
+                  @if (unit.nature === 'MULTI_UNIT') {
+                  <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary" class ="multi-unit-avatar">
+                    {{ getNameInitials(unit.name) }}
                   </c-avatar>
-                  <div class="d-flex flex-column" [adaptivePosition]="true"
-                       [tooltip]="unit.subtitle">
+                  }@else {
+                    <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary">
+                      {{ getNameInitials(unit.name) }}
+                    </c-avatar>
+                  }
+                  <div class="d-flex flex-column" [adaptivePosition]="true" [tooltip]="unit.subtitle">
                     <div>
                       <span class="me-1">{{ unit.name }}</span>
+
+                      <!-- Compteur de sous-unités pour les multi-units -->
+                      @if (unit.nature === 'MULTI_UNIT' && unit.subUnits && unit.subUnits.length > 0 && !isSubUnit(unit)) {
+                        <span class="text-muted small">({{ unit.subUnits.length }} {{ unit.subUnits.length === 1 ? 'unit' : 'units' }})</span>
+                      }
                     </div>
+
                     <div class="small text-body-secondary text-nowrap">
                       <span>{{ 'commons.snippets.audit.created-by'|translate }} {{ unit.audit.createdBy | auditName }}</span>
                     </div>
@@ -73,17 +118,16 @@
               </td>
 
               <td>
-            <span [adaptivePosition]="true"
-                  [tooltip]="'units.unit-list.table.body.beds'|translate">
-              <span class="me-1 fs-6">{{ unit.beds }}</span>
-              <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
-            </span>
+                <span [adaptivePosition]="true"
+                      [tooltip]="'units.unit-list.table.body.beds'|translate">
+                  <span class="me-1 fs-6">{{ unit.beds }}</span>
+                  <svg [cIcon]="icons.cilBed" size="lg" class="text-secondary"></svg>
+                </span>
                 <span [adaptivePosition]="true"
                       [tooltip]="'units.unit-list.table.body.bathrooms'|translate">
-              <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
-              <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
-            </span>
-
+                  <span class=" ms-2 me-1 fs-6">{{ unit.bathrooms }}</span>
+                  <svg [cIcon]="icons.cilBath" size="lg" class="text-warning"></svg>
+                </span>
               </td>
 
               <td>
@@ -108,14 +152,14 @@
               </td>
 
               <td>
-                @if (unit.readiness) {
+                @if (getComputedReadiness(unit)) {
                   <span class="text-success">
-              <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
-              </span>
+                    <i class="bi bi-check-square-fill"></i> {{ 'units.unit-list.table.body.ready'|translate }}
+                  </span>
                 } @else {
                   <span class="text-danger">
-              <i class="bi bi-x-square-fill"></i> {{ 'units.unit-list.table.body.not-ready'|translate }}
-              </span>
+                    <i class="bi bi-x-square-fill"></i> {{ 'units.unit-list.table.body.not-ready'|translate }}
+                  </span>
                 }
               </td>
 

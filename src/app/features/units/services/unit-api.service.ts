@@ -14,7 +14,8 @@ import {UnitDetailsPatchModel} from "../models/details/unit-details-patch.model"
 import {RoomGetModel} from "../models/rooms-bedding/room-get.model";
 import {RoomPostModel} from "../models/rooms-bedding/room-post.model";
 import {RoomPatchModel} from "../models/rooms-bedding/room-patch.model";
-import {PageFilterModel} from "../../../shared/models/page-filter.model";
+import {PageFilterModel} from 'src/app/shared/models/page-filter.model';
+import {MultiUnitPostModel} from "../models/multi-unit-post.model";
 
 
 @Injectable({
@@ -59,7 +60,6 @@ export class UnitApiService {
     return this.httpClient.get<PageModel<UnitItemGetModel>>(environment.apiBaseUrl.concat(environment.unitList), {params});
   }
 
-
   getUnitById(unitId: string) {
     return this.httpClient.get<UnitGetModel>(environment.apiBaseUrl.concat(environment.unitById).replace(':unitId', unitId));
   }
@@ -76,7 +76,6 @@ export class UnitApiService {
     return this.httpClient.patch<UnitDetailsGetModel>(environment.apiBaseUrl.concat(environment.unitDetailsById).replace(':unitId', unitId), payload);
   }
 
-  // Nouvelles méthodes pour les instructions
   getUnitInstructionsById(unitId: string) {
     return this.httpClient.get<UnitInstructionsGetModel>(
       environment.apiBaseUrl.concat(environment.unitInstructionsById).replace(':unitId', unitId)
@@ -105,5 +104,62 @@ export class UnitApiService {
 
   deleteRoom(unitId: string, roomId: string) {
     return this.httpClient.delete<void>(environment.apiBaseUrl.concat(environment.unitRoomById).replace(':unitId', unitId).replace(':roomId', roomId));
+  }
+
+  postMultiUnit(payload: MultiUnitPostModel) {
+    return this.httpClient.post<UnitItemGetModel>(environment.apiBaseUrl.concat(environment.unitList), payload);
+  }
+
+  getSubUnits(multiUnitId: string, pageFilter?: PageFilterModel ) {
+    let params = new HttpParams();
+
+    if (pageFilter) {
+      params = params.set('page', pageFilter.page);
+      params = params.set('size', pageFilter.size);
+
+      if (pageFilter.search || pageFilter.advancedSearchFormValue?.search) {
+        let searchValue = pageFilter.search ?? pageFilter.advancedSearchFormValue?.advancedSearch;
+        params = params.set('search', searchValue);
+      }
+
+      if (pageFilter.sort) {
+        params = params.set('sort', `${pageFilter.sort},${pageFilter.sortDirection}`);
+      }
+
+
+      if (pageFilter.advancedSearchFormValue?.nature) {
+        params = params.set('nature', pageFilter.advancedSearchFormValue.nature);
+      }
+    }
+    // GET /units/{unitId}/sub-units
+    return this.httpClient.get<PageModel<UnitItemGetModel>>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId),
+      { params }
+    );
+  }
+
+
+  postSubUnit(multiUnitId: string, payload: any) {
+    return this.httpClient.post<any>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId),
+      payload
+    );
+  }
+
+  assignExistingUnits(multiUnitId: string, payload: any) {
+    return this.httpClient.post<UnitItemGetModel[]>(
+      environment.apiBaseUrl.concat(environment.unitSubUnits).replace(':unitId', multiUnitId) + '/assign',
+      payload
+    );
+  }
+
+
+
+  detachSubUnit(subUnitId: string) {
+    // PATCH /units/{subUnitId}/detach
+    return this.httpClient.patch<void>(
+      environment.apiBaseUrl.concat(environment.unitDetach).replace(':unitId', subUnitId),
+      {}
+    );
   }
 }
