@@ -14,4 +14,5 @@ export interface UnitInfosGetModel {
 
   parentUnit?: string;
   nature?: 'SINGLE' | 'MULTI_UNIT';
+  priority?: number;
 }

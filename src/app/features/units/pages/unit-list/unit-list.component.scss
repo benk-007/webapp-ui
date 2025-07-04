@@ -69,6 +69,7 @@ tbody tr.sub-unit-row {
   vertical-align: middle;
 }
 
+
 // --- Sub-unit indentation spacing ---
 .sub-unit-indent {
   width: 20px;
@@ -118,23 +119,6 @@ tbody tr.sub-unit-row {
   z-index: 10;
 }
 
-// --- Responsive Adjustments ---
-@media (max-width: 768px) {
-  .sub-unit-indent {
-    width: 16px;
-  }
-
-  .expand-btn {
-    width: 18px;
-    height: 18px;
-  }
-
-  .expand-btn-placeholder {
-    width: 18px;
-    height: 18px;
-  }
-}
-
 // --- Sub-unit Counter Styling ---
 .text-muted.small {
   font-size: 0.75rem;
@@ -157,10 +141,6 @@ tbody tr.sub-unit-row {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.sub-unit-indent {
-  width: 20px; // Your existing indent width
 }
 
 .sub-unit-badge {

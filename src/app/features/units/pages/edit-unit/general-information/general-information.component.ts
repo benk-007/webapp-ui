@@ -88,6 +88,7 @@ export class GeneralInformationComponent implements OnDestroy {
     this.infoForm = this.fb.group({
       name: [null, [Validators.required]],
       subtitle: [null],
+      priority: [null],
       address: this.fb.group({
         street1: [null, [Validators.required]],
         street2: [null],
@@ -130,7 +131,9 @@ export class GeneralInformationComponent implements OnDestroy {
       payload = {
         name: this.infoForm.value.name,
         subtitle: this.infoForm.value.subtitle,
-        calendarColor: this.infoForm.value.calendarColor
+        calendarColor: this.infoForm.value.calendarColor,
+        priority: this.infoForm.value.priority,
+
       };
     } else {
       // Pour les unités normales, on garde la logique existante
