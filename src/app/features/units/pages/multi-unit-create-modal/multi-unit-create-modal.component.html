@@ -77,7 +77,9 @@
           </label>
           <input cFormControl formControlName="name" id="name" name="name"
                  [placeholder]="'units.create-multi-unit.form.main-unit-name.placeholder'|translate" type="text"/>
-          <c-form-feedback *ngIf="((multiUnitForm.get('name')?.touched || multiUnitForm.get('name')?.dirty) && multiUnitForm.get('name')?.hasError('required'))" [valid]="false">
+          <c-form-feedback
+            *ngIf="((multiUnitForm.get('name')?.touched || multiUnitForm.get('name')?.dirty) && multiUnitForm.get('name')?.hasError('required'))"
+            [valid]="false">
             {{ 'commons.errors.required'|translate }}
           </c-form-feedback>
         </c-col>
@@ -87,7 +89,7 @@
       <c-row *ngIf="newSubUnits.length > 0">
         <c-col md="12">
           <div formArrayName="newSubUnits">
-            <div *ngFor="let subUnit of newSubUnits.controls; let i = index" [formGroupName]="i" >
+            <div *ngFor="let subUnit of newSubUnits.controls; let i = index" [formGroupName]="i">
               <c-row>
                 <!-- Subunit Name -->
                 <c-col md="6" class="mb-3">
@@ -96,7 +98,9 @@
                   </label>
                   <input cFormControl formControlName="name" type="text"
                          [placeholder]="'units.create-multi-unit.form.subunit-name.placeholder'|translate"/>
-                  <c-form-feedback *ngIf="((subUnit.get('name')?.touched || subUnit.get('name')?.dirty) && subUnit.get('name')?.hasError('required'))" [valid]="false">
+                  <c-form-feedback
+                    *ngIf="((subUnit.get('name')?.touched || subUnit.get('name')?.dirty) && subUnit.get('name')?.hasError('required'))"
+                    [valid]="false">
                     {{ 'commons.errors.required'|translate }}
                   </c-form-feedback>
                 </c-col>
@@ -107,7 +111,9 @@
                     {{ 'units.create-multi-unit.form.priority.label'|translate }}
                   </label>
                   <input cFormControl formControlName="priority" type="number" min="1" max="99"/>
-                  <c-form-feedback *ngIf="((subUnit.get('priority')?.touched || subUnit.get('priority')?.dirty) && subUnit.get('priority')?.hasError('required'))" [valid]="false">
+                  <c-form-feedback
+                    *ngIf="((subUnit.get('priority')?.touched || subUnit.get('priority')?.dirty) && subUnit.get('priority')?.hasError('required'))"
+                    [valid]="false">
                     {{ 'commons.errors.required'|translate }}
                   </c-form-feedback>
                 </c-col>
@@ -152,7 +158,8 @@
           <label cLabel for="existingUnits">
             {{ 'units.create-multi-unit.form.existing-units.label'|translate }}
           </label>
-          <app-unit-select formControlName="existingUnits" id="existingUnits" [allowMultiUnit]="false"></app-unit-select>
+          <app-unit-select formControlName="existingUnits" id="existingUnits"
+                           [allowMultiUnit]="false"></app-unit-select>
         </c-col>
       </c-row>
 
@@ -171,7 +178,9 @@
                 {{ 'units.create-unit.form.address.street1-input.label'|translate }}
               </label>
               <input cFormControl formControlName="street1" id="street1" name="street1" type="text"/>
-              <c-form-feedback *ngIf="((multiUnitForm.get('street1')?.touched || multiUnitForm.get('street1')?.dirty) && multiUnitForm.get('street1')?.hasError('required'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('street1')?.touched || multiUnitForm.get('street1')?.dirty) && multiUnitForm.get('street1')?.hasError('required'))"
+                [valid]="false">
                 {{ 'commons.errors.required'|translate }}
               </c-form-feedback>
             </c-col>
@@ -199,10 +208,14 @@
                 {{ 'units.create-unit.form.address.city-input.label'|translate }}
               </label>
               <input cFormControl formControlName="city" id="city" name="city" type="text"/>
-              <c-form-feedback *ngIf="((multiUnitForm.get('city')?.touched || multiUnitForm.get('city')?.dirty) && multiUnitForm.get('city')?.hasError('required'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('city')?.touched || multiUnitForm.get('city')?.dirty) && multiUnitForm.get('city')?.hasError('required'))"
+                [valid]="false">
                 {{ 'commons.errors.required'|translate }}
               </c-form-feedback>
-              <c-form-feedback *ngIf="((multiUnitForm.get('city')?.touched || multiUnitForm.get('city')?.dirty) && multiUnitForm.get('city')?.hasError('noNumbers'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('city')?.touched || multiUnitForm.get('city')?.dirty) && multiUnitForm.get('city')?.hasError('noNumbers'))"
+                [valid]="false">
                 {{ 'commons.errors.no-numbers'|translate }}
               </c-form-feedback>
             </c-col>
@@ -212,7 +225,9 @@
                 {{ 'units.create-unit.form.address.country-input.label'|translate }}
               </label>
               <app-country-select formControlName="country" id="country"></app-country-select>
-              <c-form-feedback *ngIf="((multiUnitForm.get('country')?.touched || multiUnitForm.get('country')?.dirty) && multiUnitForm.get('country')?.hasError('required'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('country')?.touched || multiUnitForm.get('country')?.dirty) && multiUnitForm.get('country')?.hasError('required'))"
+                [valid]="false">
                 {{ 'commons.errors.required'|translate }}
               </c-form-feedback>
             </c-col>
@@ -242,7 +257,9 @@
                 id="mobile"
                 inputId="mobile">
               </ngx-intl-tel-input>
-              <c-form-feedback *ngIf="((multiUnitForm.get('mobile')?.touched) && multiUnitForm.get('mobile')?.hasError('required'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('mobile')?.touched) && multiUnitForm.get('mobile')?.hasError('required'))"
+                [valid]="false">
                 {{ 'commons.errors.required'|translate }}
               </c-form-feedback>
             </c-col>
@@ -254,7 +271,9 @@
                 {{ 'units.create-unit.form.contact.email-input.label'|translate }}
               </label>
               <input cFormControl formControlName="email" id="email" name="email" type="text"/>
-              <c-form-feedback *ngIf="((multiUnitForm.get('email')?.touched || multiUnitForm.get('email')?.dirty) && multiUnitForm.get('email')?.hasError('invalidEmail'))" [valid]="false">
+              <c-form-feedback
+                *ngIf="((multiUnitForm.get('email')?.touched || multiUnitForm.get('email')?.dirty) && multiUnitForm.get('email')?.hasError('invalidEmail'))"
+                [valid]="false">
                 {{ 'commons.errors.email'|translate }}
               </c-form-feedback>
             </c-col>

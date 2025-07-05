@@ -480,7 +480,7 @@
         "description": "Multi-Units allow you to manage several subunits within a single rental. Each subunit can have its own pricing, availability, and details.",
         "example": {
           "label": "For example:",
-          "text": "an apartment building with 5 identical rooms can be listed as a Multi-Unit rental."
+          "text": "An apartment building with 5 identical rooms can be listed as a Multi-Unit rental."
         }
       },
       "form": {

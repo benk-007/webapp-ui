@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {
   ButtonDirective,
@@ -12,7 +12,7 @@ import {
   FormLabelDirective,
   RowComponent
 } from "@coreui/angular";
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {ToastrService} from "ngx-toastr";
 import {Subscription} from "rxjs";
@@ -25,15 +25,7 @@ import {UnitSelectComponent} from "../../../../shared/components/unit-select/uni
 import {CommonModule} from "@angular/common";
 import {MultiUnitPostModel, SubUnitModel} from "../../models/multi-unit-post.model";
 import {IconDirective} from "@coreui/icons-angular";
-import {
-  cilClock,
-  cilPen,
-  cilSearch,
-  cilSortAscending,
-  cilSortDescending,
-  cilSwapVertical,
-  cilTrash
-} from "@coreui/icons";
+import {cilTrash} from "@coreui/icons";
 
 @Component({
   selector: 'app-multi-unit-create-modal',
@@ -62,12 +54,10 @@ import {
   templateUrl: './multi-unit-create-modal.component.html',
   styleUrl: './multi-unit-create-modal.component.scss'
 })
-export class MultiUnitCreateModalComponent implements OnInit, OnDestroy {
-
+export class MultiUnitCreateModalComponent implements OnDestroy {
   icons = {
     cilTrash
   };
-
   multiUnitForm: FormGroup;
   currentStep: 1 | 2 = 1;
   isSubmitting: boolean = false;
@@ -75,7 +65,6 @@ export class MultiUnitCreateModalComponent implements OnInit, OnDestroy {
 
   protected readonly SearchCountryField = SearchCountryField;
   protected readonly CountryISO = CountryISO;
-
   private readonly subscriptions: Subscription[] = [];
 
   public constructor(
@@ -86,30 +75,17 @@ export class MultiUnitCreateModalComponent implements OnInit, OnDestroy {
     private readonly toastrService: ToastrService
   ) {
     this.multiUnitForm = this.fb.group({
-      // Main unit name
       name: [null, [Validators.required]],
-
-      // Address section
       street1: [null, [Validators.required]],
       street2: [null],
       postcode: [null],
       city: [null, [Validators.required, noNumbersValidator()]],
       country: [null, [Validators.required]],
-
-      // Contact section
       mobile: [null, [Validators.required]],
       email: [null, [emailValidator()]],
-
-      // Existing units selection
       existingUnits: [null],
-
-      // New sub-units array
       newSubUnits: this.fb.array([])
     });
-  }
-
-  ngOnInit(): void {
-    // Démarrer sans sous-unité par défaut
   }
 
   get newSubUnits(): FormArray {

@@ -1,4 +1,4 @@
-@use "variables" as vars;
+@use "./variables" as vars;
 
 .btn {
   font-family: "Plus Jakrta Sans", sans-serif;
@@ -50,4 +50,22 @@
   }
 
 
+}
+
+.btn-group.show{
+  ul.dropdown-menu.show{
+    li{
+      button{
+        color: vars.$body-color !important;
+        font-weight: 400!important;
+
+        &.btn-secondary{
+          &:active{
+            background-color: vars.$secondary !important;
+            color: white !important;
+          }
+        }
+      }
+    }
+  }
 }
