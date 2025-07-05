@@ -1,5 +1,8 @@
 import {AuditGetModel} from "../../../shared/models/audit-get.model";
 import {AddressModel} from "../../../shared/models/address.model";
+import {ParentUnitGetModel} from "./parent-unit-get.model";
+import {ContactModel} from "../../../shared/models/contact.model";
+import {UnitNatureEnum} from "./unit-nature.enum";
 
 export interface UnitItemGetModel {
   id: string;
@@ -9,16 +12,11 @@ export interface UnitItemGetModel {
   bathrooms: number;
   audit: AuditGetModel;
   readiness: boolean;
-  nature: 'SINGLE' | 'MULTI_UNIT';
-  contact: {
-    mobile: string;
-    email: string;
-  },
+  nature: UnitNatureEnum;
+  contact: ContactModel,
   address: AddressModel;
-
-  parentUnit?: string;
-  priority?: number;
-
-  subUnits?: UnitItemGetModel[];
+  parent: ParentUnitGetModel;
+  priority: number;
+  subUnits: UnitItemGetModel[];
 }
 

@@ -1,4 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, Output} from '@angular/core';
 
 @Directive({
   selector: '[appSelectableTable]',
@@ -7,6 +7,7 @@ import {AfterViewInit, Directive, ElementRef, EventEmitter, Output} from '@angul
 export class SelectableTableDirective implements AfterViewInit {
 
   checkedValues: any[] = [];
+  @Input() insertAfterFirstCol: boolean = false;
   @Output() selectionChange: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   private observer: MutationObserver;
@@ -60,7 +61,11 @@ export class SelectableTableDirective implements AfterViewInit {
     th.setAttribute('class', 'text-center')
 
     th.appendChild(masterCheckbox);
-    rowHeader.insertBefore(th, rowHeader.firstChild);
+    if (this.insertAfterFirstCol && rowHeader.children.length > 1) {
+      rowHeader.insertBefore(th, rowHeader.children[1]);
+    } else {
+      rowHeader.insertBefore(th, rowHeader.firstChild);
+    }
   }
 
   private addRowCheckboxes() {
@@ -86,7 +91,11 @@ export class SelectableTableDirective implements AfterViewInit {
         const td = document.createElement('td');
         td.setAttribute('class', 'text-center')
         td.appendChild(checkbox);
-        row.insertBefore(td, row.firstChild);
+        if (this.insertAfterFirstCol && row.children.length > 1) {
+          row.insertBefore(td, row.children[1]);
+        } else {
+          row.insertBefore(td, row.firstChild);
+        }
       }
     });
   }

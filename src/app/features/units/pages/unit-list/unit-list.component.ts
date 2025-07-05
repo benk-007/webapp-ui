@@ -17,7 +17,7 @@ import {
 } from "@coreui/angular";
 import {TranslatePipe} from "@ngx-translate/core";
 import {IconDirective} from "@coreui/icons-angular";
-import {cilBath, cilBed, cilMediaPlay, cilPen, cilSearch, cilChevronRight, cilArrowBottom} from "@coreui/icons";
+import {cilArrowBottom, cilBath, cilBed, cilChevronRight, cilMediaPlay, cilPen, cilSearch} from "@coreui/icons";
 import {SelectableTableDirective} from "../../../../shared/directives/selectable-table.directive";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {UnitCreateModalComponent} from "../unit-create-modal/unit-create-modal.component";
@@ -33,6 +33,7 @@ import {PageTitleComponent} from "../../../../shared/components/page-title/page-
 import {MultiUnitCreateModalComponent} from "../multi-unit-create-modal/multi-unit-create-modal.component";
 import {PageFilterModel} from "../../../../shared/models/page-filter.model";
 import {NgClass} from "@angular/common";
+import {BsDatepickerModule, BsDaterangepickerDirective} from "ngx-bootstrap/datepicker";
 
 @Component({
   selector: 'app-unit-list',
@@ -60,7 +61,8 @@ import {NgClass} from "@angular/common";
     EmptyDataComponent,
     SpinnerComponent,
     PageTitleComponent,
-    NgClass
+    NgClass,
+    BsDatepickerModule,
   ],
   templateUrl: './unit-list.component.html',
   styleUrl: './unit-list.component.scss',
@@ -69,12 +71,11 @@ import {NgClass} from "@angular/common";
 export class UnitListComponent extends ListContentComponent {
 
   icons = {cilSearch, cilBed, cilBath, cilPen, cilMediaPlay, cilArrowBottom, cilChevronRight}
-
+  unitIdExpanded!:string|null;
+  expand:boolean=false;
   override listContent: UnitItemGetModel[] = [];
   // Nouvel état pour gérer l'expansion des multi-units
   expandedUnits: Set<string> = new Set();
-  // Liste plate pour l'affichage (incluant les sous-unités)
-  displayedUnits: UnitItemGetModel[] = [];
   // Unités qui doivent être auto-expandues à cause de la recherche
   autoExpandedUnits: Set<string> = new Set();
 
@@ -115,12 +116,8 @@ export class UnitListComponent extends ListContentComponent {
       this.unitApiService
         .getUnitsByPage(pageFilter)
         .subscribe({
-          next: (data: any) => {
+          next: (data) => {
             super.handleSuccessData(data);
-
-            this.handleAutoExpansionFromBackend();
-
-            this.buildDisplayedUnits();
           },
           error: (err: any) => {
             console.warn('An error occurred when retrieving unit list from API:', err)
@@ -132,98 +129,14 @@ export class UnitListComponent extends ListContentComponent {
     );
   }
 
-  /**
-   * Auto-expands multi-units that contain search-matched sub-units
-   * Called after receiving filtered results from backend
-   */
-  private handleAutoExpansionFromBackend(): void {
-
-    this.autoExpandedUnits.clear();
-
-    if (this.search && this.search.trim().length > 0) {
-      for (const unit of this.listContent) {
-        if (unit.nature === 'MULTI_UNIT' && unit.subUnits && unit.subUnits.length > 0) {
-          this.autoExpandedUnits.add(unit.id);
-          this.expandedUnits.add(unit.id);
-        }
-      }
+  expandSubUnits(unit: UnitItemGetModel) {
+    if(this.unitIdExpanded==unit.id){
+      this.unitIdExpanded=null;
+      this.expand=false;
+    }else{
+      this.unitIdExpanded = unit.id;
+      this.expand=true;
     }
-  }
-
-  /**
-   * Builds display list including expanded sub-units based on current expansion state
-   * Sub-units are marked with display flags for template rendering
-   */
-  private buildDisplayedUnits(): void {
-    this.displayedUnits = [];
-
-    for (const unit of this.listContent) {
-
-      this.displayedUnits.push(unit);
-
-
-      if (unit.nature === 'MULTI_UNIT' &&
-        this.expandedUnits.has(unit.id) &&
-        unit.subUnits &&
-        unit.subUnits.length > 0) {
-
-
-        const subUnitsWithParentFlag = unit.subUnits.map(subUnit => ({
-          ...subUnit,
-          isSubUnit: true,
-          parentUnitId: unit.id
-        }));
-
-        this.displayedUnits.push(...subUnitsWithParentFlag);
-      }
-    }
-  }
-
-  /**
-   * Toggle l'expansion d'une multi-unit
-   */
-  toggleUnitExpansion(unitId: string): void {
-    if (this.expandedUnits.has(unitId)) {
-      this.expandedUnits.delete(unitId);
-      // Retirer aussi de l'auto-expansion si elle y était
-      this.autoExpandedUnits.delete(unitId);
-    } else {
-      this.expandedUnits.add(unitId);
-    }
-
-    this.buildDisplayedUnits();
-  }
-
-  /**
-   * Vérifie si une multi-unit est expandue
-   */
-  isUnitExpanded(unitId: string): boolean {
-    return this.expandedUnits.has(unitId);
-  }
-
-  /**
-   * Vérifie si une unité est une sous-unité (pour l'affichage)
-   */
-  isSubUnit(unit: any): boolean {
-    return unit.isSubUnit === true;
-  }
-
-  /**
-   * Gérer le statut des multi-units
-   */
-  getComputedReadiness(unit: UnitItemGetModel): boolean {
-    if (unit.nature !== 'MULTI_UNIT' || !unit.subUnits || unit.subUnits.length === 0) {
-      return unit.readiness;
-    }
-    return unit.subUnits.every(sub => sub.readiness);
-  }
-
-  /**
-   * Vérifie si une unité peut être expandue (multi-unit avec sous-unités)
-   */
-  canExpand(unit: UnitItemGetModel): boolean {
-    const result = unit.nature === 'MULTI_UNIT' && unit.subUnits != null && unit.subUnits.length > 0;
-    return result;
   }
 
   openCreateUnitModal() {
@@ -258,4 +171,6 @@ export class UnitListComponent extends ListContentComponent {
     this.autoExpandedUnits.clear();
     super.refreshListContent();
   }
+
+
 }
