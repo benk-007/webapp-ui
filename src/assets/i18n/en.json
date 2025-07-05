@@ -22,7 +22,9 @@
         "create": "Create",
         "confirm": "Confirm",
         "cancel": "Cancel",
-        "delete": "Delete"
+        "delete": "Delete",
+        "previous-btn": "Previous",
+        "next-btn": "Next"
       },
       "search-input": {
         "placeholder": "Search ..."
@@ -463,11 +465,97 @@
     }
   },
   "units": {
+    "create-multi-unit": {
+      "title": "Add Multi-unit",
+      "steps": {
+        "details": {
+          "title": "Multi-Unit Details"
+        },
+        "rental": {
+          "title": "Rental Details"
+        }
+      },
+      "info": {
+        "title": "Manage multiple units under one main listing with ease.",
+        "description": "Multi-Units allow you to manage several subunits within a single rental. Each subunit can have its own pricing, availability, and details.",
+        "example": {
+          "label": "For example:",
+          "text": "an apartment building with 5 identical rooms can be listed as a Multi-Unit rental."
+        }
+      },
+      "form": {
+        "main-unit-name": {
+          "label": "Main Unit Name",
+          "placeholder": "Main Unit Name"
+        },
+        "subunit-name": {
+          "label": "Subunit Name",
+          "placeholder": "Enter subunit name"
+        },
+        "priority": {
+          "label": "Priority"
+        },
+        "status": {
+          "label": "Status"
+        },
+        "add-subunit": {
+          "label": "Add New Subunit"
+        },
+        "existing-units": {
+          "label": "Add Existing Rental as Subunit"
+        },
+        "preview": {
+          "title": "Preview:",
+          "empty": "Enter details to see preview",
+          "no-units": "No subunits added",
+          "new-units": "new subunit(s)",
+          "existing-units": "existing unit(s)"
+        },
+        "rental-info": {
+          "title": "RENTAL INFORMATION"
+        },
+        "mobile": {
+          "label": "Phone"
+        },
+        "email": {
+          "label": "AdvanceCM Email",
+          "placeholder": "example"
+        },
+        "location": {
+          "title": "RENTAL LOCATION"
+        },
+        "address": {
+          "label": "Address",
+          "placeholder": "Address"
+        },
+        "city": {
+          "label": "City",
+          "placeholder": "City"
+        },
+        "postal-code": {
+          "label": "Postal Code",
+          "placeholder": "Postal Code"
+        },
+        "country": {
+          "label": "Country"
+        },
+        "notifications": {
+          "success": {
+            "title": "Multi-unit created",
+            "message": "Multi-unit :unit has been successfully created"
+          },
+          "error": {
+            "title": "Multi-unit creation failed",
+            "message": "An error occurred while creating the multi-unit. Please try again or contact the support team."
+          }
+        }
+      }
+    },
     "unit-list": {
       "title": "Unit list",
       "cta": {
         "add-btn": "+ Add unit",
-        "add-multi-btn": "Add Multi-unit"
+        "add-multi-btn": "+ Add multi-unit"
       },
       "table": {
         "header": {
@@ -551,6 +639,8 @@
     "edit-unit": {
       "default-title": "Edit unit",
       "title": "Unit: :unit",
+      "multi-unit-title": "Edit multi-unit: {{name}}",
+      "sub-unit-title": "Edit sub-unit: {{name}}",
       "tabs": {
         "general-information": {
           "title": "General information",
@@ -963,6 +1053,31 @@
           },
           "ratesTable": {
             "title": "Rates table"
+          }
+        },
+        "sub-units": {
+          "title": "Sub-units",
+          "hint": "Manage the subunits of this multi-unit rental",
+          "add-btn": "+ Add sub-units",
+          "table": {
+            "header": {
+              "priority": "Priority",
+              "status": "Status"
+            }
+          },
+          "empty-data": "No SubUnits found. Click 'Add SubUnit' to get started.",
+          "modals": {
+            "create": {
+              "title": "Add SubUnits",
+              "sections": {
+                "subunits": "SubUnits",
+                "existing-units": "Existing Units"
+              },
+              "add-new-subunit": "Add new SubUnit"
+            },
+            "edit": {
+              "title": "Edit SubUnit"
+            }
           }
         }
       }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, Output} from '@angular/core';
 
 @Directive({
   selector: '[appSelectableTable]',
@@ -7,6 +7,7 @@ import {AfterViewInit, Directive, ElementRef, EventEmitter, Output} from '@angul
 export class SelectableTableDirective implements AfterViewInit {
 
   checkedValues: any[] = [];
+  @Input() insertAfterFirstCol: boolean = false;
   @Output() selectionChange: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   private observer: MutationObserver;
@@ -60,7 +61,11 @@ export class SelectableTableDirective implements AfterViewInit {
     th.setAttribute('class', 'text-center')
 
     th.appendChild(masterCheckbox);
-    rowHeader.insertBefore(th, rowHeader.firstChild);
+    if (this.insertAfterFirstCol && rowHeader.children.length > 1) {
+      rowHeader.insertBefore(th, rowHeader.children[1]);
+    } else {
+      rowHeader.insertBefore(th, rowHeader.firstChild);
+    }
   }
 
   private addRowCheckboxes() {
@@ -72,15 +77,88 @@ export class SelectableTableDirective implements AfterViewInit {
         checkbox.setAttribute('type', 'checkbox');
         checkbox.setAttribute('value', '' + index);
         checkbox.classList.add('form-check-input');
-        checkbox.addEventListener('change', () => {
+        checkbox.addEventListener('change', (event) => {
+          const target = event.target as HTMLInputElement;
+
+          if (target.checked) {
+            this.handleRowSelection(index, row);
+          } else {
+            this.handleRowDeselection(index, row);
+          }
+
           this.updateCheckedValues();
         });
         const td = document.createElement('td');
         td.setAttribute('class', 'text-center')
         td.appendChild(checkbox);
-        row.insertBefore(td, row.firstChild);
+        if (this.insertAfterFirstCol && row.children.length > 1) {
+          row.insertBefore(td, row.children[1]);
+        } else {
+          row.insertBefore(td, row.firstChild);
+        }
       }
     });
+  }
+
+  private handleRowSelection(index: number, row: HTMLTableRowElement): void {
+    // Vérifier si c'est une MultiUnit en cherchant le badge "MULTI"
+    const multiUnitBadge = row.querySelector('.vertical-badge') as HTMLElement;
+
+    if (multiUnitBadge && multiUnitBadge.textContent?.trim() === 'MULTI') {
+      console.log('MultiUnit selected, selecting SubUnits...'); // Debug
+      this.selectSubUnitsOfMultiUnit(index);
+    }
+  }
+
+  private handleRowDeselection(index: number, row: HTMLTableRowElement): void {
+    // Vérifier si c'est une MultiUnit en cherchant le badge "MULTI"
+    const multiUnitBadge = row.querySelector('.vertical-badge') as HTMLElement;
+
+    if (multiUnitBadge && multiUnitBadge.textContent?.trim() === 'MULTI') {
+      console.log('MultiUnit deselected, deselecting SubUnits...'); // Debug
+      this.deselectSubUnitsOfMultiUnit(index);
+    }
+  }
+
+  private selectSubUnitsOfMultiUnit(multiUnitIndex: number): void {
+    const rows = this.el.nativeElement.querySelectorAll('tbody tr');
+    console.log('Total rows:', rows.length); // Debug
+
+    for (let currentIndex = multiUnitIndex + 1; currentIndex < rows.length; currentIndex++) {
+      const row = rows[currentIndex];
+      const subUnitBadge = row.querySelector('.vertical-badge') as HTMLElement;
+
+      console.log('Checking row', currentIndex, 'badge text:', subUnitBadge?.textContent?.trim()); // Debug
+
+      if (subUnitBadge && subUnitBadge.textContent?.trim() === 'SUB') {
+        const checkbox = row.querySelector('input[type="checkbox"]') as HTMLInputElement;
+        if (checkbox) {
+          console.log('Selecting SubUnit at index:', currentIndex); // Debug
+          checkbox.checked = true;
+        }
+      } else {
+        // Si ce n'est pas une SubUnit, arrêter la boucle
+        break;
+      }
+    }
+  }
+
+  private deselectSubUnitsOfMultiUnit(multiUnitIndex: number): void {
+    const rows = this.el.nativeElement.querySelectorAll('tbody tr');
+
+    for (let currentIndex = multiUnitIndex + 1; currentIndex < rows.length; currentIndex++) {
+      const row = rows[currentIndex];
+      const subUnitBadge = row.querySelector('.vertical-badge') as HTMLElement;
+
+      if (subUnitBadge && subUnitBadge.textContent?.trim() === 'SUB') {
+        const checkbox = row.querySelector('input[type="checkbox"]') as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = false;
+        }
+      } else {
+        break;
+      }
+    }
   }
 
   private toggleRowCheckboxes(checked: boolean) {

@@ -76,6 +76,9 @@ export class GeneralInformationComponent implements OnDestroy {
 
   layers!: any;
 
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
+
   private subscriptions: Subscription[] = [];
 
   constructor(private readonly fb: FormBuilder, private readonly unitApiService: UnitApiService,
@@ -84,6 +87,7 @@ export class GeneralInformationComponent implements OnDestroy {
     this.infoForm = this.fb.group({
       name: [null, [Validators.required]],
       subtitle: [null],
+      priority: [null],
       address: this.fb.group({
         street1: [null, [Validators.required]],
         street2: [null],
@@ -119,28 +123,42 @@ export class GeneralInformationComponent implements OnDestroy {
   }
 
   submit() {
-    let payload = {
-      ...this.infoForm.value,
-      contact: {
-        mobile: this.infoForm.value.contact.mobile.e164Number
-      }
-    };
+    let payload;
+    if (this.isSubUnit) {
+      payload = {
+        name: this.infoForm.value.name,
+        subtitle: this.infoForm.value.subtitle,
+        calendarColor: this.infoForm.value.calendarColor,
+        priority: this.infoForm.value.priority,
+      };
+    } else {
+      payload = {
+        ...this.infoForm.value,
+        contact: {
+          mobile: this.infoForm.value.contact.mobile.e164Number
+        }
+      };
+    }
     this.subscriptions.push(this.unitApiService.updateUnitInfosById(this.unitId, payload).subscribe({
       next: (data) => {
         console.log('Unit infos updated successfully. Api response is:', data);
         this.unit = data;
-        this.infoForm.patchValue(this.unit);
-        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
-          this.layers = [
-            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
-              icon: icon({
-                ...Icon.Default.prototype.options,
-                iconUrl: 'assets/marker-icon.png',
-                iconRetinaUrl: 'assets/marker-icon-2x.png',
-                shadowUrl: 'assets/marker-shadow.png'
+        if (this.isSubUnit && this.parentUnitId) {
+          this.retrieveParentUnitForDisplay();
+        } else {
+          this.infoForm.patchValue(this.unit);
+          if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
+            this.layers = [
+              marker([this.unit.address.location.lat, this.unit.address.location.lng], {
+                icon: icon({
+                  ...Icon.Default.prototype.options,
+                  iconUrl: 'assets/marker-icon.png',
+                  iconRetinaUrl: 'assets/marker-icon-2x.png',
+                  shadowUrl: 'assets/marker-shadow.png'
+                })
               })
-            })
-          ];
+            ];
+          }
         }
         this.toastrService.info(
           this.translateService.instant('units.edit-unit.tabs.general-information.notifications.success.message')
@@ -163,25 +181,74 @@ export class GeneralInformationComponent implements OnDestroy {
       next: (data) => {
         console.log('Unit infos call general information response is:', data);
         this.unit = data;
-        this.infoForm.patchValue(this.unit);
-        if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
-          this.layers = [
-            marker([this.unit.address.location.lat, this.unit.address.location.lng], {
-              icon: icon({
-                ...Icon.Default.prototype.options,
-                iconUrl: 'assets/marker-icon.png',
-                iconRetinaUrl: 'assets/marker-icon-2x.png',
-                shadowUrl: 'assets/marker-shadow.png'
-              })
-            })
-          ];
+
+
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
+
+
+        if (this.isSubUnit && this.parentUnitId) {
+          this.retrieveParentUnitForDisplay();
+        } else {
+
+          this.populateFormWithData(data);
         }
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
-        //TODO: launch toast notification and redirect to unit list page
       }
     }))
+  }
+
+  private retrieveParentUnitForDisplay() {
+    this.subscriptions.push(this.unitApiService.getUnitInfosById(this.parentUnitId!).subscribe({
+      next: (parentData) => {
+        console.log('Parent unit data for display:', parentData);
+
+
+        const displayData = {
+          ...this.unit,
+          address: parentData.address,
+          contact: parentData.contact
+        };
+
+        this.populateFormWithData(displayData);
+      },
+      error: (err) => {
+        console.error('Error retrieving parent unit data:', err);
+
+        this.populateFormWithData(this.unit);
+      }
+    }));
+  }
+
+  private populateFormWithData(data: UnitInfosGetModel) {
+    this.infoForm.patchValue(data);
+
+    if (data.address && data.address.location && data.address.location.lat && data.address.location.lng) {
+      this.layers = [
+        marker([data.address.location.lat, data.address.location.lng], {
+          icon: icon({
+            ...Icon.Default.prototype.options,
+            iconUrl: 'assets/marker-icon.png',
+            iconRetinaUrl: 'assets/marker-icon-2x.png',
+            shadowUrl: 'assets/marker-shadow.png'
+          })
+        })
+      ];
+    }
+
+    this.handleSubUnitFields();
+  }
+
+  private handleSubUnitFields() {
+    if (this.isSubUnit) {
+
+      this.infoForm.get('address')?.disable();
+      this.infoForm.get('contact')?.disable();
+
+      this.infoForm.get('address.country')?.disable();
+    }
   }
 
   setMarker(event: any) {
@@ -204,10 +271,6 @@ export class GeneralInformationComponent implements OnDestroy {
         }
       }
     })
-  }
-
-  private retrieveUnitImages() {
-
   }
 
   selectColor(colorHexCode: string) {

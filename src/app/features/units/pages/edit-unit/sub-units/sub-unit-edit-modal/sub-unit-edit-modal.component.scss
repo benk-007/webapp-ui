@@ -1,0 +1,18 @@
+// sub-unit-edit-modal.component.scss
+
+.required::after {
+  content: " *";
+  color: #f95050;
+}
+
+.modal-header .modal-title {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+// Ajustement du positionnement du toggle Status
+.mb-3.d-flex.flex-column.justify-content-center {
+  .form-check {
+    margin-top: 0.5rem; // Descendre un peu plus le toggle
+  }
+}

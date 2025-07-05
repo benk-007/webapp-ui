@@ -12,4 +12,7 @@ export interface UnitGetModel {
     email: string;
   },
   address: AddressModel;
+
+  parentUnit?: string;
+  nature: 'SINGLE' | 'MULTI_UNIT';
 }

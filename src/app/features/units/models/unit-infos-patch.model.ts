@@ -10,4 +10,6 @@ export interface UnitInfosPatchModel {
   },
   calendarColor?: string;
   readiness?: boolean;
+
+  priority?: number;
 }

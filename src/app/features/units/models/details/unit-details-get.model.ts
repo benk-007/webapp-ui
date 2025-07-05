@@ -18,4 +18,5 @@ export interface UnitDetailsGetModel {
   smokingAllowed: boolean;
   petsAllowed: boolean;
   amenities: AmenityEnum[];
+  parentUnit: string;
 }

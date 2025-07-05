@@ -29,10 +29,18 @@ export class EditUnitComponent implements OnDestroy {
   private subscriptions: Subscription[] = [];
   openDropdown = false;
 
+  isSubUnit: boolean = false;
+  parentUnitId?: string;
+
+
+  isMultiUnit: boolean = false;
+
+
+  unitName: string = '';
+
   constructor(private activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService,
               private readonly translateService: TranslateService,
-              private router: Router,
               private readonly toastrService: ToastrService) {
     this.subscriptions.push(this.activatedRoute.paramMap.subscribe(value => {
       this.unitId = value.get('unitId') as string;
@@ -46,11 +54,29 @@ export class EditUnitComponent implements OnDestroy {
     this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
       next: (data) => {
         console.log('Your unit data is: ', data);
+
+        //Determines unit type and stores parent ID for sub-units
+        this.isSubUnit = !!data.parentUnit;
+        this.parentUnitId = data.parentUnit;
+        this.isMultiUnit = data.nature === 'MULTI_UNIT';
+
+        this.unitName = data.name;
+        this.updateTitle();
       },
       error: (err) => {
         console.error('An error occurred when retrieving the unit', err);
       }
     }))
+  }
+
+  private updateTitle() {
+    if (this.isSubUnit) {
+      this.title = this.translateService.instant('units.edit-unit.sub-unit-title', { name: this.unitName });
+    } else if (this.isMultiUnit) {
+      this.title = this.translateService.instant('units.edit-unit.multi-unit-title', { name: this.unitName });
+    } else {
+      this.title = this.translateService.instant('units.edit-unit.default-title');
+    }
   }
 
   ngOnDestroy(): void {

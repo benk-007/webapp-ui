@@ -17,7 +17,7 @@ import {
 } from "@coreui/angular";
 import {TranslatePipe} from "@ngx-translate/core";
 import {IconDirective} from "@coreui/icons-angular";
-import {cilBath, cilBed, cilMediaPlay, cilPen, cilSearch} from "@coreui/icons";
+import {cilArrowBottom, cilBath, cilBed, cilChevronRight, cilMediaPlay, cilPen, cilSearch} from "@coreui/icons";
 import {SelectableTableDirective} from "../../../../shared/directives/selectable-table.directive";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {UnitCreateModalComponent} from "../unit-create-modal/unit-create-modal.component";
@@ -30,6 +30,10 @@ import {TooltipDirective} from "ngx-bootstrap/tooltip";
 import {TableControlComponent} from "../../../../shared/components/table-control/table-control.component";
 import {EmptyDataComponent} from "../../../../shared/components/empty-data/empty-data.component";
 import {PageTitleComponent} from "../../../../shared/components/page-title/page-title.component";
+import {MultiUnitCreateModalComponent} from "../multi-unit-create-modal/multi-unit-create-modal.component";
+import {PageFilterModel} from "../../../../shared/models/page-filter.model";
+import {NgClass} from "@angular/common";
+import {BsDatepickerModule, BsDaterangepickerDirective} from "ngx-bootstrap/datepicker";
 
 @Component({
   selector: 'app-unit-list',
@@ -56,7 +60,9 @@ import {PageTitleComponent} from "../../../../shared/components/page-title/page-
     TableControlComponent,
     EmptyDataComponent,
     SpinnerComponent,
-    PageTitleComponent
+    PageTitleComponent,
+    NgClass,
+    BsDatepickerModule,
   ],
   templateUrl: './unit-list.component.html',
   styleUrl: './unit-list.component.scss',
@@ -64,9 +70,15 @@ import {PageTitleComponent} from "../../../../shared/components/page-title/page-
 })
 export class UnitListComponent extends ListContentComponent {
 
-  icons = {cilSearch, cilBed, cilBath, cilPen, cilMediaPlay}
-
+  icons = {cilSearch, cilBed, cilBath, cilPen, cilMediaPlay, cilArrowBottom, cilChevronRight}
+  unitIdExpanded!:string|null;
+  expand:boolean=false;
   override listContent: UnitItemGetModel[] = [];
+  // Nouvel état pour gérer l'expansion des multi-units
+  expandedUnits: Set<string> = new Set();
+  // Unités qui doivent être auto-expandues à cause de la recherche
+  autoExpandedUnits: Set<string> = new Set();
+
   override listParamValidator = {
     page: /^[1-9]\d*$/,
     size: ['10', '20', '50', '100'],
@@ -92,12 +104,19 @@ export class UnitListComponent extends ListContentComponent {
 
   override retrieveListContent(params: any) {
     super.retrieveListContent(params);
-    console.log('Retrieving users list ...')
+    console.log('Retrieving unit list ...')
+    let pageFilter: PageFilterModel = {
+      page: this.page,
+      size: this.size,
+      sort: this.sort,
+      sortDirection: this.sortDirection,
+      search: this.search
+    }
     this.subscriptions.push(
       this.unitApiService
-        .getUnitsByPage()
+        .getUnitsByPage(pageFilter)
         .subscribe({
-          next: (data: any) => {
+          next: (data) => {
             super.handleSuccessData(data);
           },
           error: (err: any) => {
@@ -110,6 +129,15 @@ export class UnitListComponent extends ListContentComponent {
     );
   }
 
+  expandSubUnits(unit: UnitItemGetModel) {
+    if(this.unitIdExpanded==unit.id){
+      this.unitIdExpanded=null;
+      this.expand=false;
+    }else{
+      this.unitIdExpanded = unit.id;
+      this.expand=true;
+    }
+  }
 
   openCreateUnitModal() {
     let initialState = {
@@ -123,5 +151,26 @@ export class UnitListComponent extends ListContentComponent {
       }
     ));
   }
+
+  openCreateMultiUnitModal() {
+    let initialState = {
+      class: 'modal-lg'
+    }
+    let multiUnitCreateModalRef = this.modalService.show(MultiUnitCreateModalComponent, initialState);
+
+    this.subscriptions.push((multiUnitCreateModalRef.content as MultiUnitCreateModalComponent).actionConfirmed.subscribe(
+      () => {
+        this.refreshListContent();
+      }
+    ));
+  }
+
+  override refreshListContent(): void {
+
+    this.expandedUnits.clear();
+    this.autoExpandedUnits.clear();
+    super.refreshListContent();
+  }
+
 
 }

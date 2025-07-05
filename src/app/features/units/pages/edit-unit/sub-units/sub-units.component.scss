@@ -1,0 +1,27 @@
+@use "../../../../../../scss/variables" as vars;
+
+button[cDropdownItem] {
+  color: black !important;
+}
+
+// Reprendre les styles de unit-list pour la cohérence
+.search-input {
+  border: 1px solid #e2e6f1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0.25rem;
+
+  &:focus-within{
+    border-color: #accdff !important;
+  }
+
+  span.input-group-text {
+    background-color: white;
+    border: none;
+  }
+  input{
+    border: none;
+    outline: none;
+  }
+}
