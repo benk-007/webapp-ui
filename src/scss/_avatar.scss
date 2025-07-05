@@ -1,8 +1,19 @@
-@use "variables" as vars;
+@use "./variables" as vars;
 
 .avatar {
   &.bg-primary {
     background-color: vars.$primary01 !important;
     color: vars.$primary !important;
   }
+
+  &.bg-secondary {
+    background-color: vars.$secondary01 !important;
+    color: vars.$secondary !important;
+  }
+
+  &.bg-dark {
+    background-color: vars.$dark01 !important;
+    color: vars.$dark !important;
+  }
+
 }

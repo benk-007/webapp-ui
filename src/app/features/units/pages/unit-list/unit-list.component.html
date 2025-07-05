@@ -80,7 +80,7 @@
                 <div class="d-flex align-items-center gap-2">
 
                   @if (unit.nature === 'MULTI_UNIT') {
-                    <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary" class="multi-unit-avatar">
+                    <c-avatar [size]="'md'" shape="rounded" textColor="white" color="secondary" class="multi-unit-avatar">
                       {{ getNameInitials(unit.name) }}
                     </c-avatar>
                   } @else {
@@ -162,7 +162,7 @@
                   </td>
                   <td>
                     <div class="d-flex align-items-center gap-2">
-                      <c-avatar [size]="'md'" shape="rounded" textColor="white" color="primary"
+                      <c-avatar [size]="'md'" shape="rounded" textColor="white" color="dark"
                                 class="multi-unit-avatar">
                         {{ getNameInitials(subUnit.name) }}
                       </c-avatar>
