@@ -6,7 +6,8 @@ import {ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet} from
 import {Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {TooltipDirective} from "ngx-bootstrap/tooltip";
-import {NgIf} from "@angular/common";
+import {JsonPipe, NgIf} from "@angular/common";
+import {UnitGetModel} from "../../models/unit-get.model";
 
 @Component({
   selector: 'app-edit-unit',
@@ -17,26 +18,19 @@ import {NgIf} from "@angular/common";
     TooltipDirective,
     RouterLink,
     RouterLinkActive,
-    NgIf
+    NgIf,
+    JsonPipe
   ],
   templateUrl: './edit-unit.component.html',
   styleUrl: './edit-unit.component.scss'
 })
 export class EditUnitComponent implements OnDestroy {
 
-  title: string;
+  unit!: UnitGetModel;
   private unitId!: string;
+
   private subscriptions: Subscription[] = [];
   openDropdown = false;
-
-  isSubUnit: boolean = false;
-  parentUnitId?: string;
-
-
-  isMultiUnit: boolean = false;
-
-
-  unitName: string = '';
 
   constructor(private activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService,
@@ -46,37 +40,18 @@ export class EditUnitComponent implements OnDestroy {
       this.unitId = value.get('unitId') as string;
       this.retrieveUnit();
     }));
-    this.title = this.translateService.instant('units.edit-unit.default-title');
   }
-
 
   private retrieveUnit() {
     this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
       next: (data) => {
         console.log('Your unit data is: ', data);
-
-        //Determines unit type and stores parent ID for sub-units
-        this.isSubUnit = !!data.parentUnit;
-        this.parentUnitId = data.parentUnit;
-        this.isMultiUnit = data.nature === 'MULTI_UNIT';
-
-        this.unitName = data.name;
-        this.updateTitle();
+        this.unit = data;
       },
       error: (err) => {
         console.error('An error occurred when retrieving the unit', err);
       }
     }))
-  }
-
-  private updateTitle() {
-    if (this.isSubUnit) {
-      this.title = this.translateService.instant('units.edit-unit.sub-unit-title', { name: this.unitName });
-    } else if (this.isMultiUnit) {
-      this.title = this.translateService.instant('units.edit-unit.multi-unit-title', { name: this.unitName });
-    } else {
-      this.title = this.translateService.instant('units.edit-unit.default-title');
-    }
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,5 @@
-<app-page-title [title]="title">
+@let type = (unit.nature == 'MULTI_UNIT') ? 'multi-unit' : ((unit.parent) ? 'sub-unit' : 'unit');
+<app-page-title *ngIf="unit" [title]="(('units.edit-unit.title.'.concat(type))|translate).concat(unit.name)">
 </app-page-title>
 
 <ul class="nav nav-underline">
@@ -10,55 +11,38 @@
     <a class="nav-link" routerLink="detail-infos"
        routerLinkActive="active">{{ 'units.edit-unit.tabs.detail-information.title'|translate }}</a>
   </li>
-  <li class="nav-item" *ngIf="!isMultiUnit" [tooltip]="'units.edit-unit.tabs.rooms-bedding.hint'|translate" placement="auto">
-    <a class="nav-link" routerLink="bedding-rooms"
-       routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
-  </li>
-  <!-- RATES DROPDOWN  -->
-  <li class="nav-item dropdown" *ngIf="!isSubUnit"
-      [tooltip]="'units.edit-unit.tabs.rates.hint'|translate"
-      placement="top"
-      (mouseenter)="openDropdown = true"
-      (mouseleave)="openDropdown = false"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: false }">
-
-    <a routerLink="rates" class="nav-link dropdown-toggle" role="button" routerLinkActive="active">
-      {{ 'units.edit-unit.tabs.rates.title'|translate }}
-    </a>
-
-    <ul class="dropdown-menu show" *ngIf="openDropdown">
-      <li><a class="dropdown-item"
-             [routerLink]="['rates/tables']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
-      <li><a class="dropdown-item"
-             [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
-    </ul>
-  </li>
-
-  <!-- SubUnits Tab -->
-  <li class="nav-item" *ngIf="isMultiUnit" [tooltip]="'units.edit-unit.tabs.sub-units.hint'|translate" placement="auto">
-    <a class="nav-link" routerLink="sub-units"
-       routerLinkActive="active">{{ 'units.edit-unit.tabs.sub-units.title'|translate }}</a>
-  </li>
-
+  @if (unit.nature != 'MULTI_UNIT') {
+    <li class="nav-item" [tooltip]="'units.edit-unit.tabs.rooms-bedding.hint'|translate"
+        placement="auto">
+      <a class="nav-link" routerLink="bedding-rooms"
+         routerLinkActive="active">{{ 'units.edit-unit.tabs.rooms-bedding.title'|translate }}</a>
+    </li>
+  }
+  @if (unit.nature == 'MULTI_UNIT') {
+    <li class="nav-item" [tooltip]="'units.edit-unit.tabs.sub-units.hint'|translate" placement="auto">
+      <a class="nav-link" routerLink="sub-units"
+         routerLinkActive="active">{{ 'units.edit-unit.tabs.sub-units.title'|translate }}</a>
+    </li>
+  }
+  @if(unit.parent ==null){
+    <li class="nav-item dropdown"
+        [tooltip]="'units.edit-unit.tabs.rates.hint'|translate"
+        placement="top"
+        (mouseenter)="openDropdown = true"
+        (mouseleave)="openDropdown = false"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }">
+      <a routerLink="rates" class="nav-link dropdown-toggle" role="button" routerLinkActive="active">
+        {{ 'units.edit-unit.tabs.rates.title'|translate }}
+      </a>
+      <ul class="dropdown-menu show" *ngIf="openDropdown">
+        <li><a class="dropdown-item"
+               [routerLink]="['rates/tables']">{{ 'units.edit-unit.tabs.rates.ratesTable.title'|translate }}</a></li>
+        <li><a class="dropdown-item"
+               [routerLink]="['rates/settings']">{{ 'units.edit-unit.tabs.rates.settings.title'|translate }}</a></li>
+      </ul>
+    </li>
+  }
 </ul>
 
 <router-outlet></router-outlet>
-
-<!--<c-tabs>
-  <c-tabs-list variant="underline-border">
-    <a class="btn" routerLink="infos" cTab>{{ 'units.edit-unit.tabs.general-information.title'|translate }}</a>
-    <button cTab [itemKey]="0" [tooltip]="'units.edit-unit.tabs.general-information.hint'|translate"
-            placement="auto">{{ 'units.edit-unit.tabs.general-information.title'|translate }}
-    </button>
-    <button cTab [itemKey]="1" [tooltip]="'units.edit-unit.tabs.detail-information.hint'|translate"
-            placement="auto">{{ 'units.edit-unit.tabs.detail-information.title'|translate }}
-    </button>
-    <button cTab [itemKey]="2">Contact</button>
-    <button cTab [itemKey]="3" disabled>Disabled</button>
-  </c-tabs-list>
-  <c-tabs-content>
-
-  </c-tabs-content>
-</c-tabs>-->
-

@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, isSignal, OnDestroy} from '@angular/core';
 import {
   ButtonDirective,
   ColComponent,
@@ -79,9 +79,6 @@ export class RentalDetailsComponent implements OnDestroy {
   basicSearch: string = '';
   private readonly $basicSearchSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private subscriptions: Subscription[] = [];
-  //
-  isSubUnit: boolean = false;
-  parentUnitId?: string;
 
   constructor(private readonly fb: FormBuilder, private readonly unitMapperService: UnitMapperService, private readonly unitApiService: UnitApiService,
               private readonly activatedRoute: ActivatedRoute, private readonly toastrService: ToastrService,
@@ -103,11 +100,7 @@ export class RentalDetailsComponent implements OnDestroy {
           .find(id => id !== null);
         if (unitId) {
           this.unitId = unitId;
-
-          // appel API pour détecter si c'est une subUnit :
-          this.checkIfSubUnit();
-
-          //this.retrieveUnitDetails(); sera appelé dans checkIfSubUnit()
+          this.retrieveUnitDetails();
         }
       })
     );
@@ -136,9 +129,6 @@ export class RentalDetailsComponent implements OnDestroy {
   }
 
   submit() {
-    //
-    const targetId = this.isSubUnit && this.parentUnitId ? this.parentUnitId : this.unitId;
-
     let payload = this.unitMapperService.formToDetailsPatchModel(this.rentalDetailsForm.value, this.rentalDetailsForm.get('amenities')!.value);
     this.subscriptions.push(this.unitApiService.updateUnitDetailsById(this.unitId, payload).subscribe({
       next: (data) => {
@@ -187,8 +177,8 @@ export class RentalDetailsComponent implements OnDestroy {
   private createForm() {
     this.rentalDetailsForm = this.fb.group({
       type: [null, [Validators.required]],
-      floorSize: [null, [Validators.required]],
-      floorSizeUnit: [FloorSizeUnitEnum.SQM, [Validators.required]],
+      floorSize: [null],
+      floorSizeUnit: [FloorSizeUnitEnum.SQM],
       minOccupancy: this.fb.group({
         adults: [1, [Validators.required]],
         children: [0, [Validators.required]],
@@ -214,13 +204,18 @@ export class RentalDetailsComponent implements OnDestroy {
   }
 
   private retrieveUnitDetails() {
-    //
-    const targetId = this.isSubUnit && this.parentUnitId ? this.parentUnitId : this.unitId;
-
-    this.subscriptions.push(this.unitApiService.getUnitDetailsById(targetId).subscribe({
+    this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.unitId).subscribe({
       next: (data) => {
         console.log('Unit details call response is:', data);
         this.handleUnitDetailsSuccessResponse(data);
+        if (this.unit.nature == 'MULTI_UNIT') {
+          this.rentalDetailsForm.get('floorSize')?.disable();
+          this.rentalDetailsForm.get('floorSizeUnit')?.disable();
+        } else {
+          if (this.unit.parent) {
+            this.rentalDetailsForm.get('type')?.disable();
+          }
+        }
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its details. More info:', err);
@@ -228,53 +223,14 @@ export class RentalDetailsComponent implements OnDestroy {
     }))
   }
 
-  //
-  private checkIfSubUnit() {
-    this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
-      next: (data) => {
-        this.isSubUnit = !!data.parentUnit;
-        this.parentUnitId = data.parentUnit;
-
-        //Récupérer d'abord les détails du parent pour le champ Type
-        if (this.isSubUnit) {
-          this.getParentDetailsForType();
-        } else {
-          this.retrieveUnitDetails();        }
-      },
-      error: (err) => {
-        console.error('Error checking unit type:', err);
-      }
-    }));
-  }
-
-  private getParentDetailsForType() {
-    this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.parentUnitId!).subscribe({
-      next: (parentData) => {
-        // Maintenant récupérer les détails de la subUnit
-        this.subscriptions.push(this.unitApiService.getUnitDetailsById(this.unitId).subscribe({
-          next: (subUnitData) => {
-            // Combiner les données : Type du parent, reste de la subUnit
-            const combinedData = {
-              ...subUnitData,
-              type: parentData.type // Type du parent
-            };
-            this.handleUnitDetailsSuccessResponse(combinedData);
-            // Désactiver le champ Type
-            this.rentalDetailsForm.get('type')?.disable();
-          },
-          error: (err) => {
-            console.error('Error getting subUnit details:', err);
-          }
-        }));
-      },
-      error: (err) => {
-        console.error('Error getting parent details:', err);
-      }
-    }));
+  get isSubUnit() {
+    return this.unit.parent != null;
   }
 
   private handleUnitDetailsSuccessResponse(data: UnitDetailsGetModel) {
     this.unit = data;
+
+
     const {amenities, ...unitDetailsWithoutAmenities} = data;
     this.rentalDetailsForm.patchValue(unitDetailsWithoutAmenities);
     const amenitiesGroup = this.rentalDetailsForm.get('amenities') as FormGroup;
@@ -289,77 +245,5 @@ export class RentalDetailsComponent implements OnDestroy {
     this.subscriptions.map(subscription => subscription.unsubscribe());
   }
 
-  /*      rooms: this.fb.array([
-        this.fb.group({
-          type: [null, [Validators.required]],
-          bathroom: [0, [Validators.required]],
-          floorSize: [null],
-          beds: this.fb.array([
-            this.fb.group({
-              type: [null, [Validators.required]],
-              quantity: [null, [Validators.required]]
-            })
-          ]),
-        })
-      ])*/
-
-  /*  get rooms(): FormArray {
-    return this.rentalDetailsForm.get('rooms') as FormArray;
-  }
-
-  roomBeds(index: number): FormArray {
-    return this.rooms.at(index).get('beds') as FormArray;
-  }
-
-  addRoom() {
-    this.rooms.push(this.fb.group({
-      type: [null, [Validators.required]],
-      bathroom: [0, [Validators.required]],
-      floorSize: [null],
-      beds: this.fb.array([
-        this.fb.group({
-          type: [null, [Validators.required]],
-          quantity: [null, [Validators.required]]
-        })
-      ])
-    }));
-  }
-
-  removeRoom(index: number) {
-    this.rooms.removeAt(index);
-  }
-
-  addBed(roomIndex: number) {
-    this.roomBeds(roomIndex).push(this.fb.group({
-      type: [null, [Validators.required]],
-      quantity: [null, [Validators.required]]
-    }));
-  }
-
-  removeBed(roomIndex: number, bedIndex: number) {
-    this.roomBeds(roomIndex).removeAt(bedIndex);
-  }
-
-  private setRooms(rooms: any[]) {
-    const roomsFormArray = new FormArray<FormGroup>([]);
-    rooms.forEach(room => {
-      const bedsArray = new FormArray<FormGroup>([]);
-      (room.beds || []).forEach((bed: { type: any; quantity: any; }) => {
-        bedsArray.push(this.fb.group({
-          type: [bed.type, [Validators.required]],
-          quantity: [bed.quantity, [Validators.required]]
-        }));
-      });
-      const roomGroup = this.fb.group({
-        type: [room.type, [Validators.required]],
-        bathroom: [room.bathroom, [Validators.required]],
-        floorSize: [room.floorSize],
-        beds: bedsArray
-      });
-      roomsFormArray.push(roomGroup);
-    });
-    this.rentalDetailsForm.setControl('rooms', roomsFormArray);
-  }*/
-
-
+  protected readonly isSignal = isSignal;
 }

@@ -1,5 +1,6 @@
 import {AuditGetModel} from "../../../shared/models/audit-get.model";
 import {AddressModel} from "../../../shared/models/address.model";
+import {ParentUnitGetModel} from "./parent-unit-get.model";
 
 export interface UnitGetModel {
   id: string;
@@ -13,6 +14,6 @@ export interface UnitGetModel {
   },
   address: AddressModel;
 
-  parentUnit?: string;
+  parent?: ParentUnitGetModel;
   nature: 'SINGLE' | 'MULTI_UNIT';
 }

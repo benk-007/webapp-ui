@@ -637,10 +637,11 @@
       }
     },
     "edit-unit": {
-      "default-title": "Edit unit",
-      "title": "Unit: :unit",
-      "multi-unit-title": "Edit multi-unit: {{name}}",
-      "sub-unit-title": "Edit sub-unit: {{name}}",
+      "title": {
+        "unit": "Unit: ",
+        "multi-unit": "Multi-unit: ",
+        "sub-unit": "Sub-unit: "
+      },
       "tabs": {
         "general-information": {
           "title": "General information",

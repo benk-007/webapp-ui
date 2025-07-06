@@ -3,6 +3,7 @@
            [virtualScroll]="true"
            [(ngModel)]="selectedCountries"
            [items]="countries"
+           [disabled]="disabled"
            (change)="valueChanged($event)">
   <ng-template let-item="item" ng-label-tmp ng-option-tmp>
     {{ 'commons.countries.' + item |translate }}

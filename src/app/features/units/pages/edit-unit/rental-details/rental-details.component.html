@@ -19,13 +19,13 @@
 
     <!--Floor size input-->
     <c-col [md]="4">
-      <label cLabel
-             for="floor-size"
-             class="required">{{ 'units.edit-unit.tabs.detail-information.sections.general.form.floor-size-input.label'|translate }}</label>
+      <label cLabel for="floor-size">
+        {{ 'units.edit-unit.tabs.detail-information.sections.general.form.floor-size-input.label'|translate }}
+      </label>
       <c-input-group>
         <input id="floor-size" cFormControl formControlName="floorSize" type="number"/>
         <c-dropdown>
-          <button cButton cDropdownToggle color="secondary" variant="outline">
+          <button cButton cDropdownToggle color="secondary" variant="outline" [disabled]="unit.nature=='MULTI_UNIT'">
             {{ rentalDetailsForm.value?.floorSizeUnit }}
           </button>
           <div cDropdownMenu>

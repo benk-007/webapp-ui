@@ -1,9 +1,10 @@
 import {AddressModel} from "../../../shared/models/address.model";
+import {ParentUnitGetModel} from "./parent-unit-get.model";
 
 export interface UnitInfosGetModel {
   id: string;
   name: string;
-  subtitle?: string;
+  subtitle: string;
   address: AddressModel;
   contact: {
     mobile: string;
@@ -11,8 +12,7 @@ export interface UnitInfosGetModel {
   };
   calendarColor: string;
   readiness: boolean;
-
-  parentUnit?: string;
-  nature?: 'SINGLE' | 'MULTI_UNIT';
-  priority?: number;
+  parent: ParentUnitGetModel;
+  nature: 'SINGLE' | 'MULTI_UNIT';
+  priority: number;
 }

@@ -58,7 +58,6 @@ import {GalleryComponent} from "./gallery/gallery.component";
 export class GeneralInformationComponent implements OnDestroy {
   infoForm: FormGroup;
   unitId!: string;
-  // markers: google.maps.LatLngLiteral[] = [];
   unit!: UnitInfosGetModel;
   icons = {cilLocationPin}
   readonly calendarColors: string[] = ['#7ad148', '#5484ED', '#A4BDFC', '#46D6DB', '#7AE7BF', '#51B749', '#FBD75B',
@@ -73,11 +72,7 @@ export class GeneralInformationComponent implements OnDestroy {
     zoom: 4,
     center: latLng(33.57184, -7.61279)
   };
-
   layers!: any;
-
-  isSubUnit: boolean = false;
-  parentUnitId?: string;
 
   private subscriptions: Subscription[] = [];
 
@@ -122,6 +117,10 @@ export class GeneralInformationComponent implements OnDestroy {
 
   }
 
+  get isSubUnit() {
+    return this.unit.parent != null;
+  }
+
   submit() {
     let payload;
     if (this.isSubUnit) {
@@ -135,7 +134,8 @@ export class GeneralInformationComponent implements OnDestroy {
       payload = {
         ...this.infoForm.value,
         contact: {
-          mobile: this.infoForm.value.contact.mobile.e164Number
+          mobile: this.infoForm.value.contact.mobile.e164Number,
+          email: this.infoForm.value.contact.email
         }
       };
     }
@@ -143,10 +143,8 @@ export class GeneralInformationComponent implements OnDestroy {
       next: (data) => {
         console.log('Unit infos updated successfully. Api response is:', data);
         this.unit = data;
-        if (this.isSubUnit && this.parentUnitId) {
-          this.retrieveParentUnitForDisplay();
-        } else {
-          this.infoForm.patchValue(this.unit);
+        this.infoForm.patchValue(this.unit);
+        if (!this.isSubUnit) {
           if (this.unit.address && this.unit.address.location && this.unit.address.location.lat && this.unit.address.location.lng) {
             this.layers = [
               marker([this.unit.address.location.lat, this.unit.address.location.lng], {
@@ -175,24 +173,12 @@ export class GeneralInformationComponent implements OnDestroy {
     }))
   }
 
-
   private retrieveUnit() {
     this.subscriptions.push(this.unitApiService.getUnitInfosById(this.unitId).subscribe({
       next: (data) => {
         console.log('Unit infos call general information response is:', data);
         this.unit = data;
-
-
-        this.isSubUnit = !!data.parentUnit;
-        this.parentUnitId = data.parentUnit;
-
-
-        if (this.isSubUnit && this.parentUnitId) {
-          this.retrieveParentUnitForDisplay();
-        } else {
-
-          this.populateFormWithData(data);
-        }
+        this.populateFormWithData(data);
       },
       error: (err) => {
         console.error('An error occurred during unit call to retrieve its general information. More info:', err);
@@ -200,31 +186,8 @@ export class GeneralInformationComponent implements OnDestroy {
     }))
   }
 
-  private retrieveParentUnitForDisplay() {
-    this.subscriptions.push(this.unitApiService.getUnitInfosById(this.parentUnitId!).subscribe({
-      next: (parentData) => {
-        console.log('Parent unit data for display:', parentData);
-
-
-        const displayData = {
-          ...this.unit,
-          address: parentData.address,
-          contact: parentData.contact
-        };
-
-        this.populateFormWithData(displayData);
-      },
-      error: (err) => {
-        console.error('Error retrieving parent unit data:', err);
-
-        this.populateFormWithData(this.unit);
-      }
-    }));
-  }
-
   private populateFormWithData(data: UnitInfosGetModel) {
     this.infoForm.patchValue(data);
-
     if (data.address && data.address.location && data.address.location.lat && data.address.location.lng) {
       this.layers = [
         marker([data.address.location.lat, data.address.location.lng], {
@@ -237,19 +200,13 @@ export class GeneralInformationComponent implements OnDestroy {
         })
       ];
     }
-
-    this.handleSubUnitFields();
-  }
-
-  private handleSubUnitFields() {
     if (this.isSubUnit) {
-
       this.infoForm.get('address')?.disable();
       this.infoForm.get('contact')?.disable();
-
       this.infoForm.get('address.country')?.disable();
     }
   }
+
 
   setMarker(event: any) {
     console.log('your event is:', event);

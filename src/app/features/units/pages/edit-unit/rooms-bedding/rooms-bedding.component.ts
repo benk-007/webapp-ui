@@ -35,10 +35,6 @@ export class RoomsBeddingComponent implements OnDestroy {
   bathrooms: RoomGetModel[] = [];
   subscriptions: Subscription[] = []
 
-  //
-  isSubUnit: boolean = false;
-  parentUnitId?: string;
-
   constructor(private readonly activatedRoute: ActivatedRoute,
               private readonly unitApiService: UnitApiService) {
     this.setUnitIdFromRoute();
@@ -67,26 +63,10 @@ export class RoomsBeddingComponent implements OnDestroy {
           .find(id => id !== null);
         if (unitId) {
           this.unitId = unitId;
-          //appel pour détecter le type d'unité
-          this.checkUnitType();
-
-          //this.retrieveUnitRooms();
+          this.retrieveUnitRooms();
         }
       })
     );
-  }
- //
-  private checkUnitType() {
-    this.subscriptions.push(this.unitApiService.getUnitById(this.unitId).subscribe({
-      next: (data) => {
-        this.isSubUnit = !!data.parentUnit;
-        this.parentUnitId = data.parentUnit;
-        this.retrieveUnitRooms();
-      },
-      error: (err) => {
-        console.error('Error checking unit type:', err);
-      }
-    }));
   }
 
   private retrieveUnitRooms() {
@@ -96,7 +76,6 @@ export class RoomsBeddingComponent implements OnDestroy {
         if (res.content.length != 0) {
           this.rooms = res.content;
           this.setBathrooms();
-          // this.bathrooms = this.rooms.filter(room => room.type === 'BATHROOM')
         } else {
           this.addRoom();
         }
@@ -115,6 +94,5 @@ export class RoomsBeddingComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.map(subscription => subscription.unsubscribe());
   }
-
 
 }
