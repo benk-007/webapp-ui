@@ -3,29 +3,20 @@ export const UNIT_SERVICE = 'unitMgtApi/';
 export const GUEST_SERVICE = 'guestMgtApi/'
 
 export const commonProperties = {
-  //authentication
+  /*===========UAA Service===========*/
+  // authentication resource
   login: UAA_SERVICE + 'login',
-
-  //forgot-password
   forgotPassword: UAA_SERVICE + 'forgot-password',
-
-  //refresh-token
   refreshToken: UAA_SERVICE + 'refresh-token',
-
-  //reset-password
   resetPassword: UAA_SERVICE + 'reset-password',
-
-  //change-password
   changePassword: UAA_SERVICE + 'change-password',
-
-  //validate-account
   validateAccount: UAA_SERVICE + 'validate-account',
-
-  //user-management
+  // user resource
   userList: UAA_SERVICE + 'users',
   userById: UAA_SERVICE + 'users/:userId',
 
-  //unit
+  /*===========UNIT Service===========*/
+  // Unit resource
   unitList: UNIT_SERVICE + 'units',
   unitById: UNIT_SERVICE + 'units/:unitId',
   unitInfosById: UNIT_SERVICE + 'units/:unitId/infos',
@@ -33,33 +24,33 @@ export const commonProperties = {
   unitInstructionsById: UNIT_SERVICE + 'units/:unitId/inst',
   unitRoomsById: UNIT_SERVICE + 'units/:unitId/rooms',
   unitRoomById: UNIT_SERVICE + 'units/:unitId/rooms/:roomId',
-
-  //unit subUnits
+  //unit subUnits resource
   unitSubUnits: UNIT_SERVICE + 'units/:unitId/sub-units',
   unitDetach: UNIT_SERVICE + 'units/:unitId/detach',
-
-  //rate
-  unitBaseRateById: UNIT_SERVICE + 'units/:unitId/rates/default',
-
-  //unit images
+  // Image resource
   unitImages: UNIT_SERVICE + 'images',
   unitImageById: UNIT_SERVICE + 'images/:imageId',
 
-  //guests
+  /*===========Rates===========*/
+  // Default resource
+  unitBaseRateById: UNIT_SERVICE + 'units/:unitId/rates/default',
+  // Tables resource
+  rateList: UNIT_SERVICE + 'rates-tables',
+  rateById: UNIT_SERVICE + 'rates-tables/:ratesTableId',
+
+  /*===========Guest Service===========*/
+  // Guest resource
   guestList: GUEST_SERVICE + 'guests',
   guestById: GUEST_SERVICE + 'guests/:guestId',
 
-  //documents
+  // Document resource
   identityDocuments: GUEST_SERVICE + 'identity-documents',
   identityDocumentById: GUEST_SERVICE + 'identity-documents/:identityDocumentId',
   identityDocumentImageById: GUEST_SERVICE + 'identity-documents/:identityDocumentId/image',
 
-  // id-document images
+  // Document image resource
   idDocumentImages: GUEST_SERVICE + 'images',
   idDocumentImageById: GUEST_SERVICE + 'images/:imageId',
 
-  // rate table
-  rateList: UNIT_SERVICE +'rates-tables',
-  rateById: UNIT_SERVICE +'rates-tables/:ratesTableId'
 
 }
