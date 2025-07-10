@@ -1761,6 +1761,89 @@
         }
       }
     }
+  },
+  "incidents": {
+    "list": {
+      "title": "Incidents",
+      "cta": {
+        "add-btn": "+ Add Incident"
+      },
+      "placeholder": {
+        "title": "Incident Management",
+        "message": "Create your first incident by clicking the '+ Add Incident' button above."
+      }
+    },
+    "create": {
+      "title": "Add Incident",
+      "form": {
+        "incidentName": {
+          "label": "Incident Name",
+          "placeholder": "Some incident name will go here"
+        },
+        "reporter": {
+          "label": "Reporter",
+          "placeholder": "Select reporter"
+        },
+        "reviewer": {
+          "label": "Reviewer",
+          "placeholder": "Select reviewer"
+        },
+        "rentals": {
+          "label": "Select Rentals",
+          "placeholder": "Select rental"
+        },
+        "severity": {
+          "label": "Severity",
+          "placeholder": "Select severity"
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select status"
+        },
+        "categories": {
+          "label": "Select Categories",
+          "placeholder": "Select categories"
+        },
+        "tags": {
+          "label": "Tags",
+          "placeholder": "Type to pick or create tag"
+        },
+        "description": {
+          "label": "Incident Description",
+          "placeholder": "Some incident details & description of the incident will come here along with supporting files & any information will go here"
+        },
+        "image": {
+          "label": "Upload Image",
+          "hint": "You can only upload one file that is 10MB or smaller, only PNG, JPG, JPEG, PDF, WORD and EXCEL file types are allowed"
+        },
+        "enums": {
+          "severity": {
+            "Low": "Low",
+            "Medium": "Medium",
+            "High": "High",
+            "Critical": "Critical"
+          },
+          "status": {
+            "Open": "Open",
+            "In Review": "In Review",
+            "Tasked": "Tasked",
+            "Resolved": "Resolved",
+            "Escalated": "Escalated",
+            "On Hold": "On Hold"
+          }
+        },
+        "notifications": {
+          "success": {
+            "title": "Incident created",
+            "message": "Incident has been successfully created"
+          },
+          "error": {
+            "title": "Incident creation failed",
+            "message": "An error occurred while creating the incident. Please try again or contact the support team."
+          }
+        }
+      }
+    }
   }
 }
 

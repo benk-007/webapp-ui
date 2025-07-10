@@ -1,6 +1,7 @@
 export const UAA_SERVICE = 'authMgtApi/';
 export const UNIT_SERVICE = 'unitMgtApi/';
 export const GUEST_SERVICE = 'guestMgtApi/'
+export const TASK_SERVICE = 'taskMgtApi/';
 
 export const commonProperties = {
   /*===========UAA Service===========*/
@@ -51,6 +52,12 @@ export const commonProperties = {
   // Document image resource
   idDocumentImages: GUEST_SERVICE + 'images',
   idDocumentImageById: GUEST_SERVICE + 'images/:imageId',
+
+  // ============Task Management============
+  // Incident resource
+  incidentList: TASK_SERVICE + 'incidents',
+  incidentCategories: TASK_SERVICE + 'incidents/categories',
+  incidentById: TASK_SERVICE + 'incidents/:incidentId',
 
 
 }

@@ -1,0 +1,26 @@
+<ng-select
+  [(ngModel)]="selectedCategories"
+  (ngModelChange)="valueChanged($event)"
+  [items]="categoriesList"
+  [disabled]="disable"
+  [multiple]="true"
+  [closeOnSelect]="false"
+  [searchable]="true"
+  [clearable]="true"
+  bindLabel="name"
+  bindValue="name"
+  placeholder="Select Categories"
+  class="ng-select ng-select-custom">
+
+  <!-- Template pour l'affichage dans le champ -->
+  <ng-template ng-label-tmp let-item="item">
+    {{ item.name }}
+  </ng-template>
+
+  <!-- Template pour les options dans la dropdown -->
+  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+    <input type="checkbox" [checked]="item.selected" style="margin-right: 8px;">
+    <span>{{ item.name }}</span>
+  </ng-template>
+
+</ng-select>

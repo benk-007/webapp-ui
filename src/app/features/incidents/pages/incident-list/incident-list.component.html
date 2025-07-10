@@ -1,0 +1,15 @@
+<app-page-title [title]="'incidents.list.title' | translate">
+  <button cButton color="secondary" size="sm" (click)="openCreateIncidentModal()">
+    {{ 'incidents.list.cta.add-btn' | translate }}
+  </button>
+</app-page-title>
+
+<!-- Contenu temporaire en attendant la vraie liste -->
+<c-row>
+  <c-col md="12">
+    <div class="text-center mt-5">
+      <h5 class="text-muted">{{ 'incidents.list.placeholder.title' | translate }}</h5>
+      <p class="text-muted">{{ 'incidents.list.placeholder.message' | translate }}</p>
+    </div>
+  </c-col>
+</c-row>

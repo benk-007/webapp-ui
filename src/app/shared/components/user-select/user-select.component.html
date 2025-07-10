@@ -1,0 +1,22 @@
+<ng-select
+  [(ngModel)]="selectedUser"
+  (ngModelChange)="valueChanged($event)"
+  [items]="usersList"
+  [disabled]="disable"
+  [searchable]="true"
+  [clearable]="false"
+  bindLabel="fullName"
+  bindValue="fullName"
+  [placeholder]="placeholder"
+  class="ng-select ng-select-custom">
+
+  <!-- Affichage simple du nom -->
+  <ng-template let-item="item" ng-label-tmp>
+    {{ item.fullName }}
+  </ng-template>
+
+  <!-- Options simples dans la dropdown -->
+  <ng-template let-item="item" ng-option-tmp>
+    {{ item.fullName }}
+  </ng-template>
+</ng-select>

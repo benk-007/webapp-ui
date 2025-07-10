@@ -1,0 +1,173 @@
+<!-- Modal title -->
+<div class="modal-header justify-content-center align-items-center">
+  <h6 class="modal-title">
+    {{ 'incidents.create.title' | translate }}
+  </h6>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+  <form (submit)="submit()" [formGroup]="incidentForm" cForm>
+
+    <!-- Incident Name - Pleine largeur -->
+    <c-row class="mb-3">
+      <c-col md="12">
+        <label cLabel class="required me-2" for="incidentName">
+          {{ 'incidents.create.form.incidentName.label' | translate }}
+        </label>
+        <input cFormControl formControlName="name" id="incidentName" type="text"
+               placeholder="{{ 'incidents.create.form.incidentName.placeholder' | translate }}"/>
+        @if (incidentForm.get('name')?.touched && incidentForm.get('name')?.hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+      </c-col>
+    </c-row>
+
+    <!-- Reporter et Reviewer - 2 colonnes -->
+    <c-row class="mb-3">
+      <c-col md="6">
+        <label cLabel class="required me-2" for="reporter">
+          {{ 'incidents.create.form.reporter.label' | translate }}
+        </label>
+        <app-user-select
+          formControlName="reporterId"
+          (userSelected)="onReporterSelected($event)"
+          placeholder="{{ 'incidents.create.form.reporter.placeholder' | translate }}">
+        </app-user-select>
+        @if (incidentForm.get('reporterId')?.touched && incidentForm.get('reporterId')?.hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel for="reviewer">
+          {{ 'incidents.create.form.reviewer.label' | translate }}
+        </label>
+        <app-user-select
+          formControlName="reviewerId"
+          (userSelected)="onReviewerSelected($event)"
+          placeholder="{{ 'incidents.create.form.reviewer.placeholder' | translate }}">
+        </app-user-select>
+      </c-col>
+    </c-row>
+
+    <!-- Select Rentals - Pleine largeur -->
+    <c-row class="mb-3">
+      <c-col md="12">
+        <label cLabel for="rentals">
+          {{ 'incidents.create.form.rentals.label' | translate }}
+        </label>
+        <app-unit-select
+          formControlName="rentalId"
+          (updatedUnits)="onRentalSelected($event)">
+        </app-unit-select>
+      </c-col>
+    </c-row>
+
+    <!-- Severity et Status - 2 colonnes -->
+    <c-row class="mb-3">
+      <c-col md="6">
+        <label cLabel for="severity">
+          {{ 'incidents.create.form.severity.label' | translate }}
+        </label>
+        <ng-select id="severity"
+                   appearance="outline"
+                   [searchable]="false"
+                   [clearable]="false"
+                   [items]="severityOptions"
+                   formControlName="severity"
+                   placeholder="{{ 'incidents.create.form.severity.placeholder' | translate }}">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ ('incidents.create.form.enums.severity.' + item) | translate }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span>{{ ('incidents.create.form.enums.severity.' + item) | translate }}</span>
+          </ng-template>
+        </ng-select>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel for="status">
+          {{ 'incidents.create.form.status.label' | translate }}
+        </label>
+        <ng-select id="status"
+                   appearance="outline"
+                   [searchable]="false"
+                   [clearable]="false"
+                   [items]="statusOptions"
+                   formControlName="status"
+                   placeholder="{{ 'incidents.create.form.status.placeholder' | translate }}">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ ('incidents.create.form.enums.status.' + item) | translate }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span>{{ ('incidents.create.form.enums.status.' + item) | translate }}</span>
+          </ng-template>
+        </ng-select>
+      </c-col>
+    </c-row>
+
+    <!-- Select Categories et Tags - 2 colonnes -->
+    <c-row class="mb-4">
+      <c-col md="6">
+        <label cLabel class="required me-2" for="categories">
+          {{ 'incidents.create.form.categories.label' | translate }}
+        </label>
+        <app-category-select
+          formControlName="categoryIds"
+          (categoriesSelected)="onCategoriesSelected($event)">
+        </app-category-select>
+        @if (incidentForm.get('categoryIds')?.touched && incidentForm.get('categoryIds')?.hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel for="tags">
+          {{ 'incidents.create.form.tags.label' | translate }}
+        </label>
+        <input cFormControl formControlName="tags" id="tags" type="text"
+               placeholder="{{ 'incidents.create.form.tags.placeholder' | translate }}"/>
+      </c-col>
+    </c-row>
+
+    <!-- Incident Description - Pleine largeur -->
+    <c-row class="mb-3">
+      <c-col md="12">
+        <label cLabel for="description">
+          {{ 'incidents.create.form.description.label' | translate }}
+        </label>
+        <textarea cFormControl formControlName="description" id="description" rows="2"
+                  placeholder="{{ 'incidents.create.form.description.placeholder' | translate }}">
+        </textarea>
+      </c-col>
+    </c-row>
+
+    <!-- Upload Section - Pleine largeur -->
+    <c-row class="mb-3">
+      <c-col md="12">
+        <label cLabel for="incidentImage">
+          {{ 'incidents.create.form.image.label' | translate }}
+        </label>
+        <input id="incidentImage" type="file" (change)="onImageSelected($event)" class="form-control"
+               accept="image/*"/>
+        <small class="text-muted">
+          {{ 'incidents.create.form.image.hint' | translate }}
+        </small>
+      </c-col>
+    </c-row>
+
+    <!-- Modal footer -->
+    <c-row class="mt-3">
+      <c-col class="d-flex justify-content-end">
+        <button cButton class="ms-1" color="light" size="sm" variant="ghost" (click)="closeModal()">
+          {{ 'commons.form.cancel-btn' | translate }}
+        </button>
+        <button cButton class="ms-1" color="primary" size="sm" type="submit" [disabled]="!incidentForm.valid">
+          {{ 'commons.form.save-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>
