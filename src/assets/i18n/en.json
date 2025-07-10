@@ -1813,8 +1813,8 @@
           "placeholder": "Some incident details & description of the incident will come here along with supporting files & any information will go here"
         },
         "image": {
-          "label": "Upload Image",
-          "hint": "You can only upload one file that is 10MB or smaller, only PNG, JPG, JPEG, PDF, WORD and EXCEL file types are allowed"
+          "label": "Upload Images",
+          "hint": "Upload files that are 10MB or smaller, only PNG, JPG, JPEG file types are allowed"
         },
         "enums": {
           "severity": {

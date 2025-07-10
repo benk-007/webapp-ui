@@ -8,8 +8,6 @@
 <!-- Modal body -->
 <div class="modal-body">
   <form (submit)="submit()" [formGroup]="incidentForm" cForm>
-    {{incidentForm.value | json}}
-
     <!-- Incident Name -->
     <c-row class="mb-3">
       <c-col md="12">
