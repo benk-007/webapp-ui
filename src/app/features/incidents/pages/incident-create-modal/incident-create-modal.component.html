@@ -58,6 +58,7 @@
           {{ 'incidents.create.form.rentals.label' | translate }}
         </label>
         <app-unit-select
+          [withParent]="null"
           formControlName="rentalId"
           (updatedUnits)="onRentalSelected($event)">
         </app-unit-select>
@@ -150,10 +151,22 @@
           {{ 'incidents.create.form.image.label' | translate }}
         </label>
         <input id="incidentImage" type="file" (change)="onImageSelected($event)" class="form-control"
-               accept="image/*"/>
+               accept="image/*" multiple/>
         <small class="text-muted">
           {{ 'incidents.create.form.image.hint' | translate }}
         </small>
+
+        <!-- Afficher les fichiers sélectionnés -->
+        @if (imageFiles.length > 0) {
+          <div class="mt-2">
+            <small class="text-success">{{ imageFiles.length }} image(s) selected:</small>
+            <ul class="small">
+              @for (file of imageFiles; track file.name) {
+                <li>{{ file.name }}</li>
+              }
+            </ul>
+          </div>
+        }
       </c-col>
     </c-row>
 

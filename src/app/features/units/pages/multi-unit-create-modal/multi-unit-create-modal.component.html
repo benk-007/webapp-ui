@@ -158,7 +158,7 @@
           <label cLabel for="existingUnits">
             {{ 'units.create-multi-unit.form.existing-units.label'|translate }}
           </label>
-          <app-unit-select formControlName="existingUnits" id="existingUnits"
+          <app-unit-select formControlName="existingUnits" id="existingUnits" [filterByReadiness]="false"
                            [allowMultiUnit]="false"></app-unit-select>
         </c-col>
       </c-row>

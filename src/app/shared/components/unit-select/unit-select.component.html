@@ -2,7 +2,7 @@
            (scrollToEnd)="onScrollToEnd()"
            (search)="searchUnits($event)"
            [(ngModel)]="selectedUnits"
-           multiple="true"
+           [multiple]="multiple"
            [disabled]="disable"
            [items]="unitSearchList"
            [placeholder]="'Select units ...'"

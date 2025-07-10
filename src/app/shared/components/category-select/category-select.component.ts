@@ -59,7 +59,7 @@ export class CategorySelectComponent implements OnInit, OnDestroy, ControlValueA
 
   private loadCategories(): void {
     this.subscriptions.push(
-      this.categoryService.getCategories().subscribe({
+      this.categoryService.getAllCategories().subscribe({
         next: (categories) => {
           this.categoriesList = categories;
         },

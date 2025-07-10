@@ -28,6 +28,7 @@ import { CategoryModel } from '../../models/category.model';
 import { UserItemGetModel } from '../../../settings/user-settings/models/user-item-get.model';
 import { UnitItemGetModel } from '../../../units/models/unit-item-get.model';
 import { UserService } from '../../../settings/user-settings/services/user.service';
+import {AuditGetModel} from "../../../../shared/models/audit-get.model";
 
 @Component({
   selector: 'app-incident-create-modal',
@@ -66,7 +67,7 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   statusOptions = Object.values(StatusEnum);
 
   // Fichier image
-  imageFile: File | null = null;
+  imageFiles: File[] = [];
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -96,32 +97,27 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
     this.setDefaultReporter();
   }
 
+
   //Récupération utilisateur actuel
   private setDefaultReporter(): void {
-    const authUser = this.authService.getUser();
-    if (authUser().userId) {
-      // Récupérer l'objet utilisateur complet depuis la liste
-      this.loadCurrentUserFromUserService(authUser().userId);
-    }
-  }
+    const currentUser = this.authService.getUser();
+    if (currentUser().userId && currentUser().username) {
+      // Créer un objet UserItemGetModel pour l'affichage
+      const defaultUser: UserItemGetModel = {
+        id: currentUser().userId,
+        fullName: currentUser().username, // Utiliser username au lieu de fullName
+        email: currentUser().email,
+        mobile: '',
+        enabled: true,
+        activated: true,
+        roles: [],
+        audit: {} as any
+      };
 
-  private loadCurrentUserFromUserService(userId: string): void {
-    // Utiliser UserService pour récupérer l'objet utilisateur complet
-    this.subscriptions.push(
-      this.userService.getUsersByPage(0, 1000, 'fullName', 'asc', '').subscribe({
-        next: (res) => {
-          const foundUser = res.content.find(user => user.id === userId);
-          if (foundUser) {
-            this.currentUser = foundUser;
-            // Définir l'utilisateur complet dans le formulaire
-            this.incidentForm.patchValue({
-              reporterId: foundUser
-            });
-          }
-        },
-        error: (err) => console.error('Failed to load current user:', err)
-      })
-    );
+      this.incidentForm.patchValue({
+        reporterId: defaultUser
+      });
+    }
   }
 
   // Validator personnalisé pour s'assurer que l'array n'est pas vide
@@ -130,15 +126,22 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   }
 
   onImageSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        this.toastrService.error('Please select a valid image file.');
+    const files = Array.from(event.target.files) as File[];
+    if (files.length > 0) {
+      // Valider que tous les fichiers sont des images
+      const invalidFiles = files.filter(file => !file.type.startsWith('image/'));
+      if (invalidFiles.length > 0) {
+        this.toastrService.error('Please select only valid image files.');
         return;
       }
-      this.imageFile = file;
+      this.imageFiles = files;
     }
   }
+
+  removeImage(index: number): void {
+    this.imageFiles.splice(index, 1);
+  }
+
 
   onCategoriesSelected(categories: CategoryModel[]): void {
     // Extraire les IDs des catégories sélectionnées
@@ -161,10 +164,10 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   }
 
   onRentalSelected(units: UnitItemGetModel[] | null): void {
-    // app-unit-select retourne un array, on prend le premier élément
+    // app-unit-select retourne un array même en mode single
     const selectedUnit = units && units.length > 0 ? units[0] : null;
     this.incidentForm.patchValue({
-      rentalId: selectedUnit?.id || null
+      rentalId: selectedUnit
     });
   }
 
@@ -193,9 +196,10 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
     const incidentJsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
     formData.append('payload', incidentJsonBlob);
 
-    if (this.imageFile) {
-      formData.append('file', this.imageFile);
-    }
+    // Ajouter toutes les images
+    this.imageFiles.forEach((file, index) => {
+      formData.append(`files`, file);
+    });
 
     this.subscriptions.push(
       this.incidentService.postIncident(formData).subscribe({
@@ -226,7 +230,7 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.modalRef.hide();
     this.incidentForm.reset();
-    this.imageFile = null;
+    this.imageFiles = []; // Reset array
   }
 
   ngOnDestroy(): void {

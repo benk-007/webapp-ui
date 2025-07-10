@@ -56,7 +56,7 @@ export const commonProperties = {
   // ============Task Management============
   // Incident resource
   incidentList: TASK_SERVICE + 'incidents',
-  incidentCategories: TASK_SERVICE + 'incidents/categories',
+  incidentCategories: TASK_SERVICE + 'categories',
   incidentById: TASK_SERVICE + 'incidents/:incidentId',
 
 
