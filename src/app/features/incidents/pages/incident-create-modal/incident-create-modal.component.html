@@ -58,8 +58,7 @@
           {{ 'incidents.create.form.rentals.label' | translate }}
         </label>
         <app-unit-select
-          [withParent]="null"
-          formControlName="rentalId"
+          formControlName="rentalId" [multiple]="false" [withParent]="null" [filterByReadiness]="false"
           (updatedUnits)="onRentalSelected($event)">
         </app-unit-select>
       </c-col>

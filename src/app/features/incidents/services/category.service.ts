@@ -29,16 +29,4 @@ export class CategoryService {
       { params }
     );
   }
-
-  // Méthode pour récupérer toutes les catégories (pour le dropdown)
-  getAllCategories(): Observable<CategoryModel[]> {
-    const params = new HttpParams().set('size', '1000'); // Taille large pour récupérer toutes
-
-    return this.httpClient.get<PageModel<CategoryModel>>(
-      environment.apiBaseUrl.concat(environment.incidentCategories),
-      { params }
-    ).pipe(
-      map((response: PageModel<CategoryModel>) => response.content)
-    );
-  }
 }

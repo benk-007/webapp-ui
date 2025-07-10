@@ -20,6 +20,7 @@ import {
 } from '@ng-select/ng-select';
 import { CategoryService } from '../../../features/incidents/services/category.service';
 import { CategoryModel } from '../../../features/incidents/models/category.model';
+import {PageFilterModel} from "../../models/page-filter.model";
 
 @Component({
   selector: 'app-category-select',
@@ -45,7 +46,7 @@ export class CategorySelectComponent implements OnInit, OnDestroy, ControlValueA
   @Output() categoriesSelected = new EventEmitter<CategoryModel[]>();
 
   categoriesList: CategoryModel[] = [];
-  selectedCategories: CategoryModel[] = [];
+  selectedCategories: string[] = [];
 
   touched = false;
   disabled = false;
@@ -58,28 +59,41 @@ export class CategorySelectComponent implements OnInit, OnDestroy, ControlValueA
   }
 
   private loadCategories(): void {
+    const pageFilter: PageFilterModel = {
+      page: 0,
+      size: 1000,
+      sort: 'name',
+      sortDirection: 'asc',
+      search: ''
+    };
+
     this.subscriptions.push(
-      this.categoryService.getAllCategories().subscribe({
-        next: (categories) => {
-          this.categoriesList = categories;
+      this.categoryService.getCategoriesByPage(pageFilter).subscribe({
+        next: (response) => {
+          this.categoriesList = response.content;
         },
         error: (err) => console.error('Failed to retrieve categories:', err)
       })
     );
   }
 
-  valueChanged(selectedCategories: CategoryModel[]): void {
+  valueChanged(selectedCategoryIds: string[]): void {
     this.markAsTouched();
     if (!this.disabled) {
-      this.selectedCategories = selectedCategories || [];
-      this.onChange(this.selectedCategories);
-      this.categoriesSelected.emit(this.selectedCategories);
+      this.selectedCategories = selectedCategoryIds || [];
+      this.onChange(this.selectedCategories); // ✅ Retourne directement les IDs
+      // Émettre les objets complets pour information
+      const selectedObjects = this.categoriesList.filter(cat =>
+        this.selectedCategories.includes(cat.id)
+      );
+      this.categoriesSelected.emit(selectedObjects);
     }
   }
 
-  writeValue(obj: CategoryModel[]): void {
+  writeValue(obj: string[]): void { // ✅ Reçoit des IDs
     this.selectedCategories = obj || [];
   }
+
 
   onChange = (_: any) => {};
   registerOnChange(fn: any): void {
