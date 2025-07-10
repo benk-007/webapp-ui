@@ -147,22 +147,12 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
     // Transformation des objets complets en références (id + name seulement)
     const reporterRef: UserRefModel = formValue.reporter;
 
-
-    const reviewerRef: UserRefModel | undefined = formValue.reviewer ? {
-      id: formValue.reviewer.id,
-      name: formValue.reviewer.fullName
-    } : undefined;
+    const reviewerRef: UserRefModel | undefined = formValue.reviewer;
 
     const rentalRef: RentalRefModel | undefined = formValue.rental;
 
-    // Transformer les IDs de catégories en objets CategoryModel (id + name seulement)
-    const categoriesRef: CategoryModel[] = formValue.categories?.map((categoryId: string) => {
-      const category = this.getCategoryById(categoryId);
-      return {
-        id: categoryId,
-        name: category?.name || ''
-      };
-    }) || [];
+    const categoriesRef: CategoryModel[] = formValue.categories || [];
+
 
 
     const payload: IncidentPostModel = {
@@ -176,6 +166,8 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
       tags: formValue.tags,
       description: formValue.description
     };
+
+    console.log('Incident payload:', payload);
 
     const formData = new FormData();
     const incidentJsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });

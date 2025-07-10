@@ -66,14 +66,18 @@ export class CategorySelectComponent implements OnInit, OnDestroy, ControlValueA
     if (!this.disabled) {
       this.selectedCategories = selectedCategoryIds || [];
 
-      // Transformer les IDs en objets CategoryModel complets
-      const selectedObjects = this.categoriesList.filter(cat =>
-        this.selectedCategories.includes(cat.id)
-      );
+      const selectedObjects = this.categoriesList
+        .filter(cat => this.selectedCategories.includes(cat.id))
+        .map(cat => ({
+          id: cat.id,
+          name: cat.name
+        }));
+
       this.onChange(selectedObjects);
       this.categoriesSelected.emit(selectedObjects);
     }
   }
+
 
   writeValue(obj: string[]): void { // Reçoit des IDs
     this.selectedCategories = obj || [];
