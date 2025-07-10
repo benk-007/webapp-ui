@@ -1,17 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
   NgLabelTemplateDirective,
@@ -21,6 +9,7 @@ import {
 
 import { UserService } from '../../../features/settings/user-settings/services/user.service';
 import { UserItemGetModel } from '../../../features/settings/user-settings/models/user-item-get.model';
+import {UserRefModel} from "../../../features/incidents/models/user-ref.model";
 
 @Component({
   selector: 'app-user-select',
@@ -44,10 +33,10 @@ import { UserItemGetModel } from '../../../features/settings/user-settings/model
 export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @Input() disable = false;
   @Input() placeholder = 'Select user...';
-  @Output() userSelected = new EventEmitter<UserItemGetModel | null>();
+  @Output() userSelected = new EventEmitter<UserRefModel | null>();
 
   usersList: UserItemGetModel[] = [];
-  selectedUser: UserItemGetModel | null = null;
+  selectedUser: UserRefModel | null = null;
 
   touched = false;
   disabled = false;
@@ -63,11 +52,11 @@ export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAcces
     // Charger tous les utilisateurs d'un coup (pas de pagination)
     this.subscriptions.push(
       this.userService.getUsersByPage(
-        0, // page
-        1000, // size large pour récupérer tous les users
-        'fullName', // sort
-        'asc', // sortDirection
-        '' // pas de recherche initiale
+        0,
+        1000,
+        'fullName',
+        'asc',
+        ''
       ).subscribe({
         next: (res) => {
           this.usersList = res.content;
@@ -77,16 +66,24 @@ export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAcces
     );
   }
 
-  valueChanged($event: UserItemGetModel | null): void {
+  valueChanged(selectedUserItem: UserItemGetModel | null): void {
     this.markAsTouched();
     if (!this.disabled) {
-      this.selectedUser = $event;
+      if (selectedUserItem) {
+        // Transforme UserItemGetModel en UserRefModel
+        this.selectedUser = {
+          id: selectedUserItem.id,
+          name: selectedUserItem.fullName // Utilise fullName car c'est dans UserItemGetModel
+        };
+      } else {
+        this.selectedUser = null;
+      }
       this.onChange(this.selectedUser);
       this.userSelected.emit(this.selectedUser);
     }
   }
 
-  writeValue(obj: UserItemGetModel | null): void {
+  writeValue(obj: UserRefModel | null): void {
     this.selectedUser = obj;
   }
 

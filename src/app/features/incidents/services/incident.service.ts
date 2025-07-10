@@ -17,10 +17,4 @@ export class IncidentService {
       formData
     );
   }
-
-  getIncidentById(incidentId: string): Observable<IncidentGetModel> {
-    return this.httpClient.get<IncidentGetModel>(
-      environment.apiBaseUrl.concat(environment.incidentById).replace(':incidentId', incidentId)
-    );
-  }
 }

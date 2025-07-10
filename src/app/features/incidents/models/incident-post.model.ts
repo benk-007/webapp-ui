@@ -1,14 +1,17 @@
 import { SeverityEnum } from '../enums/severity.enum';
 import { StatusEnum } from '../enums/status.enum';
+import {CategoryModel} from "./category.model";
+import {UserRefModel} from "./user-ref.model";
+import {RentalRefModel} from "./rental-ref.model";
 
 export interface IncidentPostModel {
   name: string;
-  reporterId: string;
-  reviewerId?: string;
-  rentalId?: string;
+  reporter: UserRefModel;
+  reviewer?: UserRefModel;
+  rental?: RentalRefModel;
   severity?: SeverityEnum;
   status?: StatusEnum;
-  categoryIds: string[];
+  categories: CategoryModel[];
   tags?: string;
   description?: string;
 }

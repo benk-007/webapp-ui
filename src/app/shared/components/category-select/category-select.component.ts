@@ -1,23 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { Subscription } from 'rxjs';
-import {
-  NgLabelTemplateDirective,
-  NgOptionTemplateDirective,
-  NgSelectComponent
-} from '@ng-select/ng-select';
+import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from '@ng-select/ng-select';
 import { CategoryService } from '../../../features/incidents/services/category.service';
 import { CategoryModel } from '../../../features/incidents/models/category.model';
 import {PageFilterModel} from "../../models/page-filter.model";
@@ -81,17 +65,22 @@ export class CategorySelectComponent implements OnInit, OnDestroy, ControlValueA
     this.markAsTouched();
     if (!this.disabled) {
       this.selectedCategories = selectedCategoryIds || [];
-      this.onChange(this.selectedCategories); // ✅ Retourne directement les IDs
-      // Émettre les objets complets pour information
+
+      // Transformer les IDs en objets CategoryModel complets
       const selectedObjects = this.categoriesList.filter(cat =>
         this.selectedCategories.includes(cat.id)
       );
+      this.onChange(selectedObjects);
       this.categoriesSelected.emit(selectedObjects);
     }
   }
 
-  writeValue(obj: string[]): void { // ✅ Reçoit des IDs
+  writeValue(obj: string[]): void { // Reçoit des IDs
     this.selectedCategories = obj || [];
+  }
+
+  getCategoryById(id: string): CategoryModel | undefined {
+    return this.categoriesList.find(cat => cat.id === id);
   }
 
 

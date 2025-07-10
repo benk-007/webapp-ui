@@ -8,8 +8,9 @@
 <!-- Modal body -->
 <div class="modal-body">
   <form (submit)="submit()" [formGroup]="incidentForm" cForm>
+    {{incidentForm.value | json}}
 
-    <!-- Incident Name - Pleine largeur -->
+    <!-- Incident Name -->
     <c-row class="mb-3">
       <c-col md="12">
         <label cLabel class="required me-2" for="incidentName">
@@ -30,11 +31,10 @@
           {{ 'incidents.create.form.reporter.label' | translate }}
         </label>
         <app-user-select
-          formControlName="reporterId"
-          (userSelected)="onReporterSelected($event)"
+          formControlName="reporter"
           placeholder="{{ 'incidents.create.form.reporter.placeholder' | translate }}">
         </app-user-select>
-        @if (incidentForm.get('reporterId')?.touched && incidentForm.get('reporterId')?.hasError('required')) {
+        @if (incidentForm.get('reporter')?.touched && incidentForm.get('reporter')?.hasError('required')) {
           <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
         }
       </c-col>
@@ -44,27 +44,25 @@
           {{ 'incidents.create.form.reviewer.label' | translate }}
         </label>
         <app-user-select
-          formControlName="reviewerId"
-          (userSelected)="onReviewerSelected($event)"
+          formControlName="reviewer"
           placeholder="{{ 'incidents.create.form.reviewer.placeholder' | translate }}">
         </app-user-select>
       </c-col>
     </c-row>
 
-    <!-- Select Rentals - Pleine largeur -->
+    <!-- Select Rentals -->
     <c-row class="mb-3">
       <c-col md="12">
         <label cLabel for="rentals">
           {{ 'incidents.create.form.rentals.label' | translate }}
         </label>
         <app-unit-select
-          formControlName="rentalId" [multiple]="false" [withParent]="null" [filterByReadiness]="false"
-          (updatedUnits)="onRentalSelected($event)">
+          formControlName="rental" [multiple]="false" [withParent]="null" [filterByReadiness]="false">
         </app-unit-select>
       </c-col>
     </c-row>
 
-    <!-- Severity et Status - 2 colonnes -->
+    <!-- Severity et Status-->
     <c-row class="mb-3">
       <c-col md="6">
         <label cLabel for="severity">
@@ -107,17 +105,16 @@
       </c-col>
     </c-row>
 
-    <!-- Select Categories et Tags - 2 colonnes -->
+    <!-- Select Categories et Tags -->
     <c-row class="mb-4">
       <c-col md="6">
         <label cLabel class="required me-2" for="categories">
           {{ 'incidents.create.form.categories.label' | translate }}
         </label>
         <app-category-select
-          formControlName="categoryIds"
-          (categoriesSelected)="onCategoriesSelected($event)">
+          formControlName="categories">
         </app-category-select>
-        @if (incidentForm.get('categoryIds')?.touched && incidentForm.get('categoryIds')?.hasError('required')) {
+        @if (incidentForm.get('categories')?.touched && incidentForm.get('categories')?.hasError('required')) {
           <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
         }
       </c-col>
@@ -131,7 +128,7 @@
       </c-col>
     </c-row>
 
-    <!-- Incident Description - Pleine largeur -->
+    <!-- Incident Description -->
     <c-row class="mb-3">
       <c-col md="12">
         <label cLabel for="description">
@@ -143,7 +140,7 @@
       </c-col>
     </c-row>
 
-    <!-- Upload Section - Pleine largeur -->
+    <!-- Upload Section -->
     <c-row class="mb-3">
       <c-col md="12">
         <label cLabel for="incidentImage">

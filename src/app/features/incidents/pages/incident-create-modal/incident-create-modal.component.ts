@@ -24,11 +24,12 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { CategorySelectComponent } from '../../../../shared/components/category-select/category-select.component';
 import { UserSelectComponent } from '../../../../shared/components/user-select/user-select.component';
 import { UnitSelectComponent } from '../../../../shared/components/unit-select/unit-select.component';
-import { CategoryModel } from '../../models/category.model';
 import { UserItemGetModel } from '../../../settings/user-settings/models/user-item-get.model';
-import { UnitItemGetModel } from '../../../units/models/unit-item-get.model';
-import { UserService } from '../../../settings/user-settings/services/user.service';
+import {UserRefModel} from "../../models/user-ref.model";
+import {RentalRefModel} from "../../models/rental-ref.model";
+import {CategoryModel} from "../../models/category.model";
 import {AuditGetModel} from "../../../../shared/models/audit-get.model";
+import {CategoryService} from "../../services/category.service";
 
 @Component({
   selector: 'app-incident-create-modal',
@@ -56,9 +57,6 @@ import {AuditGetModel} from "../../../../shared/models/audit-get.model";
 })
 export class IncidentCreateModalComponent implements OnInit, OnDestroy {
 
-  currentUser: UserItemGetModel | null = null;
-
-
   incidentForm: FormGroup;
   @Output() actionConfirmed = new EventEmitter<void>();
 
@@ -74,20 +72,20 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly incidentService: IncidentService,
+    private readonly categoryService: CategoryService,
     private readonly authService: AuthService,
-    private readonly userService: UserService,
     private readonly modalRef: BsModalRef,
     private readonly translateService: TranslateService,
     private readonly toastrService: ToastrService
   ) {
     this.incidentForm = this.fb.group({
       name: [null, [Validators.required]],
-      reporterId: [null, [Validators.required]],
-      reviewerId: [null],
-      rentalId: [null],
+      reporter: [null, [Validators.required]],
+      reviewer: [null],
+      rental: [null],
       severity: [SeverityEnum.MEDIUM],
       status: [StatusEnum.OPEN],
-      categoryIds: [[], [Validators.required, this.arrayNotEmptyValidator]],
+      categories: [[], [Validators.required, this.arrayNotEmptyValidator]],
       tags: [null],
       description: [null]
     });
@@ -101,21 +99,21 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   //Récupération utilisateur actuel
   private setDefaultReporter(): void {
     const currentUser = this.authService.getUser();
-    if (currentUser().userId && currentUser().username) {
-      // Créer un objet UserItemGetModel pour l'affichage
-      const defaultUser: UserItemGetModel = {
+    if (currentUser().userId) {
+      // Créer un objet UserItemGetModel pour le reporter par défaut
+      const defaultReporter: UserItemGetModel = {
         id: currentUser().userId,
-        fullName: currentUser().username, // Utiliser username au lieu de fullName
+        fullName: currentUser().username,
         email: currentUser().email,
         mobile: '',
         enabled: true,
         activated: true,
         roles: [],
-        audit: {} as any
+        audit: {} as AuditGetModel
       };
 
       this.incidentForm.patchValue({
-        reporterId: defaultUser
+        reporter: defaultReporter
       });
     }
   }
@@ -127,48 +125,20 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
 
   onImageSelected(event: any): void {
     const files = Array.from(event.target.files) as File[];
-    if (files.length > 0) {
-      // Valider que tous les fichiers sont des images
-      const invalidFiles = files.filter(file => !file.type.startsWith('image/'));
-      if (invalidFiles.length > 0) {
-        this.toastrService.error('Please select only valid image files.');
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        this.toastrService.error('Please select valid image files only.');
         return;
       }
-      this.imageFiles = files;
     }
+
+    this.imageFiles = files;
   }
 
-  removeImage(index: number): void {
-    this.imageFiles.splice(index, 1);
-  }
+  private getCategoryById(categoryId: string): CategoryModel | undefined {
 
-
-  onCategoriesSelected(categories: CategoryModel[]): void {
-    // Extraire les IDs des catégories sélectionnées
-    const categoryIds = categories.map(cat => cat.id);
-    this.incidentForm.patchValue({
-      categoryIds: categoryIds
-    });
-  }
-
-  onReporterSelected(user: UserItemGetModel | null): void {
-    this.incidentForm.patchValue({
-      reporterId: user
-    });
-  }
-
-  onReviewerSelected(user: UserItemGetModel | null): void {
-    this.incidentForm.patchValue({
-      reviewerId: user?.id || null
-    });
-  }
-
-  onRentalSelected(units: UnitItemGetModel[] | null): void {
-    // app-unit-select retourne un array même en mode single
-    const selectedUnit = units && units.length > 0 ? units[0] : null;
-    this.incidentForm.patchValue({
-      rentalId: selectedUnit
-    });
+    return { id: categoryId, name: 'Category Name' };
   }
 
   submit(): void {
@@ -180,14 +150,40 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
 
     const formValue = this.incidentForm.value;
 
+    // Transformation des objets complets en références (id + name seulement)
+    const reporterRef: UserRefModel = {
+      id: formValue.reporter?.id || '',
+      name: formValue.reporter?.fullName || ''
+    };
+
+    const reviewerRef: UserRefModel | undefined = formValue.reviewer ? {
+      id: formValue.reviewer.id,
+      name: formValue.reviewer.fullName
+    } : undefined;
+
+    const rentalRef: RentalRefModel | undefined = formValue.rental ? {
+      id: formValue.rental.id,
+      name: formValue.rental.name
+    } : undefined;
+
+    // Transformer les IDs de catégories en objets CategoryModel (id + name seulement)
+    const categoriesRef: CategoryModel[] = formValue.categories?.map((categoryId: string) => {
+      const category = this.getCategoryById(categoryId);
+      return {
+        id: categoryId,
+        name: category?.name || ''
+      };
+    }) || [];
+
+
     const payload: IncidentPostModel = {
       name: formValue.name,
-      reporterId: formValue.reporterId,
-      reviewerId: formValue.reviewerId,
-      rentalId: formValue.rentalId,
+      reporter: reporterRef,
+      reviewer: reviewerRef,
+      rental: rentalRef,
       severity: formValue.severity,
       status: formValue.status,
-      categoryIds: formValue.categoryIds,
+      categories: categoriesRef,
       tags: formValue.tags,
       description: formValue.description
     };
@@ -199,6 +195,11 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
     // Ajouter toutes les images
     this.imageFiles.forEach((file, index) => {
       formData.append(`files`, file);
+    });
+
+    // (for debugging)
+    formData.forEach((value, key) => {
+      console.log(key, value);
     });
 
     this.subscriptions.push(
