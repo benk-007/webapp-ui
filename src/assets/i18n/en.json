@@ -1771,6 +1771,53 @@
       "placeholder": {
         "title": "Incident Management",
         "message": "Create your first incident by clicking the '+ Add Incident' button above."
+      },
+      "delete-modal": {
+        "title": "Delete Incident",
+        "message": "Are you sure you want to delete incident \"{{name}}\"?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Incident deleted",
+            "message": "Incident \"{{name}}\" has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion failed",
+            "message": "An error occurred while deleting the incident."
+          }
+        }
+      },
+      "table": {
+        "header": {
+          "name": "Incident Name",
+          "reporter": "Reporter",
+          "reviewer": "Reviewer",
+          "rental": "Rental",
+          "severity": "Severity",
+          "status": "Status",
+          "created-on": "Created On",
+          "actions": "Actions"
+        },
+        "body": {
+          "no-reviewer": "No reviewer assigned",
+          "no-rental": "No rental assigned"
+        }
+      },
+      "empty-data": "Create your first incident by clicking the '+ Add Incident' button above to start tracking and managing property issues.",
+      "severity": {
+        "Low": "Low",
+        "Medium": "Medium",
+        "High": "High",
+        "Critical": "Critical"
+      },
+      "status": {
+        "Open": "Open",
+        "In Review": "In Review",
+        "Tasked": "Tasked",
+        "Resolved": "Resolved",
+        "Escalated": "Escalated",
+        "On Hold": "On Hold"
       }
     },
     "create": {

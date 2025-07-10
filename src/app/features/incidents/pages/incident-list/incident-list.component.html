@@ -1,15 +1,136 @@
-<app-page-title [title]="'incidents.list.title' | translate">
-  <button cButton color="secondary" size="sm" (click)="openCreateIncidentModal()">
-    {{ 'incidents.list.cta.add-btn' | translate }}
-  </button>
-</app-page-title>
-
-<!-- Contenu temporaire en attendant la vraie liste -->
-<c-row>
-  <c-col md="12">
-    <div class="text-center mt-5">
-      <h5 class="text-muted">{{ 'incidents.list.placeholder.title' | translate }}</h5>
-      <p class="text-muted">{{ 'incidents.list.placeholder.message' | translate }}</p>
-    </div>
+<!-- ========== EN-TÊTE DE PAGE ========== -->
+<!-- Titre de la page et bouton d'ajout -->
+<c-row class="page-title mb-3">
+  <c-col [md]="6" class="d-flex align-items-center">
+    <h1 class="page-title mb-0">{{ 'incidents.list.title' | translate }}</h1>
+  </c-col>
+  <c-col [md]="6" class="d-flex justify-content-end">
+    <button cButton size="sm" color="secondary" type="button" (click)="openCreateIncidentModal()">
+      {{ 'incidents.list.cta.add-btn' | translate }}
+    </button>
   </c-col>
 </c-row>
+
+<!-- ========== SECTION RECHERCHE ========== -->
+<!-- Barre de recherche basique -->
+<c-row class="mb-3">
+  <c-col [md]="2">
+    <c-input-group sizing="sm" class="search-input">
+      <span cInputGroupText>
+        <svg [cIcon]="icons.cilSearch"></svg>
+      </span>
+      <input id="searchBar" cFormControl (input)="triggerBasicSearch($event)"
+             [placeholder]="'commons.form.search-input.placeholder' | translate"/>
+    </c-input-group>
+  </c-col>
+</c-row>
+
+<!-- ========== CONTRÔLES DU TABLEAU ========== -->
+<!-- Pagination et contrôles de taille -->
+<app-table-control></app-table-control>
+
+<!-- ========== GESTION DES ÉTATS ========== -->
+<!-- État de chargement initial -->
+@if (!firstCallDone) {
+  <c-row class="d-flex justify-content-center mt-5">
+    <c-spinner color="secondary"/>
+  </c-row>
+  <c-row class="d-flex justify-content-center mt-1">
+    <c-col [md]="4" class="d-flex justify-content-center text-center">
+      {{ 'commons.snippets.loading' | translate }}
+    </c-col>
+  </c-row>
+} @else {
+
+  <!-- ========== CONTENU PRINCIPAL ========== -->
+  @if (!isListEmpty) {
+    <!-- Tableau avec données -->
+    <div class="table-responsive">
+      <table cTable hover appSelectableTable [responsive]="true">
+        <!-- En-têtes du tableau -->
+        <thead>
+        <tr>
+          <th>{{ 'incidents.list.table.header.name' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.rental' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.status' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.severity' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.reporter' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.reviewer' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.created-on' | translate }}</th>
+          <th>{{ 'incidents.list.table.header.actions' | translate }}</th>
+        </tr>
+        </thead>
+
+        <!-- Corps du tableau - Lignes de données -->
+        <tbody>
+          @for (incident of listContent; track incident.id) {
+            <tr>
+              <!-- Colonne Nom + Audit info -->
+              <td>
+                <div class="d-flex flex-column">
+                  <div><span>{{ incident.name }}</span></div>
+                  <div class="small text-body-secondary text-nowrap">
+                    <span>
+                      {{ 'commons.snippets.audit.created-by' | translate }}
+                      {{ incident.audit.createdBy | auditName }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Colonne Rental (avec gestion valeur nulle) -->
+              <td>{{ incident.rental?.name ? incident.rental?.name : ' - ' }}</td>
+
+              <!-- Colonne Status (texte simple) -->
+              <td>{{ ('incidents.list.status.' + incident.status) | translate }}</td>
+
+              <!-- Colonne Severity (badge coloré) -->
+              <td>
+                <span class="badge" [class]="getSeverityBadgeClass(incident.severity)">
+                  {{ ('incidents.list.severity.' + incident.severity) | translate }}
+                </span>
+              </td>
+
+              <!-- Colonne Reporter -->
+              <td>{{ incident.reporter?.name || '-' }}</td>
+
+              <!-- Colonne Reviewer (avec gestion valeur nulle) -->
+              <td>{{ incident.reviewer?.name ? incident.reviewer?.name : ' - ' }}</td>
+
+              <!-- Colonne Date de création avec audit info -->
+              <td>
+                <app-badge>
+                  <i class="bi bi-clock me-1"></i>
+                  {{ incident.audit.createdAt | date: 'mediumDate' }}
+                </app-badge>
+              </td>
+              <!-- Colonne Actions -->
+              <td>
+                <!-- Bouton Édition -->
+                <button cButton size="sm" color="primary" class="btn-light me-2" [routerLink]="['/incidents/', incident.id]">
+                  <svg [cIcon]="icons.cilPen" size="sm"></svg>
+                </button>
+                <!-- Bouton Suppression -->
+                <button cButton size="sm" color="danger" class="btn-light" (click)="deleteIncident(incident)">
+                  <svg [cIcon]="icons.cilTrash" size="sm"></svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  } @else {
+    <!-- ========== ÉTATS VIDES ========== -->
+    @if (!isSearchActive) {
+      <!-- Liste vide (aucun incident) -->
+      <app-empty-data imageSrc="assets/images/animations/no-incidents.svg" [message]="'incidents.list.empty-data'|translate">
+      </app-empty-data>
+    } @else {
+      <!-- Pas de résultats de recherche -->
+      <app-empty-data imageSrc="assets/images/animations/no-result.gif"></app-empty-data>
+    }
+  }
+
+}

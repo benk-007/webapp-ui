@@ -19,7 +19,7 @@
 
   <!-- Template pour les options dans la dropdown -->
   <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-    <input type="checkbox" [checked]="item.selected" style="margin-right: 8px;">
+    <input type="checkbox" [checked]="item.selected" class="ng-select-custom">
     <span>{{ item.name }}</span>
   </ng-template>
 

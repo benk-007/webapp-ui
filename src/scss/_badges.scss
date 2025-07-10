@@ -19,4 +19,25 @@ span.badge {
     background-color: vars.$danger01;
     color: vars.$danger;
   }
+
+  // Severity badges for incidents
+  &.bg-severity-low {
+    background-color: vars.$success01;
+    color: vars.$success;
+  }
+
+  &.bg-severity-medium {
+    background-color: vars.$warning01;
+    color: vars.$warning;
+  }
+
+  &.bg-severity-high {
+    background-color: #fef1e7; // Orange light background
+    color: #e67e22; // Orange color
+  }
+
+  &.bg-severity-critical {
+    background-color: vars.$danger01;
+    color: vars.$danger;
+  }
 }
