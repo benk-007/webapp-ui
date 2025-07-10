@@ -1,7 +1,7 @@
 <ng-select (change)="valueChanged($event)"
            (scrollToEnd)="onScrollToEnd()"
            (search)="searchUnits($event)"
-           [(ngModel)]="selectedUnits"
+           [(ngModel)]="displayValue"
            [multiple]="multiple"
            [disabled]="disable"
            [items]="unitSearchList"

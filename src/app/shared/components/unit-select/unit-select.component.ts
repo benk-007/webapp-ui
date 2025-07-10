@@ -23,6 +23,7 @@ import { NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective 
 import { UnitApiService } from '../../../features/units/services/unit-api.service';
 import { UnitItemGetModel } from '../../../features/units/models/unit-item-get.model';
 import { PageFilterModel } from '../../models/page-filter.model';
+import {RentalRefModel} from "../../../features/incidents/models/rental-ref.model";
 
 @Component({
   selector: 'app-unit-select',
@@ -58,6 +59,8 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   // ----- Internal state -----
   unitSearchList: UnitItemGetModel[] = [];
   selectedUnits: UnitItemGetModel[] | null = null;
+  displayValue: UnitItemGetModel | UnitItemGetModel[] | null = null; // Propriété normale
+
 
   $unitSearch = new BehaviorSubject<string>('');
   private unitSearchPage = 0;
@@ -159,20 +162,54 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
     }
   }
 
-  valueChanged($event: any): void {
+  valueChanged($event: UnitItemGetModel[] | UnitItemGetModel | null): void {
     console.log('value changed in unit select: ', $event);
     this.markAsTouched();
 
     if (!this.disabled) {
-      this.selectedUnits = $event || null;
-      this.onChange(this.selectedUnits);
-      this.updatedUnits.emit(this.selectedUnits);
+      // Gérer le cas single (pas multiple)
+      if (!this.multiple) {
+        this.selectedUnits = $event ? [$event as UnitItemGetModel] : null;
+        this.displayValue = $event; // Mettre à jour displayValue
+      } else {
+        this.selectedUnits = $event as UnitItemGetModel[] || null;
+        this.displayValue = this.selectedUnits; // Mettre à jour displayValue
+      }
+
+      // Transformer en RentalRefModel pour l'émission
+      let rentalRefToEmit: RentalRefModel[] | RentalRefModel | null = null;
+
+      if (this.selectedUnits && this.selectedUnits.length > 0) {
+        const transformedUnits = this.selectedUnits.map(unit => ({
+          id: unit.id,
+          name: unit.name
+        }));
+
+        rentalRefToEmit = this.multiple ? transformedUnits : transformedUnits[0];
+      }
+
+      this.onChange(rentalRefToEmit);
+      this.updatedUnits.emit(rentalRefToEmit as UnitItemGetModel[] | null);
     }
   }
 
-  // ----- ControlValueAccessor Implementation -----
-  writeValue(obj: any): void {
-    this.selectedUnits = obj;
+  writeValue(obj: RentalRefModel[] | RentalRefModel | null): void {
+    if (obj) {
+      const objArray = Array.isArray(obj) ? obj : [obj];
+      this.selectedUnits = objArray
+        .map(ref => this.unitSearchList.find(unit => unit.id === ref.id))
+        .filter(Boolean) as UnitItemGetModel[];
+
+      // Mettre à jour displayValue
+      if (!this.multiple && this.selectedUnits.length > 0) {
+        this.displayValue = this.selectedUnits[0];
+      } else {
+        this.displayValue = this.selectedUnits;
+      }
+    } else {
+      this.selectedUnits = null;
+      this.displayValue = null;
+    }
   }
 
   onChange = (_: any) => {};

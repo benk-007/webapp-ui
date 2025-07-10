@@ -36,7 +36,8 @@ export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   @Output() userSelected = new EventEmitter<UserRefModel | null>();
 
   usersList: UserItemGetModel[] = [];
-  selectedUser: UserRefModel | null = null;
+  selectedUser: UserItemGetModel | null = null;
+  private pendingValue: UserRefModel | null = null;
 
   touched = false;
   disabled = false;
@@ -49,42 +50,59 @@ export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   }
 
   private loadUsers(): void {
-    // Charger tous les utilisateurs d'un coup (pas de pagination)
     this.subscriptions.push(
-      this.userService.getUsersByPage(
-        0,
-        1000,
-        'fullName',
-        'asc',
-        ''
-      ).subscribe({
+      this.userService.getUsersByPage(0, 1000, 'fullName', 'asc', '').subscribe({
         next: (res) => {
           this.usersList = res.content;
+          // Appliquer la valeur en attente si elle existe
+          if (this.pendingValue) {
+            this.applyPendingValue();
+          }
         },
         error: (err) => console.error('Failed to retrieve users:', err)
       })
     );
   }
 
+  private applyPendingValue(): void {
+    if (this.pendingValue && this.usersList.length > 0) {
+      this.selectedUser = this.usersList.find(user => user.id === this.pendingValue!.id) || null;
+      this.pendingValue = null; // Nettoyer la valeur en attente
+    }
+  }
+
   valueChanged(selectedUserItem: UserItemGetModel | null): void {
     this.markAsTouched();
     if (!this.disabled) {
+      this.selectedUser = selectedUserItem;
+
+      let userRefToEmit: UserRefModel | null = null;
       if (selectedUserItem) {
-        // Transforme UserItemGetModel en UserRefModel
-        this.selectedUser = {
+        // Transforme en UserRefModel pour l'émission
+        userRefToEmit = {
           id: selectedUserItem.id,
-          name: selectedUserItem.fullName // Utilise fullName car c'est dans UserItemGetModel
+          name: selectedUserItem.fullName
         };
-      } else {
-        this.selectedUser = null;
       }
-      this.onChange(this.selectedUser);
-      this.userSelected.emit(this.selectedUser);
+
+      this.onChange(userRefToEmit); // Émet UserRefModel
+      this.userSelected.emit(userRefToEmit);
     }
   }
 
   writeValue(obj: UserRefModel | null): void {
-    this.selectedUser = obj;
+    if (obj) {
+      if (this.usersList.length > 0) {
+        // Si la liste est déjà chargée, appliquer directement
+        this.selectedUser = this.usersList.find(user => user.id === obj.id) || null;
+      } else {
+        // Sinon, stocker pour application ultérieure
+        this.pendingValue = obj;
+      }
+    } else {
+      this.selectedUser = null;
+      this.pendingValue = null;
+    }
   }
 
   onChange = (_: any) => {};

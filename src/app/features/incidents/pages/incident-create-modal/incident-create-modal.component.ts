@@ -100,16 +100,10 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
   private setDefaultReporter(): void {
     const currentUser = this.authService.getUser();
     if (currentUser().userId) {
-      // Créer un objet UserItemGetModel pour le reporter par défaut
-      const defaultReporter: UserItemGetModel = {
+      // Créer directement un UserRefModel (seulement id + name)
+      const defaultReporter: UserRefModel = {
         id: currentUser().userId,
-        fullName: currentUser().username,
-        email: currentUser().email,
-        mobile: '',
-        enabled: true,
-        activated: true,
-        roles: [],
-        audit: {} as AuditGetModel
+        name: currentUser().username
       };
 
       this.incidentForm.patchValue({
@@ -151,20 +145,15 @@ export class IncidentCreateModalComponent implements OnInit, OnDestroy {
     const formValue = this.incidentForm.value;
 
     // Transformation des objets complets en références (id + name seulement)
-    const reporterRef: UserRefModel = {
-      id: formValue.reporter?.id || '',
-      name: formValue.reporter?.fullName || ''
-    };
+    const reporterRef: UserRefModel = formValue.reporter;
+
 
     const reviewerRef: UserRefModel | undefined = formValue.reviewer ? {
       id: formValue.reviewer.id,
       name: formValue.reviewer.fullName
     } : undefined;
 
-    const rentalRef: RentalRefModel | undefined = formValue.rental ? {
-      id: formValue.rental.id,
-      name: formValue.rental.name
-    } : undefined;
+    const rentalRef: RentalRefModel | undefined = formValue.rental;
 
     // Transformer les IDs de catégories en objets CategoryModel (id + name seulement)
     const categoriesRef: CategoryModel[] = formValue.categories?.map((categoryId: string) => {
