@@ -58,4 +58,15 @@ export class IncidentService {
       payload
     );
   }
+
+  /**
+   * Supprime un incident par son ID
+   * @param incidentId ID de l'incident à supprimer
+   * @returns Observable void
+   */
+  deleteIncidentById(incidentId: string): Observable<void> {
+    return this.httpClient.delete<void>(
+      environment.apiBaseUrl.concat(environment.incidentById).replace(':incidentId', incidentId)
+    );
+  }
 }

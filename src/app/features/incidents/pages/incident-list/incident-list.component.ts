@@ -66,7 +66,6 @@ import {BadgeComponent} from "../../../../shared/components/badge/badge.componen
 })
 export class IncidentListComponent extends ListContentComponent {
 
-  // ========== PROPRIÉTÉS ==========
 
   // Icônes utilisées dans le template
   icons = {
@@ -86,7 +85,6 @@ export class IncidentListComponent extends ListContentComponent {
     search: /.{3,}/
   };
 
-  // ========== CONSTRUCTEUR ==========
 
   constructor(
     public override router: Router,
@@ -99,7 +97,6 @@ export class IncidentListComponent extends ListContentComponent {
     super(router, route);
   }
 
-  // ========== LIFECYCLE HOOKS ==========
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -130,7 +127,6 @@ export class IncidentListComponent extends ListContentComponent {
     );
   }
 
-  // ========== ACTIONS UTILISATEUR ==========
 
   // Ouverture de la modal de création d'incident
   openCreateIncidentModal() {
@@ -156,34 +152,25 @@ export class IncidentListComponent extends ListContentComponent {
 
     this.subscriptions.push(
       (confirmModalRef.content as ConfirmModalComponent).actionConfirmed.subscribe(() => {
-        // TODO: Implémenter incidentService.deleteIncidentById() quand l'endpoint sera disponible
-        // this.incidentService.deleteIncidentById(incident.id).subscribe({
-        //   next: () => {
-        //     this.refreshListContent();
-        //     this.toastr.success(
-        //       this.translateService.instant('incidents.list.notifications.delete.success.message', {name: incident.name}),
-        //       this.translateService.instant('incidents.list.notifications.delete.success.title')
-        //     );
-        //   },
-        //   error: () => {
-        //     this.toastr.error(
-        //       this.translateService.instant('incidents.list.notifications.delete.error.message'),
-        //       this.translateService.instant('incidents.list.notifications.delete.error.title')
-        //     );
-        //   }
-        // });
-
-        // Simulation temporaire - à supprimer quand l'API sera disponible
-        this.toastr.success(
-          this.translateService.instant('incidents.list.notifications.delete.success.message', {name: incident.name}),
-          this.translateService.instant('incidents.list.notifications.delete.success.title')
-        );
-        this.refreshListContent();
+        this.incidentService.deleteIncidentById(incident.id).subscribe({
+          next: () => {
+            this.refreshListContent();
+            this.toastr.success(
+              this.translateService.instant('incidents.list.notifications.delete.success.message', {name: incident.name}),
+              this.translateService.instant('incidents.list.notifications.delete.success.title')
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant('incidents.list.notifications.delete.error.message'),
+              this.translateService.instant('incidents.list.notifications.delete.error.title')
+            );
+          }
+        });
       })
     );
   }
 
-  // ========== MÉTHODES UTILITAIRES ==========
 
   // Génération des classes CSS pour les badges de severity
   getSeverityBadgeClass(severity: string): string {

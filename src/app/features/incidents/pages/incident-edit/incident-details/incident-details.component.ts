@@ -158,7 +158,7 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
         next: (updatedIncident) => {
           console.log('Incident updated successfully:', updatedIncident);
           this.incident = updatedIncident;
-          this.toastrService.success(
+          this.toastrService.info(
             this.translateService.instant('incidents.edit.notifications.update.success.message', { name: updatedIncident.name }),
             this.translateService.instant('incidents.edit.notifications.update.success.title')
           );

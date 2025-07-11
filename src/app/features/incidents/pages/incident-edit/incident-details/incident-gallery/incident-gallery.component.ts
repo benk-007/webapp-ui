@@ -54,7 +54,6 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
 
   @Input() incidentId!: string;
 
-  // ========== PROPRIÉTÉS ==========
 
   // Liste des images
   images: IncidentImageGetModel[] = [];
@@ -82,7 +81,6 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  // ========== MÉTHODES PUBLIQUES ==========
 
   /**
    * Gère la sélection de fichiers pour l'upload
@@ -117,7 +115,6 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
           const initialState = {
             imageUrl: imageUrl,
             fileName: image.fileName,
-            fileSize: this.formatFileSize(image.fileSize),
             createdAt: image.audit.createdAt,
             createdBy: image.audit.createdBy
           };
@@ -188,26 +185,6 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
       })
     );
   }
-
-  /**
-   * Formate la taille du fichier
-   */
-  formatFileSize(bytes?: number): string {
-    if (!bytes) return 'N/A';
-
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let size = bytes;
-    let unitIndex = 0;
-
-    while (size >= 1024 && unitIndex < units.length - 1) {
-      size /= 1024;
-      unitIndex++;
-    }
-
-    return `${size.toFixed(1)} ${units[unitIndex]}`;
-  }
-
-  // ========== MÉTHODES PRIVÉES ==========
 
   /**
    * Récupère la liste des images depuis l'API
