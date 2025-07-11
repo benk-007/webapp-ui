@@ -1,0 +1,44 @@
+<!-- Modal title -->
+<div class="modal-header justify-content-center align-items-center">
+  <h6 class="modal-title">
+    {{ 'categories.edit.title' | translate }}
+  </h6>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+  <form (submit)="submit()" [formGroup]="categoryForm" cForm>
+
+    <!-- Category Name Input -->
+    <c-row class="mb-3">
+      <c-col md="12">
+        <label cLabel class="required me-2" for="categoryName">
+          {{ 'categories.create.form.name.label' | translate }}
+        </label>
+        <input
+          cFormControl
+          formControlName="name"
+          id="categoryName"
+          type="text"
+          placeholder="{{ 'categories.create.form.name.placeholder' | translate }}"
+        />
+        @if (categoryForm.get('name')?.touched && categoryForm.get('name')?.hasError('required')) {
+          <c-form-feedback [valid]="false">{{ 'commons.errors.required' | translate }}</c-form-feedback>
+        }
+      </c-col>
+    </c-row>
+
+    <!-- Modal footer -->
+    <c-row class="mt-3">
+      <c-col class="d-flex justify-content-end">
+        <button cButton class="ms-1" color="light" size="sm" variant="ghost" (click)="closeModal()">
+          {{ 'commons.form.cancel-btn' | translate }}
+        </button>
+        <button cButton class="ms-1" color="primary" size="sm" type="submit" [disabled]="!categoryForm.valid">
+          {{ 'commons.form.update-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+  </form>
+</div>

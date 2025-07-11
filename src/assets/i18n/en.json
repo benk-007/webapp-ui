@@ -1763,6 +1763,72 @@
       }
     }
   },
+  "categories": {
+    "list": {
+      "title": "Categories",
+      "cta": {
+        "add-btn": "+ Add Category"
+      },
+      "table": {
+        "header": {
+          "name": "Name",
+          "created-on": "Created On",
+          "actions": "Actions"
+        }
+      },
+      "empty-data": "No categories found. Click '+ Add Category' to create your first category.",
+      "delete-modal": {
+        "title": "Delete Category",
+        "message": "Are you sure you want to delete the category \"{{name}}\"?"
+      },
+      "notifications": {
+        "delete": {
+          "success": {
+            "title": "Category deleted",
+            "message": "Category \"{{name}}\" has been successfully deleted."
+          },
+          "error": {
+            "title": "Deletion failed",
+            "message": "An error occurred while deleting the category."
+          }
+        }
+      }
+    },
+    "create": {
+      "title": "Add Category",
+      "form": {
+        "name": {
+          "label": "Category Name",
+          "placeholder": "Enter category name"
+        },
+        "notifications": {
+          "success": {
+            "title": "Category created",
+            "message": "Category \"{{name}}\" has been successfully created."
+          },
+          "error": {
+            "title": "Category creation failed",
+            "message": "An error occurred while creating the category. Please try again."
+          }
+        }
+      }
+    },
+    "edit": {
+      "title": "Edit Category",
+      "form": {
+        "notifications": {
+          "success": {
+            "title": "Category updated",
+            "message": "Category \"{{name}}\" has been successfully updated."
+          },
+          "error": {
+            "title": "Category update failed",
+            "message": "An error occurred while updating the category. Please try again."
+          }
+        }
+      }
+    }
+  },
   "incidents": {
     "list": {
       "title": "Incidents",
