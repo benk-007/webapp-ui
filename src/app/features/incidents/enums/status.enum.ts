@@ -1,8 +1,8 @@
 export enum StatusEnum {
-  OPEN = 'Open',
-  IN_REVIEW = 'In Review',
-  TASKED = 'Tasked',
-  RESOLVED = 'Resolved',
-  ESCALATED = 'Escalated',
-  ON_HOLD = 'On Hold'
+  OPEN = 'OPEN',
+  IN_REVIEW = 'IN_REVIEW',
+  TASKED = 'TASKED',
+  RESOLVED = 'RESOLVED',
+  ESCALATED = 'ESCALATED',
+  ON_HOLD = 'ON_HOLD'
 }

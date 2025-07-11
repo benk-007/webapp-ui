@@ -1807,18 +1807,18 @@
       },
       "empty-data": "Create your first incident by clicking the '+ Add Incident' button above to start tracking and managing property issues.",
       "severity": {
-        "Low": "Low",
-        "Medium": "Medium",
-        "High": "High",
-        "Critical": "Critical"
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High",
+        "CRITICAL": "Critical"
       },
       "status": {
-        "Open": "Open",
-        "In Review": "In Review",
-        "Tasked": "Tasked",
-        "Resolved": "Resolved",
-        "Escalated": "Escalated",
-        "On Hold": "On Hold"
+        "OPEN": "Open",
+        "IN_REVIEW": "In Review",
+        "TASKED": "Tasked",
+        "RESOLVED": "Resolved",
+        "ESCALATED": "Escalated",
+        "ON_HOLD": "On Hold"
       }
     },
     "create": {
@@ -1866,18 +1866,18 @@
         },
         "enums": {
           "severity": {
-            "Low": "Low",
-            "Medium": "Medium",
-            "High": "High",
-            "Critical": "Critical"
+            "LOW": "Low",
+            "MEDIUM": "Medium",
+            "HIGH": "High",
+            "CRITICAL": "Critical"
           },
           "status": {
-            "Open": "Open",
-            "In Review": "In Review",
-            "Tasked": "Tasked",
-            "Resolved": "Resolved",
-            "Escalated": "Escalated",
-            "On Hold": "On Hold"
+            "OPEN": "Open",
+            "IN_REVIEW": "In Review",
+            "TASKED": "Tasked",
+            "RESOLVED": "Resolved",
+            "ESCALATED": "Escalated",
+            "ON_HOLD": "On Hold"
           }
         },
         "notifications": {
