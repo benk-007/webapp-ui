@@ -69,7 +69,6 @@ import { IncidentGalleryComponent } from './incident-gallery/incident-gallery.co
 })
 export class IncidentDetailsComponent implements OnInit, OnDestroy {
 
-  // ========== PROPRIÉTÉS ==========
 
   // Formulaire d'édition
   incidentForm: FormGroup;
@@ -87,7 +86,6 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
   // Gestion des subscriptions
   private subscriptions: Subscription[] = [];
 
-  // ========== CONSTRUCTEUR ==========
 
   constructor(
     private readonly fb: FormBuilder,
@@ -110,7 +108,6 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ========== LIFECYCLE HOOKS ==========
 
   ngOnInit(): void {
     // Récupération de l'ID depuis l'URL et chargement des données
@@ -128,7 +125,6 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  // ========== MÉTHODES PUBLIQUES ==========
 
   /**
    * Soumission du formulaire de mise à jour
@@ -148,7 +144,11 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
       rental: formValue.rental,
       severity: formValue.severity,
       status: formValue.status,
-      categories: formValue.categories,
+      categories: (formValue.categories || []).map((cat: any) =>
+        typeof cat === 'string'
+          ? this.incident.categories.find(c => c.id === cat)
+          : { id: cat.id, name: cat.name }
+      ),
       tags: formValue.tags,
       description: formValue.description
     };
@@ -174,7 +174,6 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  // ========== MÉTHODES PRIVÉES ==========
 
   /**
    * Récupère l'incident depuis l'API

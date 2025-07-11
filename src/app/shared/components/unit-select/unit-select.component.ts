@@ -172,7 +172,7 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
     this.markAsTouched();
 
     if (!this.disabled) {
-      // Gérer le cas single (pas multiple)
+      // Gérer le cas single
       if (!this.multiple) {
         this.selectedUnits = $event ? [$event as UnitItemGetModel] : null;
         this.displayValue = $event; // Mettre à jour displayValue

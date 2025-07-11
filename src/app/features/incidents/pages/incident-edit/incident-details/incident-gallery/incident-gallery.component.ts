@@ -22,6 +22,7 @@ import { IncidentImageGetModel } from '../../../../models/incident-image-get.mod
 // Shared components
 import { ConfirmModalComponent } from '../../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { AuditNamePipe } from '../../../../../../shared/pipes/audit-name.pipe';
+import {ImageViewModalComponent} from "../../../../../../shared/components/image-view-modal/image-view-modal.component";
 
 @Component({
   selector: 'app-incident-gallery',
@@ -104,12 +105,44 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Ouvre une image en mode visualisation
+   * Ouvre une image en mode visualisation dans une modal
    */
   viewImage(image: IncidentImageGetModel): void {
-    if (image.imageUrl) {
-      window.open(image.imageUrl as string, '_blank');
-    }
+    this.subscriptions.push(
+      this.incidentImageService.getImageById(image.id).subscribe({
+        next: (blob) => {
+          const imageUrl = URL.createObjectURL(blob);
+
+          // Ouvrir la modal de visualisation
+          const initialState = {
+            imageUrl: imageUrl,
+            fileName: image.fileName,
+            fileSize: this.formatFileSize(image.fileSize),
+            createdAt: image.audit.createdAt,
+            createdBy: image.audit.createdBy
+          };
+
+          const modalRef = this.modalService.show(ImageViewModalComponent, {
+            initialState,
+            class: 'modal-lg modal-dialog-centered',
+            keyboard: true,
+            backdrop: true
+          });
+
+          // Nettoyer l'URL quand la modal se ferme
+          modalRef.onHidden?.subscribe(() => {
+            URL.revokeObjectURL(imageUrl);
+          });
+        },
+        error: (err) => {
+          console.error('Error viewing image:', err);
+          this.toastrService.error(
+            this.translateService.instant('incidents.edit.gallery.notifications.view.error.message'),
+            this.translateService.instant('incidents.edit.gallery.notifications.view.error.title')
+          );
+        }
+      })
+    );
   }
 
   /**

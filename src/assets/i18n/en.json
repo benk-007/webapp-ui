@@ -24,7 +24,8 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "previous-btn": "Previous",
-        "next-btn": "Next"
+        "next-btn": "Next",
+        "close": "Close"
       },
       "search-input": {
         "placeholder": "Search ..."
@@ -1987,6 +1988,18 @@
             "error": {
               "title": "Delete Failed",
               "message": "An error occurred while deleting the image"
+            },
+            "view": {
+              "error": {
+                "title": "View Failed",
+                "message": "An error occurred while loading the image"
+              }
+            },
+            "download": {
+              "error": {
+                "title": "Download Failed",
+                "message": "An error occurred while downloading the image"
+              }
             }
           }
         }

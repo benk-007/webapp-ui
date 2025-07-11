@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ fileName }}</h5>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+
+<div class="modal-body p-0">
+  <div class="image-container">
+    <img [src]="imageUrl" [alt]="fileName" class="img-fluid w-100">
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="image-info flex-grow-1">
+    <small class="text-muted">
+      <strong>Size:</strong> {{ fileSize }} |
+      <strong>Created:</strong> {{ createdAt | date:'medium' }} |
+      <strong>By:</strong> {{ createdBy | auditName }}
+    </small>
+  </div>
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+    {{ 'commons.form.buttons.close' | translate }}
+  </button>
+</div>
