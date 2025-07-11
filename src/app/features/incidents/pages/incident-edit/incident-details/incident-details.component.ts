@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
@@ -86,6 +86,8 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
   // Gestion des subscriptions
   private subscriptions: Subscription[] = [];
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('galleryComponent') galleryComponent!: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -249,5 +251,21 @@ export class IncidentDetailsComponent implements OnInit, OnDestroy {
    */
   private arrayNotEmptyValidator(control: any) {
     return control.value && control.value.length > 0 ? null : { required: true };
+  }
+
+  /**
+   * Déclenche l'ouverture du sélecteur de fichiers
+   */
+  triggerFileUpload(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  /**
+   * Gère la sélection de fichiers et les transmet au composant galerie
+   */
+  onFileSelected(event: Event): void {
+    if (this.galleryComponent) {
+      this.galleryComponent.onFileSelected(event);
+    }
   }
 }

@@ -152,8 +152,23 @@
 
   <!-- ========== SECTION GALERIE D'IMAGES ========== -->
   <c-col md="12">
-    <h6 class="section-title underline mb-3">{{ 'incidents.edit.gallery.title' | translate }}</h6>
-    <app-incident-gallery [incidentId]="incidentId"></app-incident-gallery>
+    <!-- Titre avec bouton d'upload -->
+    <c-row class="page-title mb-3">
+      <c-col [md]="10">
+        <h6 class="section-title underline mb-3 mt-3">{{ 'incidents.edit.gallery.title' | translate }}</h6>
+      </c-col>
+      <c-col [md]="2" class="d-flex justify-content-end align-items-end">
+        <button cButton size="sm" color="secondary" type="button" class="mb-3 mt-3" (click)="triggerFileUpload()">
+          <i class="bi bi-upload me-2"></i>{{ 'incidents.edit.gallery.upload-btn' | translate }}
+        </button>
+      </c-col>
+    </c-row>
+
+    <!-- Input caché pour l'upload -->
+    <input #fileInput type="file" (change)="onFileSelected($event)" multiple accept="image/*" hidden/>
+
+    <!-- Composant galerie -->
+    <app-incident-gallery [incidentId]="incidentId" #galleryComponent></app-incident-gallery>
   </c-col>
 
 </c-row>

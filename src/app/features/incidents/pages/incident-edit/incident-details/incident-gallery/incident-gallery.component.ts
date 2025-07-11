@@ -85,7 +85,7 @@ export class IncidentGalleryComponent implements OnInit, OnDestroy {
   /**
    * Gère la sélection de fichiers pour l'upload
    */
-  onFileSelected(event: Event): void {
+  public onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       // Upload tous les fichiers en une seule fois avec formData

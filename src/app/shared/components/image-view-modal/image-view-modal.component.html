@@ -12,12 +12,8 @@
 <div class="modal-footer">
   <div class="image-info flex-grow-1">
     <small class="text-muted">
-      <strong>Size:</strong> {{ fileSize }} |
       <strong>Created:</strong> {{ createdAt | date:'medium' }} |
       <strong>By:</strong> {{ createdBy | auditName }}
     </small>
   </div>
-  <button type="button" class="btn btn-secondary" (click)="closeModal()">
-    {{ 'commons.form.buttons.close' | translate }}
-  </button>
 </div>

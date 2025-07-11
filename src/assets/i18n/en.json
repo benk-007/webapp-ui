@@ -1952,7 +1952,7 @@
       "gallery": {
         "title": "Images Gallery",
         "upload-section": "Upload incident images",
-        "upload-btn": "Upload Image",
+        "upload-btn": "Upload",
         "no-images": "No images available for this incident",
         "image-details": {
           "filename": "File Name",

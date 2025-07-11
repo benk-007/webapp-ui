@@ -1,6 +1,5 @@
 <!-- En-tête avec titre dynamique -->
-<app-page-title *ngIf="incident" [title]="'incidents.edit.title' | translate">
-  {{ incident.name }}
+<app-page-title *ngIf="incident" [title]="('incidents.edit.title' | translate) + ' ' + incident.name">
 </app-page-title>
 
 <!-- Navigation par onglets -->
