@@ -1890,6 +1890,125 @@
           }
         }
       }
+    },
+    "edit": {
+      "title": "Edit Incident:",
+      "default-title": "Edit Incident",
+      "tabs": {
+        "details": {
+          "title": "Details",
+          "hint": "Edit incident information, severity, status and other details"
+        },
+        "images": {
+          "title": "Images",
+          "hint": "Manage incident images and attachments"
+        }
+      },
+      "form": {
+        "details": {
+          "title": "Incident Details"
+        },
+        "images": {
+          "title": "Incident Images"
+        },
+        "incidentName": {
+          "label": "Incident Name",
+          "placeholder": "Enter incident name"
+        },
+        "reporter": {
+          "label": "Reporter",
+          "placeholder": "Select reporter"
+        },
+        "reviewer": {
+          "label": "Reviewer",
+          "placeholder": "Select reviewer"
+        },
+        "rental": {
+          "label": "Rental",
+          "placeholder": "Select rental"
+        },
+        "severity": {
+          "label": "Severity",
+          "placeholder": "Select severity"
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select status"
+        },
+        "categories": {
+          "label": "Categories",
+          "placeholder": "Select categories"
+        },
+        "tags": {
+          "label": "Tags",
+          "placeholder": "Enter tags"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter incident description"
+        }
+      },
+      "gallery": {
+        "title": "Images Gallery",
+        "upload-section": "Upload incident images",
+        "upload-btn": "Upload Image",
+        "no-images": "No images available for this incident",
+        "image-details": {
+          "filename": "File Name",
+          "size": "Size",
+          "created-on": "Created On",
+          "created-by": "Created By"
+        },
+        "actions": {
+          "view": "View Image",
+          "download": "Download",
+          "delete": "Delete"
+        },
+        "delete-modal": {
+          "title": "Delete Image",
+          "message": "Are you sure you want to delete this image? This action cannot be undone."
+        },
+        "notifications": {
+          "upload": {
+            "success": {
+              "title": "Image Uploaded",
+              "message": "Image has been uploaded successfully"
+            },
+            "error": {
+              "title": "Upload Failed",
+              "message": "An error occurred while uploading the image"
+            }
+          },
+          "delete": {
+            "success": {
+              "title": "Image Deleted",
+              "message": "Image has been deleted successfully"
+            },
+            "error": {
+              "title": "Delete Failed",
+              "message": "An error occurred while deleting the image"
+            }
+          }
+        }
+      },
+      "notifications": {
+        "load": {
+          "error": {
+            "title": "Loading Failed",
+            "message": "An error occurred while loading incident data"
+          }
+        },
+        "update": {
+          "success": {
+            "title": "Incident Updated",
+            "message": "Incident \"{{name}}\" has been updated successfully"
+          },
+          "error": {
+            "title": "Update Failed",
+            "message": "An error occurred while updating the incident"
+          }
+        }
+      }
     }
   }
 }

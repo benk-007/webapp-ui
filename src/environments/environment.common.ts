@@ -59,5 +59,7 @@ export const commonProperties = {
   incidentCategories: TASK_SERVICE + 'categories',
   incidentById: TASK_SERVICE + 'incidents/:incidentId',
 
-
+  // Incident Image resource
+  incidentImages: TASK_SERVICE + 'images',
+  incidentImageById: TASK_SERVICE + 'images/:imageId',
 }

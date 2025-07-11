@@ -1,0 +1,23 @@
+<!-- En-tête avec titre dynamique -->
+<app-page-title *ngIf="incident" [title]="'incidents.edit.title' | translate">
+  {{ incident.name }}
+</app-page-title>
+
+<!-- Navigation par onglets -->
+<ul class="nav nav-underline">
+  <li class="nav-item" [tooltip]="'incidents.edit.tabs.details.hint'|translate" placement="auto">
+    <a class="nav-link active" routerLink="details"
+       routerLinkActive="active">{{ 'incidents.edit.tabs.details.title'|translate }}</a>
+  </li>
+
+  <!-- Onglets futurs (commentés pour l'instant) -->
+  <!--
+  <li class="nav-item" [tooltip]="'incidents.edit.tabs.images.hint'|translate" placement="auto">
+    <a class="nav-link" routerLink="images"
+       routerLinkActive="active">{{ 'incidents.edit.tabs.images.title'|translate }}</a>
+  </li>
+  -->
+</ul>
+
+<!-- Contenu des onglets -->
+<router-outlet></router-outlet>

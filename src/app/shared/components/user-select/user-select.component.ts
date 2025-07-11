@@ -93,7 +93,7 @@ export class UserSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   writeValue(obj: UserRefModel | null): void {
     if (obj) {
       if (this.usersList.length > 0) {
-        // Si la liste est déjà chargée, appliquer directement
+        // Si la liste est déjà chargée, trouver l'utilisateur par ID
         this.selectedUser = this.usersList.find(user => user.id === obj.id) || null;
       } else {
         // Sinon, stocker pour application ultérieure

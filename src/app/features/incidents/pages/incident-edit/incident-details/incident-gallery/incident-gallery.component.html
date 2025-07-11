@@ -1,0 +1,115 @@
+<c-row>
+  <!-- ========== SECTION UPLOAD ========== -->
+  <c-col md="12" class="mb-4">
+    @if (images.length === 0) {
+      <!-- Upload placeholder quand aucune image -->
+      <label class="upload-placeholder-first w-100">
+        <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" hidden/>
+        <div class="image-wrapper d-flex flex-column align-items-center justify-content-center text-center">
+          <img class="img-fluid" src="assets/images/animations/image-placeholder.gif" alt="">
+          <span class="text-info-emphasis">
+            {{ 'incidents.edit.gallery.upload-section' | translate }}
+          </span>
+        </div>
+      </label>
+    } @else {
+      <!-- Bouton d'upload quand des images existent -->
+      <button class="btn btn-outline-secondary w-100" (click)="fileInput.click()">
+        <i class="bi bi-upload me-2"></i>{{ 'incidents.edit.gallery.upload-btn' | translate }}
+      </button>
+      <input #fileInput type="file" (change)="onFileSelected($event)" multiple accept="image/*" hidden/>
+    }
+  </c-col>
+
+  <!-- ========== LISTE DES IMAGES ========== -->
+  <c-col md="12">
+    @if (images.length === 0) {
+      <!-- Message quand aucune image -->
+      <div class="text-center text-muted py-4">
+        <i class="bi bi-image fs-1 mb-2"></i>
+        <p>{{ 'incidents.edit.gallery.no-images' | translate }}</p>
+      </div>
+    } @else {
+      <!-- Liste des images avec métadonnées -->
+      <div class="images-list">
+        @for (image of images; track image.id) {
+          <c-card class="mb-3">
+            <c-card-body>
+              <c-row class="align-items-center">
+
+                <!-- Miniature de l'image -->
+                <c-col md="2">
+                  <div class="image-thumbnail position-relative">
+                    <img [src]="image.imageUrl" [alt]="image.fileName"
+                         class="img-fluid rounded shadow-sm cursor-pointer"
+                         (click)="viewImage(image)"/>
+                    <div class="image-overlay d-flex justify-content-center align-items-center">
+                      <i class="bi bi-eye text-white fs-4"></i>
+                    </div>
+                  </div>
+                </c-col>
+
+                <!-- Métadonnées de l'image -->
+                <c-col md="8">
+                  <div class="image-metadata">
+                    <!-- Nom du fichier cliquable -->
+                    <h6 class="mb-1">
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="viewImage(image)">
+                        {{ image.fileName }}
+                      </a>
+                    </h6>
+
+                    <!-- Informations détaillées -->
+                    <div class="metadata-grid">
+                      <div class="metadata-item">
+                        <small class="text-muted">{{ 'incidents.edit.gallery.image-details.size' | translate }}:</small>
+                        <span class="ms-1">{{ formatFileSize(image.fileSize) }}</span>
+                      </div>
+
+                      <div class="metadata-item">
+                        <small class="text-muted">{{ 'incidents.edit.gallery.image-details.created-on' | translate }}:</small>
+                        <span class="ms-1">{{ image.audit.createdAt | date:'medium' }}</span>
+                      </div>
+
+                      <div class="metadata-item">
+                        <small class="text-muted">{{ 'incidents.edit.gallery.image-details.created-by' | translate }}:</small>
+                        <span class="ms-1">{{ image.audit.createdBy | auditName }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </c-col>
+
+                <!-- Actions -->
+                <c-col md="2" class="text-end">
+                  <div class="action-buttons">
+                    <!-- Bouton de visualisation -->
+                    <button class="btn btn-sm btn-outline-primary me-2"
+                            (click)="viewImage(image)"
+                            [tooltip]="'incidents.edit.gallery.actions.view' | translate">
+                      <i class="bi bi-eye"></i>
+                    </button>
+
+                    <!-- Bouton de téléchargement -->
+                    <button class="btn btn-sm btn-outline-info me-2"
+                            (click)="downloadImage(image)"
+                            [tooltip]="'incidents.edit.gallery.actions.download' | translate">
+                      <i class="bi bi-download"></i>
+                    </button>
+
+                    <!-- Bouton de suppression -->
+                    <button class="btn btn-sm btn-outline-danger"
+                            (click)="confirmImageDeletion(image)"
+                            [tooltip]="'incidents.edit.gallery.actions.delete' | translate">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </c-col>
+
+              </c-row>
+            </c-card-body>
+          </c-card>
+        }
+      </div>
+    }
+  </c-col>
+</c-row>

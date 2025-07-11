@@ -59,7 +59,9 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   // ----- Internal state -----
   unitSearchList: UnitItemGetModel[] = [];
   selectedUnits: UnitItemGetModel[] | null = null;
-  displayValue: UnitItemGetModel | UnitItemGetModel[] | null = null; // Propriété normale
+  displayValue: UnitItemGetModel | UnitItemGetModel[] | null = null;
+  private pendingValue: RentalRefModel[] | null = null;
+
 
 
   $unitSearch = new BehaviorSubject<string>('');
@@ -136,6 +138,9 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
                 }
               }
             }
+
+            // Appliquer les valeurs en attente
+            this.applyPendingValue();
           } else {
             this.unitSearchList = this.unitSearchList.concat(res.content);
           }
@@ -194,21 +199,71 @@ export class UnitSelectComponent implements OnInit, OnDestroy, ControlValueAcces
   }
 
   writeValue(obj: RentalRefModel[] | RentalRefModel | null): void {
+    console.log('UnitSelectComponent writeValue called with:', obj);
+
     if (obj) {
       const objArray = Array.isArray(obj) ? obj : [obj];
-      this.selectedUnits = objArray
-        .map(ref => this.unitSearchList.find(unit => unit.id === ref.id))
-        .filter(Boolean) as UnitItemGetModel[];
 
-      // Mettre à jour displayValue
-      if (!this.multiple && this.selectedUnits.length > 0) {
+      if (this.unitSearchList.length > 0) {
+        // Si la liste est déjà chargée, appliquer directement
+        this.selectedUnits = objArray
+          .map(ref => this.unitSearchList.find(unit => unit.id === ref.id))
+          .filter(Boolean) as UnitItemGetModel[];
+
+        this.updateDisplayValue();
+      } else {
+        // Sinon, stocker pour application ultérieure
+        this.pendingValue = objArray;
+        // Et déclencher le chargement de la liste
+        this.loadInitialUnits();
+      }
+    } else {
+      this.selectedUnits = null;
+      this.displayValue = null;
+      this.pendingValue = null;
+    }
+  }
+
+  /**
+   * Charge les unités initiales pour permettre l'affichage des valeurs pré-sélectionnées
+   */
+  private loadInitialUnits(): void {
+    if (this.unitSearchList.length === 0) {
+      this.$unitSearch.next(''); // Déclenche le chargement initial
+    }
+  }
+
+  /**
+   * Met à jour displayValue en fonction du mode (single/multiple)
+   */
+  private updateDisplayValue(): void {
+    if (this.selectedUnits && this.selectedUnits.length > 0) {
+      if (!this.multiple) {
         this.displayValue = this.selectedUnits[0];
       } else {
         this.displayValue = this.selectedUnits;
       }
     } else {
-      this.selectedUnits = null;
       this.displayValue = null;
+    }
+  }
+
+  /**
+   * Applique les valeurs en attente une fois la liste chargée
+   */
+  private applyPendingValue(): void {
+    if (this.pendingValue && this.unitSearchList.length > 0) {
+      console.log('Applying pending value:', this.pendingValue);
+
+      this.selectedUnits = this.pendingValue
+        .map(ref => this.unitSearchList.find(unit => unit.id === ref.id))
+        .filter(Boolean) as UnitItemGetModel[];
+
+      this.updateDisplayValue();
+      this.pendingValue = null; // Nettoyer la valeur en attente
+
+      console.log('Selected units after applying pending:', this.selectedUnits);
+      console.log('Display value after applying pending:', this.displayValue);
     }
   }
 

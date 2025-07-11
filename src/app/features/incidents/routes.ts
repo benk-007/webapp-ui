@@ -18,6 +18,10 @@ export const routes: Routes = [
         data: {
           title: 'List'
         }
+      },
+      {
+        path: ':id',
+        loadChildren: () => import('./pages/incident-edit/routes').then((m) => m.routes)
       }
     ]
   }
